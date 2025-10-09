@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float maxSpeed = 5;
 
     [SerializeField] TextMeshProUGUI textoVida;
+    
 
     public int vida = 10;
 
@@ -21,8 +22,22 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float forceX = Input.GetAxis("Horizontal");
-        float forceY = Input.GetAxis("Vertical");
+        float forceX = 0;
+        float forceY = 0;
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            forceY = 1;
+        } else if (Input.GetKey(KeyCode.S)) {
+            forceY = -1;
+        }
+
+        if (Input.GetKey(KeyCode.D))
+        {
+            forceX = 1;
+        } else if (Input.GetKey(KeyCode.A)) {
+            forceX = -1;
+        }
 
         Vector2 movimiento = new Vector2(forceX, forceY) * maxSpeed;
 
@@ -32,7 +47,8 @@ public class PlayerController : MonoBehaviour
         rigidBody.linearVelocity = movimiento;
     }
 
-    private void OnTriggerEnter2D(Collider2D other) {
+    private void OnTriggerEnter2D(Collider2D other)
+    {
         if (other.CompareTag("objetoCaida"))
         {
             vida -= 1;

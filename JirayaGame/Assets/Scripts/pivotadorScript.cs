@@ -29,7 +29,7 @@ public class pivotadorScript : MonoBehaviour
         {
             timer += Time.deltaTime;
 
-            if (timer > 3)
+            if (timer > 0.4)
             {
                 move = true;
                 timer = 0;

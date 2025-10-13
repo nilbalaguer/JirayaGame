@@ -28,7 +28,13 @@ public class Enemigo1Script : MonoBehaviour
     {
         if (other.gameObject.CompareTag("KatanaFriend"))
         {
-            vida -= 10;
+            vida -= 5;
+
+
+            Vector2 knockbackDir = (other.transform.position - transform.position).normalized;
+
+            float knockbackForce = 10f;
+            rb.AddForce(knockbackDir * knockbackForce, ForceMode2D.Impulse);
         }
     }
 }

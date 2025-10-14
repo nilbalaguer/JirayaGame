@@ -4,6 +4,8 @@ public class Enemigo1Script : MonoBehaviour
 {
     public int vida = 10;
 
+    public Rigidbody2D rb;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -28,7 +30,7 @@ public class Enemigo1Script : MonoBehaviour
     {
         if (other.gameObject.CompareTag("KatanaFriend"))
         {
-            vida -= 5;
+            vida -= 1;
 
 
             Vector2 knockbackDir = (other.transform.position - transform.position).normalized;

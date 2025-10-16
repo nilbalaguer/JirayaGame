@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI textoVida;
 
+    [SerializeField] string state = "idle";
+
 
     public int vida = 10;
 
@@ -49,10 +51,115 @@ public class PlayerController : MonoBehaviour
 
         Vector2 movimiento = new Vector2(forceX, forceY) * maxSpeed;
 
-        animator.SetFloat("MoveX", movimiento.x);
-        animator.SetFloat("MoveY", movimiento.y);
 
         rigidBody.linearVelocity = movimiento;
+
+
+        //Maquina de estados
+        switch (state)
+        {
+            default:
+            case "idle":
+                if (forceX > 0)
+                {
+                    state = "MoveRight";
+                }
+                else if (forceX < 0)
+                {
+                    state = "MoveLeft";
+                }
+
+                if (forceY > 0)
+                {
+                    state = "MoveUp";
+                }
+                else if (forceY < 0)
+                {
+                    state = "MoveDown";
+                }
+
+                break;
+
+            case "MoveRight":
+            case "MoveLeft":
+            case "MoveUp":
+            case "MoveDown":
+                if (forceX > 0)
+                {
+                    state = "MoveRight";
+                }
+                else if (forceX < 0)
+                {
+                    state = "MoveLeft";
+                }
+
+                if (forceY > 0)
+                {
+                    state = "MoveUp";
+                }
+                else if (forceY < 0)
+                {
+                    state = "MoveDown";
+                }
+
+                if (forceX == 0 && forceY == 0)
+                {
+                    state = "idle";
+                }
+
+                break;
+
+        }
+        
+        switch (state)
+        {
+            default:
+            case "idle":
+                animator.SetBool("MoveUp", false);
+                animator.SetBool("MoveDown", false);
+                animator.SetBool("MoveLeft", false);
+                animator.SetBool("MoveRight", false);
+                animator.SetBool("Idle", true);
+
+                break;
+
+            case "MoveRight":
+
+                animator.SetBool("MoveUp", false);
+                animator.SetBool("MoveDown", false);
+                animator.SetBool("MoveLeft", false);
+                animator.SetBool("MoveRight", true);
+
+                break;
+
+            case "MoveLeft":
+
+                animator.SetBool("MoveUp", false);
+                animator.SetBool("MoveDown", false);
+                animator.SetBool("MoveLeft", true);
+                animator.SetBool("MoveRight", false);
+
+                break;
+
+            case "MoveUp":
+
+                animator.SetBool("MoveUp", true);
+                animator.SetBool("MoveDown", false);
+                animator.SetBool("MoveLeft", false);
+                animator.SetBool("MoveRight", false);
+
+                break;
+
+            case "MoveDown":
+
+                animator.SetBool("MoveUp", false);
+                animator.SetBool("MoveDown", true);
+                animator.SetBool("MoveLeft", false);
+                animator.SetBool("MoveRight", false);
+
+                break;
+
+        }
 
 
         //Rotacion de las armas siempre igual que el ultimo movimiento del jugador

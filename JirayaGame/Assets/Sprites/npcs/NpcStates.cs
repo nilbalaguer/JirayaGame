@@ -5,15 +5,18 @@ public class NpcStates : MonoBehaviour
     private Rigidbody2D rb;
     private Animator anim;
 
-    public enum State { Idle, Patrol};
+    public enum State { Idle, Patrol, Alerted };
     public State currentState;
 
     public Transform[] patrolPoints; 
     private int currentPointIndex = 0;
     public float speed = 2f;
     public float waitTime = 2f;        
-    private float waitCounter;         
+    private float waitCounter;
     private bool waiting = false;
+
+    private GameObject player;
+    public float rangoPlayer = 2f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -26,11 +29,17 @@ public class NpcStates : MonoBehaviour
         {
             transform.position = patrolPoints[0].position;
         }
+        player = GameObject.FindWithTag("Player");
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (player == null)
+        {
+            player = GameObject.FindWithTag("Player");
+        }
+        
         Vector2 pos = transform.position;
 
         switch (currentState)
@@ -42,7 +51,7 @@ public class NpcStates : MonoBehaviour
                     waiting = true;
                     waitCounter = waitTime;
                 }
-                else
+                else if (!PlayerinRange())
                 {
                     waitCounter -= Time.deltaTime;
                     if (waitCounter <= 0f)
@@ -54,12 +63,24 @@ public class NpcStates : MonoBehaviour
                 break;
 
             case State.Patrol:
-
-                if (Vector2.Distance(pos, patrolPoints[currentPointIndex].position) < 0.1f)
+                if (PlayerinRange()){
+                    currentState = State.Alerted;
+                }
+                else
+                {
+                    if (Vector2.Distance(pos, patrolPoints[currentPointIndex].position) < 0.1f)
+                    {
+                        currentState = State.Idle;
+                        waitCounter = waitTime;
+                        NextPoint();
+                    }
+                }
+                break;
+            case State.Alerted:
+                if (!PlayerinRange())
                 {
                     currentState = State.Idle;
                     waitCounter = waitTime;
-                    NextPoint();
                 }
                 break;
         }
@@ -72,6 +93,10 @@ public class NpcStates : MonoBehaviour
                 break;
             case State.Patrol:
                 MoveTowards(patrolPoints[currentPointIndex].position);
+                break;
+            case State.Alerted:
+                rb.linearVelocity = Vector2.zero;
+                anim.SetInteger("state", 0);
                 break;
         }
 
@@ -87,31 +112,36 @@ public class NpcStates : MonoBehaviour
         {
             currentPointIndex = (currentPointIndex + 1) % patrolPoints.Length;
         }
-        
-        void UpdateSpriteDirection(Vector2 dir)
-        {
-            float absX = Mathf.Abs(dir.x);
-            float absY = Mathf.Abs(dir.y);
 
-            if (dir.magnitude < 0.1f)
-            {
-                anim.SetInteger("state", 0);
-                return; 
-            }
+    void UpdateSpriteDirection(Vector2 dir)
+    {
+        float absX = Mathf.Abs(dir.x);
+        float absY = Mathf.Abs(dir.y);
 
-            if (absX > absY)
-            {
-                anim.SetInteger("state", 1); 
-                transform.localScale = new Vector3(dir.x < 0 ? -5 : 5, 5, 5);
-            }
-            else
+        if (dir.magnitude < 0.1f)
         {
-                //anim.SetInteger("state", dir.y > 0 ? 3 : 2);  
-                if (dir.y > 0)
-                    anim.SetInteger("state", 3); 
-                else
-                    anim.SetInteger("state", 2); 
-            }
-        
+            anim.SetInteger("state", 0);
+            return;
         }
+
+        if (absX > absY)
+        {
+            anim.SetInteger("state", 1);
+            transform.localScale = new Vector3(dir.x < 0 ? -5 : 5, 5, 5);
+        }
+        else
+        {
+            if (dir.y > 0)
+                anim.SetInteger("state", 3);
+            else
+                anim.SetInteger("state", 2);
+        }
+
+    }
+        
+    bool PlayerinRange()
+    {
+        float distancia = Vector2.Distance(transform.position, player.transform.position);
+        return distancia <= rangoPlayer;
+    }
 }

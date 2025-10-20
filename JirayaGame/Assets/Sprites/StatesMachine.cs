@@ -24,24 +24,6 @@ public class StatesMachine : MonoBehaviour
         //Switch para cambiar de estado
         switch (PlayerState)
         {
-            /*case State.Idle:
-                if (velocity > 0.1f && velocity <= 2f)
-                    PlayerState = State.Walk;
-                else if (Input.GetKey(KeyCode.LeftShift) && velocity > 0.1f)
-                    PlayerState = State.Run;  
-                break;
-            case State.Walk:
-                if (velocity <= 0.1f)
-                    PlayerState = State.Idle;
-                else if (Input.GetKey(KeyCode.LeftShift) && velocity > 0.1f)
-                    PlayerState = State.Run;
-                break;
-            case State.Run:
-                if (velocity <= 2f && velocity > 0.1f)
-                    PlayerState = State.Walk;
-                else if (velocity <= 0.1f)
-                    PlayerState = State.Idle;
-                break;*/
 
             case State.Idle:
                 if (velocity > 0.1f)

@@ -105,8 +105,12 @@ public class NpcStates : MonoBehaviour
                 transform.localScale = new Vector3(dir.x < 0 ? -5 : 5, 5, 5);
             }
             else
-            {
-                anim.SetInteger("state", dir.y > 0 ? 3 : 2);  
+        {
+                //anim.SetInteger("state", dir.y > 0 ? 3 : 2);  
+                if (dir.y > 0)
+                    anim.SetInteger("state", 3); 
+                else
+                    anim.SetInteger("state", 2); 
             }
         
         }

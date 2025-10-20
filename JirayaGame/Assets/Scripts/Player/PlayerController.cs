@@ -110,52 +110,44 @@ public class PlayerController : MonoBehaviour
                 break;
 
         }
+
+        /*
+            State 0 = idle
+            State 1 = Walk right
+            State 2 = Walk left
+            State 3 = Walk Up
+            State 4 = Walk Down
+        */
         
         switch (state)
         {
             default:
             case "idle":
-                animator.SetBool("MoveUp", false);
-                animator.SetBool("MoveDown", false);
-                animator.SetBool("MoveLeft", false);
-                animator.SetBool("MoveRight", false);
-                animator.SetBool("Idle", true);
+                animator.SetInteger("State", 0);
 
                 break;
 
             case "MoveRight":
 
-                animator.SetBool("MoveUp", false);
-                animator.SetBool("MoveDown", false);
-                animator.SetBool("MoveLeft", false);
-                animator.SetBool("MoveRight", true);
+                animator.SetInteger("State", 1);
 
                 break;
 
             case "MoveLeft":
 
-                animator.SetBool("MoveUp", false);
-                animator.SetBool("MoveDown", false);
-                animator.SetBool("MoveLeft", true);
-                animator.SetBool("MoveRight", false);
+                animator.SetInteger("State", 2);
 
                 break;
 
             case "MoveUp":
 
-                animator.SetBool("MoveUp", true);
-                animator.SetBool("MoveDown", false);
-                animator.SetBool("MoveLeft", false);
-                animator.SetBool("MoveRight", false);
+                animator.SetInteger("State", 3);
 
                 break;
 
             case "MoveDown":
 
-                animator.SetBool("MoveUp", false);
-                animator.SetBool("MoveDown", true);
-                animator.SetBool("MoveLeft", false);
-                animator.SetBool("MoveRight", false);
+                animator.SetInteger("State", 4);
 
                 break;
 

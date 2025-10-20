@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemigo1Script : MonoBehaviour
 {
@@ -7,15 +8,17 @@ public class Enemigo1Script : MonoBehaviour
     [SerializeField] Rigidbody2D rb;
     [SerializeField] CircleCollider2D playerRangeCollider;
     [SerializeField] CircleCollider2D enemyCollider;
-    [SerializeField] CircleCollider2D knockBackCollider;
+    [SerializeField] Image healthFillImage;
     [SerializeField] float maxSpeed = 3;
+
+    public float knockForce = 2;
 
     private GameObject playerGameObject;
 
     private bool playerInRange = false;
-
-    private bool enemigoEnKnockback = false;
     private float enemigoKnockout = 0f;
+
+    private float enemigoKnockBack = 0f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -26,7 +29,7 @@ public class Enemigo1Script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (playerInRange && Vector2.Distance(transform.position, playerGameObject.transform.position) > 1.1)
+        if (playerInRange && Vector2.Distance(transform.position, playerGameObject.transform.position) > 0.7)
         {
             if (enemigoKnockout <= 0)
             {
@@ -55,7 +58,8 @@ public class Enemigo1Script : MonoBehaviour
                 Vector2 movimiento = new Vector2(forceX, forceY) * maxSpeed;
 
                 rb.linearVelocity = movimiento;
-            } else
+            }
+            else
             {
                 enemigoKnockout -= Time.deltaTime;
             }
@@ -64,14 +68,19 @@ public class Enemigo1Script : MonoBehaviour
         {
             rb.linearVelocity = Vector2.zero;
         }
-
-        if (enemigoEnKnockback)
+        
+        if (enemigoKnockBack > 0)
         {
-            Vector2 direction = (transform.position - playerGameObject.transform.position).normalized;
+            Vector2 knockDirection = transform.position - playerGameObject.transform.position;
 
-            rb.linearVelocity = direction * 9;
+            rb.linearVelocity = knockDirection * knockForce;
 
-            enemigoKnockout = 1f;
+            enemigoKnockBack -= Time.deltaTime;
+
+            if (enemigoKnockBack < 0)
+            {
+                rb.linearVelocity = Vector2.zero;
+            }
         }
     }
 
@@ -85,11 +94,14 @@ public class Enemigo1Script : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("KatanaFriend") && other == enemyCollider)
+        if (other.gameObject.CompareTag("KatanaFriend") && other.IsTouching(enemyCollider))
         {
             vida -= 1;
 
-            enemigoEnKnockback = true;
+            healthFillImage.fillAmount = Mathf.Clamp01(vida * (float)0.1);
+
+            enemigoKnockout = 1f;
+            enemigoKnockBack = 0.1f;
             
         }
 
@@ -101,11 +113,6 @@ public class Enemigo1Script : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-
-        if (other == knockBackCollider && other.gameObject.CompareTag("KatanaFriend"))
-        {
-            enemigoEnKnockback = false;
-        }
 
         if (other.gameObject.CompareTag("Player") && !other.IsTouching(playerRangeCollider))
         {

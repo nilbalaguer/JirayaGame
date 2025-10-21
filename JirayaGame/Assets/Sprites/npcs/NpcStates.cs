@@ -17,6 +17,8 @@ public class NpcStates : MonoBehaviour
 
     private GameObject player;
     public float rangoPlayer = 2f;
+
+    public GameObject dialogueBox;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -30,6 +32,7 @@ public class NpcStates : MonoBehaviour
             transform.position = patrolPoints[0].position;
         }
         player = GameObject.FindWithTag("Player");
+        dialogueBox.SetActive(false);
     }
 
     // Update is called once per frame
@@ -59,6 +62,9 @@ public class NpcStates : MonoBehaviour
                         waiting = false;
                         currentState = State.Patrol;
                     }
+                }else if (PlayerinRange())
+                {
+                    currentState = State.Alerted;
                 }
                 break;
 
@@ -90,9 +96,11 @@ public class NpcStates : MonoBehaviour
             case State.Idle:
                 rb.linearVelocity = Vector2.zero;
                 anim.SetInteger("state", 0);
+                dialogueBox.SetActive(false);
                 break;
             case State.Patrol:
                 MoveTowards(patrolPoints[currentPointIndex].position);
+                dialogueBox.SetActive(false);
                 break;
             case State.Alerted:
                 rb.linearVelocity = Vector2.zero;
@@ -113,6 +121,7 @@ public class NpcStates : MonoBehaviour
                         anim.SetInteger("state", 4);
                     }
                 }
+                dialogueBox.SetActive(true);
                 break;
         }
 

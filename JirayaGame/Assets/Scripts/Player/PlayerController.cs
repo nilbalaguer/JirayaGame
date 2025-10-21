@@ -19,7 +19,8 @@ public class PlayerController : MonoBehaviour
     [Header("Armas")]
     [SerializeField] GameObject katanaObject;
     [SerializeField] PolygonCollider2D colliderKatana;
-    [SerializeField] float cooldownMele = 0;
+    [SerializeField] SpriteRenderer spriteRendererKatana;
+    private float cooldownMele = 0;
     [SerializeField] float cooldownForMele = 0.5f;
     private string lastMove;
 
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         colliderKatana.enabled = false;
+        spriteRendererKatana.enabled = false;
     }
 
     // Update is called once per frame
@@ -60,51 +62,36 @@ public class PlayerController : MonoBehaviour
         {
             default:
             case "idle":
-                if (forceX > 0)
-                {
-                    state = "MoveRight";
-                }
-                else if (forceX < 0)
-                {
-                    state = "MoveLeft";
-                }
-
-                if (forceY > 0)
-                {
-                    state = "MoveUp";
-                }
-                else if (forceY < 0)
-                {
-                    state = "MoveDown";
-                }
-
-                break;
-
             case "MoveRight":
             case "MoveLeft":
             case "MoveUp":
             case "MoveDown":
-                if (forceX > 0)
+                if (rigidBody.linearVelocity.x > 0)
                 {
                     state = "MoveRight";
                 }
-                else if (forceX < 0)
+                else if (rigidBody.linearVelocity.x < 0)
                 {
                     state = "MoveLeft";
                 }
 
-                if (forceY > 0)
+                if (rigidBody.linearVelocity.y > 0)
                 {
                     state = "MoveUp";
                 }
-                else if (forceY < 0)
+                else if (rigidBody.linearVelocity.y < 0)
                 {
                     state = "MoveDown";
                 }
 
-                if (forceX == 0 && forceY == 0)
+                if (rigidBody.linearVelocity.x == 0 && rigidBody.linearVelocity.y == 0)
                 {
                     state = "idle";
+                }
+
+                if (Input.GetButtonDown("Fire1") && cooldownMele <= 0)
+                {
+                    state = "Attack";
                 }
 
                 break;
@@ -118,7 +105,7 @@ public class PlayerController : MonoBehaviour
             State 3 = Walk Up
             State 4 = Walk Down
         */
-        
+
         switch (state)
         {
             default:
@@ -151,47 +138,56 @@ public class PlayerController : MonoBehaviour
 
                 break;
 
-        }
+            case "Attack":
 
+                //Rotacion de las armas siempre igual que el ultimo movimiento del jugador
+                //Setea el cooldown para que empieze el ataque y retrase para el siguiente
+                cooldownMele = cooldownForMele;
 
-        //Rotacion de las armas siempre igual que el ultimo movimiento del jugador
-        //Activar catana por unos milisegundos
-        if (Input.GetButtonDown("Fire1") && cooldownMele == 0)
-        {
-            cooldownMele = 0.01f;
+                switch (lastMove)
+                {
+                    case "up":
+                        katanaObject.transform.rotation = Quaternion.Euler(0, 0, 0);
+                        break;
+                    case "down":
+                        katanaObject.transform.rotation = Quaternion.Euler(0, 0, 180);
+                        break;
+                    case "right":
+                        katanaObject.transform.rotation = Quaternion.Euler(0, 0, -90);
+                        break;
+                    case "left":
+                        katanaObject.transform.rotation = Quaternion.Euler(0, 0, 90);
+                        break;
 
-            switch (lastMove)
-            {
-                case "up":
-                    katanaObject.transform.rotation = Quaternion.Euler(0, 0, 0);
-                    break;
-                case "down":
-                    katanaObject.transform.rotation = Quaternion.Euler(0, 0, 180);
-                    break;
-                case "right":
-                    katanaObject.transform.rotation = Quaternion.Euler(0, 0, -90);
-                    break;
-                case "left":
-                    katanaObject.transform.rotation = Quaternion.Euler(0, 0, 90);
-                    break;
+                    default:
+                        katanaObject.transform.rotation = Quaternion.Euler(0, 0, 180);
+                        break;
+                }
 
-                default:
-                    katanaObject.transform.rotation = Quaternion.Euler(0, 0, 180);
-                    break;
-            }
+                state = "idle";
+
+                break;
+
         }
         
+        //Sistema Katana para el cooldown i para activar i desactivar el katana collider solo por 0.1 segundos
         if (cooldownMele > 0)
         {
-            colliderKatana.enabled = true;
-
-            cooldownMele += Time.deltaTime;
-
-            if (cooldownMele >= cooldownForMele)
+            if (cooldownMele == cooldownForMele)
             {
-                cooldownMele = 0;
+                colliderKatana.enabled = true;
+                spriteRendererKatana.enabled = true;
 
+            } else if (colliderKatana.enabled && cooldownMele < (cooldownForMele - 0.1))
+            {
                 colliderKatana.enabled = false;
+            }
+
+            cooldownMele -= Time.deltaTime;
+
+            if (cooldownMele <= 0)
+            {
+                spriteRendererKatana.enabled = false;
             }
         }
     }

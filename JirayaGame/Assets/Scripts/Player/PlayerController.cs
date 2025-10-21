@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] SpriteRenderer spriteRendererKatana;
     private float cooldownMele = 0;
     [SerializeField] float cooldownForMele = 0.5f;
-    private string lastMove;
+    private int lastMove;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -39,16 +39,16 @@ public class PlayerController : MonoBehaviour
 
         if (forceY > 0)
         {
-            lastMove = "up";
+            lastMove = 1;
         } else if (forceY < 0) {
-            lastMove = "down";
+            lastMove = 2;
         }
 
         if (forceX > 0)
         {
-            lastMove = "right";
+            lastMove = 3;
         } else if (forceX < 0) {
-            lastMove = "left";
+            lastMove = 4;
         }
 
         Vector2 movimiento = new Vector2(forceX, forceY) * maxSpeed;
@@ -146,16 +146,16 @@ public class PlayerController : MonoBehaviour
 
                 switch (lastMove)
                 {
-                    case "up":
+                    case 1:
                         katanaObject.transform.rotation = Quaternion.Euler(0, 0, 0);
                         break;
-                    case "down":
+                    case 2:
                         katanaObject.transform.rotation = Quaternion.Euler(0, 0, 180);
                         break;
-                    case "right":
+                    case 3:
                         katanaObject.transform.rotation = Quaternion.Euler(0, 0, -90);
                         break;
-                    case "left":
+                    case 4:
                         katanaObject.transform.rotation = Quaternion.Euler(0, 0, 90);
                         break;
 
@@ -169,6 +169,8 @@ public class PlayerController : MonoBehaviour
                 break;
 
         }
+
+        animator.SetInteger("LastDirection", lastMove);
         
         //Sistema Katana para el cooldown i para activar i desactivar el katana collider solo por 0.1 segundos
         if (cooldownMele > 0)

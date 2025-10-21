@@ -959,7 +959,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 501161405265066691, guid: c7066564d790e7449af1b2b98ec772b5, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -967,7 +967,7 @@ SpriteRenderer:
   m_Size: {x: 0.1, y: 0.12}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &479047633
@@ -980,7 +980,7 @@ Animator:
   m_GameObject: {fileID: 479047628}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 4318148916018601518, guid: c7066564d790e7449af1b2b98ec772b5, type: 3}
+  m_Controller: {fileID: 9100000, guid: dd3282b5c2ffdb64a93fc616675614a0, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -8768,55 +8768,59 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5445482418505120430, guid: 04ff8af2ce576d5498ec52023326e4e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].x
-      value: 0.4253692
+      value: 0.34384772
       objectReference: {fileID: 0}
     - target: {fileID: 5445482418505120430, guid: 04ff8af2ce576d5498ec52023326e4e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].y
-      value: 0.9799856
+      value: 0.7206005
       objectReference: {fileID: 0}
     - target: {fileID: 5445482418505120430, guid: 04ff8af2ce576d5498ec52023326e4e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[1].x
-      value: 0.006561801
+      value: -0.008259967
       objectReference: {fileID: 0}
     - target: {fileID: 5445482418505120430, guid: 04ff8af2ce576d5498ec52023326e4e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[1].y
-      value: 1.082162
+      value: 0.8153658
       objectReference: {fileID: 0}
     - target: {fileID: 5445482418505120430, guid: 04ff8af2ce576d5498ec52023326e4e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[2].x
-      value: -0.41936633
+      value: -0.34525624
       objectReference: {fileID: 0}
     - target: {fileID: 5445482418505120430, guid: 04ff8af2ce576d5498ec52023326e4e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[2].y
-      value: 1.0037606
+      value: 0.72214246
       objectReference: {fileID: 0}
     - target: {fileID: 5445482418505120430, guid: 04ff8af2ce576d5498ec52023326e4e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[3].x
-      value: -0.6792454
+      value: -0.57549155
       objectReference: {fileID: 0}
     - target: {fileID: 5445482418505120430, guid: 04ff8af2ce576d5498ec52023326e4e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[3].y
-      value: 0.69584644
+      value: 0.54021513
       objectReference: {fileID: 0}
     - target: {fileID: 5445482418505120430, guid: 04ff8af2ce576d5498ec52023326e4e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[4].x
-      value: -0.8278244
+      value: -0.67219347
       objectReference: {fileID: 0}
     - target: {fileID: 5445482418505120430, guid: 04ff8af2ce576d5498ec52023326e4e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[4].y
-      value: 0.25026047
+      value: 0.23543847
       objectReference: {fileID: 0}
     - target: {fileID: 5445482418505120430, guid: 04ff8af2ce576d5498ec52023326e4e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[5].x
-      value: 0.8236424
+      value: 0.65318877
       objectReference: {fileID: 0}
     - target: {fileID: 5445482418505120430, guid: 04ff8af2ce576d5498ec52023326e4e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[5].y
-      value: 0.22508407
+      value: 0.21026206
+      objectReference: {fileID: 0}
+    - target: {fileID: 5445482418505120430, guid: 04ff8af2ce576d5498ec52023326e4e7, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[6].x
+      value: 0.5987598
       objectReference: {fileID: 0}
     - target: {fileID: 5445482418505120430, guid: 04ff8af2ce576d5498ec52023326e4e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[6].y
-      value: 0.6979179
+      value: 0.51264256
       objectReference: {fileID: 0}
     - target: {fileID: 5445482418505120430, guid: 04ff8af2ce576d5498ec52023326e4e7, type: 3}
       propertyPath: m_SpriteTilingProperty.adaptiveTilingThreshold

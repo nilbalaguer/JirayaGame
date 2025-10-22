@@ -344,13 +344,14 @@ GameObject:
   - component: {fileID: 110119994}
   - component: {fileID: 110119993}
   - component: {fileID: 110119995}
+  - component: {fileID: 110119996}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &110119992
 RectTransform:
   m_ObjectHideFlags: 0
@@ -421,7 +422,7 @@ Animator:
   m_GameObject: {fileID: 110119991}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: d690115694a427b468a27baa3d0c3432, type: 2}
+  m_Controller: {fileID: 9100000, guid: 80999c68d3dee1f43bdcc2f73afb61fa, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -433,6 +434,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &110119996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110119991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed248fad201caea4caea6300fd76b9f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 519681318}
 --- !u!1 &167268237
 GameObject:
   m_ObjectHideFlags: 0
@@ -767,7 +781,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &519681319
 RectTransform:
   m_ObjectHideFlags: 0

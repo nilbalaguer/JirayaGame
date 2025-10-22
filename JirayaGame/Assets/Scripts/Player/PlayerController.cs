@@ -170,7 +170,7 @@ public class PlayerController : MonoBehaviour
 
         }
 
-        animator.SetInteger("LastDirection", lastMove);
+        animator.SetFloat("LastDirection", lastMove);
         
         //Sistema Katana para el cooldown i para activar i desactivar el katana collider solo por 0.1 segundos
         if (cooldownMele > 0)

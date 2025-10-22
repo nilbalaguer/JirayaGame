@@ -1,19 +1,19 @@
 fileFormatVersion: 2
-guid: 314e3559157cda5449646b67ca1aa108
+guid: 3d36b1fe1ba11a64392d452873acd429
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2281638126696541448
-    second: campesino_back_0
+      213: 2736501549475849351
+    second: samurai-frontalWalk (1) 1_0
   - first:
-      213: 2576547014017044242
-    second: campesino_back_1
+      213: 8528848226646445009
+    second: samurai-frontalWalk (1) 1_1
   - first:
-      213: -4843813574459264648
-    second: campesino_back_2
+      213: -6269350827879477513
+    second: samurai-frontalWalk (1) 1_2
   - first:
-      213: -4253024896969301851
-    second: campesino_back_3
+      213: -533840353062997107
+    second: samurai-frontalWalk (1) 1_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -109,12 +109,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: campesino_back_0
+      name: samurai-frontalWalk (1) 1_0
       rect:
         serializedVersion: 2
-        x: 6
+        x: 7
         y: 0
-        width: 21
+        width: 19
         height: 31
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -124,19 +124,41 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8f2d340663ef550e0800000000000000
-      internalID: -2281638126696541448
+      spriteID: 78460df19a10af520800000000000000
+      internalID: 2736501549475849351
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: campesino_back_1
+      name: samurai-frontalWalk (1) 1_1
       rect:
         serializedVersion: 2
-        x: 38
+        x: 39
         y: 0
-        width: 21
+        width: 19
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1db4b7c364e8c5670800000000000000
+      internalID: 8528848226646445009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: samurai-frontalWalk (1) 1_2
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 0
+        width: 19
         height: 31
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -146,20 +168,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 21f449dabdbb1c320800000000000000
-      internalID: 2576547014017044242
+      spriteID: 7fe41f373aacef8a0800000000000000
+      internalID: -6269350827879477513
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: campesino_back_2
+      name: samurai-frontalWalk (1) 1_3
       rect:
         serializedVersion: 2
-        x: 70
+        x: 103
         y: 0
-        width: 21
-        height: 30
+        width: 19
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -168,30 +190,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 871f328b73157ccb0800000000000000
-      internalID: -4843813574459264648
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: campesino_back_3
-      rect:
-        serializedVersion: 2
-        x: 102
-        y: 0
-        width: 21
-        height: 31
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5a0a043c3683af4c0800000000000000
-      internalID: -4253024896969301851
+      spriteID: d8339ecf60b6798f0800000000000000
+      internalID: -533840353062997107
       vertices: []
       indices: 
       edges: []
@@ -200,7 +200,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: d8c141dbb8c704040a091b302fd3c066
+    spriteID: 52a9f5bfa5312fb4fa97ae195f700e63
     internalID: 0
     vertices: []
     indices: 
@@ -210,10 +210,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      campesino_back_0: -2281638126696541448
-      campesino_back_1: 2576547014017044242
-      campesino_back_2: -4843813574459264648
-      campesino_back_3: -4253024896969301851
+      samurai-frontalWalk (1) 1_0: 2736501549475849351
+      samurai-frontalWalk (1) 1_1: 8528848226646445009
+      samurai-frontalWalk (1) 1_2: -6269350827879477513
+      samurai-frontalWalk (1) 1_3: -533840353062997107
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -84,7 +84,7 @@ public class PlayerController : MonoBehaviour
                     state = "MoveDown";
                 }
 
-                if (rigidBody.linearVelocity.x == 0 && rigidBody.linearVelocity.y == 0)
+                if (rigidBody.linearVelocity.x == 0 && rigidBody.linearVelocity.y == 0 && state != "Attack")
                 {
                     state = "idle";
                 }
@@ -92,6 +92,11 @@ public class PlayerController : MonoBehaviour
                 if (Input.GetButtonDown("Fire1") && cooldownMele <= 0)
                 {
                     state = "Attack";
+                }
+
+                if (Input.GetButtonDown("Jump"))
+                {
+                    animator.SetBool("Human", !animator.GetBool("Human"));
                 }
 
                 break;
@@ -104,37 +109,43 @@ public class PlayerController : MonoBehaviour
             State 2 = Walk left
             State 3 = Walk Up
             State 4 = Walk Down
+            State 5 = Attack
         */
 
         switch (state)
         {
             default:
             case "idle":
-                animator.SetInteger("State", 0);
+                animator.SetFloat("State", 0);
+                animator.SetInteger("State-int", 0);
 
                 break;
 
             case "MoveRight":
 
-                animator.SetInteger("State", 1);
+                animator.SetFloat("State", 1);
+                animator.SetInteger("State-int", 1);
 
                 break;
 
             case "MoveLeft":
 
-                animator.SetInteger("State", 2);
+                animator.SetFloat("State", 2);
+                animator.SetInteger("State-int", 2);
 
                 break;
 
             case "MoveUp":
 
-                animator.SetInteger("State", 3);
+                animator.SetFloat("State", 3);
+                animator.SetInteger("State-int", 3);
 
                 break;
 
             case "MoveDown":
 
-                animator.SetInteger("State", 4);
+                animator.SetFloat("State", 4);
+                animator.SetInteger("State-int", 4);
 
                 break;
 
@@ -142,6 +153,9 @@ public class PlayerController : MonoBehaviour
 
                 //Rotacion de las armas siempre igual que el ultimo movimiento del jugador
                 //Setea el cooldown para que empieze el ataque y retrase para el siguiente
+                animator.SetFloat("State", 5);
+                animator.SetInteger("State-int", 5);
+
                 cooldownMele = cooldownForMele;
 
                 switch (lastMove)
@@ -171,7 +185,7 @@ public class PlayerController : MonoBehaviour
         }
 
         animator.SetFloat("LastDirection", lastMove);
-        
+
         //Sistema Katana para el cooldown i para activar i desactivar el katana collider solo por 0.1 segundos
         if (cooldownMele > 0)
         {
@@ -180,7 +194,8 @@ public class PlayerController : MonoBehaviour
                 colliderKatana.enabled = true;
                 spriteRendererKatana.enabled = true;
 
-            } else if (colliderKatana.enabled && cooldownMele < (cooldownForMele - 0.1))
+            }
+            else if (colliderKatana.enabled && cooldownMele < (cooldownForMele - 0.1))
             {
                 colliderKatana.enabled = false;
             }

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 48e0eb369a1aaf1449fdf771de7343c3
+guid: bf0d30d12c7f06c438e938f7422ad2ff
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -98,7 +98,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638968386367257442
+  platformSettingsDirtyTick: 638968386418469852
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -123,7 +123,7 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: sapo-forward-attack
+  - name: Frame_0
     originalName: 
     pivot: {x: 0.5, y: 0}
     alignment: 9
@@ -134,8 +134,8 @@ ScriptedImporter:
       x: 4
       y: 4
       width: 16
-      height: 16
-    spriteID: c0b29a75b8c2644429c6d681dd3c06e0
+      height: 15
+    spriteID: 537281ade6420b249b544b87721c5a38
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -153,10 +153,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 4
-      y: 28
+      y: 27
       width: 16
-      height: 16
-    spriteID: 213daed89662f1248a194b9d3dfc3c9e
+      height: 15
+    spriteID: b1071c23e2caf904190f3c8af0b562ac
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -164,17 +164,17 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 28}
+    uvTransform: {x: 4, y: 27}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
     uuid:
-      value0: 3972054734
+      value0: 2724668678
       value1: 0
       value2: 0
       value3: 0
     guid: 0
-    name: sapo-forward-attack
+    name: sapo-left-attack
     layerFlags: 0
     layerType: 0
     blendMode: 0
@@ -186,8 +186,8 @@ ScriptedImporter:
         x: 0
         y: 0
         width: 16
-        height: 16
-      spriteId: c0b29a75b8c2644429c6d681dd3c06e0
+        height: 15
+      spriteId: 537281ade6420b249b544b87721c5a38
     - name: Frame_1
       frameIndex: 1
       additiveSortOrder: 0
@@ -195,8 +195,8 @@ ScriptedImporter:
         x: 0
         y: 0
         width: 16
-        height: 16
-      spriteId: 213daed89662f1248a194b9d3dfc3c9e
+        height: 15
+      spriteId: b1071c23e2caf904190f3c8af0b562ac
     linkedCells: []
     parentIndex: -1
   platformSettings:

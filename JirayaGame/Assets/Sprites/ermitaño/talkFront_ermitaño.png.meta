@@ -1,16 +1,19 @@
 fileFormatVersion: 2
-guid: 7193f93bd01c5b84f8dc251998ea5a97
+guid: fb229b3b1c5de364bbf45a0d7d6b345c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2446551114162168659
-    second: nube_texto 2_0
+      213: -4406054802111853895
+    second: "talkFront_ermita\xF1o_0"
   - first:
-      213: -8711758874146367478
-    second: nube_texto 2_1
+      213: 447152106463197440
+    second: "talkFront_ermita\xF1o_1"
   - first:
-      213: -2058422975238661428
-    second: nube_texto 2_2
+      213: -3702978285094620853
+    second: "talkFront_ermita\xF1o_2"
+  - first:
+      213: -5965977380955154391
+    second: "talkFront_ermita\xF1o_3"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -106,67 +109,89 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: nube_texto 2_0
+      name: "talkFront_ermita\xF1o_0"
       rect:
         serializedVersion: 2
-        x: 2
-        y: 4
-        width: 25
-        height: 21
+        x: 6
+        y: 0
+        width: 20
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 353e874a645e3f120800000000000000
-      internalID: 2446551114162168659
+      spriteID: 9ba0833708c8ad2c0800000000000000
+      internalID: -4406054802111853895
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: nube_texto 2_1
+      name: "talkFront_ermita\xF1o_1"
       rect:
         serializedVersion: 2
-        x: 30
-        y: 4
-        width: 25
-        height: 21
+        x: 38
+        y: 0
+        width: 20
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a0816a9f57d991780800000000000000
-      internalID: -8711758874146367478
+      spriteID: 0097e42c87a943600800000000000000
+      internalID: 447152106463197440
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: nube_texto 2_2
+      name: "talkFront_ermita\xF1o_2"
       rect:
         serializedVersion: 2
-        x: 58
-        y: 4
-        width: 25
-        height: 21
+        x: 70
+        y: 0
+        width: 20
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: cca9563c5330f63e0800000000000000
-      internalID: -2058422975238661428
+      spriteID: b4133f17ed06c9cc0800000000000000
+      internalID: -3702978285094620853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "talkFront_ermita\xF1o_3"
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 0
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 928172e5e27943da0800000000000000
+      internalID: -5965977380955154391
       vertices: []
       indices: 
       edges: []
@@ -175,7 +200,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 892ce3dbc6a72094d91e56933645e5d5
+    spriteID: 2311c04338794f64d96e762f8cec6599
     internalID: 0
     vertices: []
     indices: 
@@ -185,9 +210,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      nube_texto 2_0: 2446551114162168659
-      nube_texto 2_1: -8711758874146367478
-      nube_texto 2_2: -2058422975238661428
+      "talkFront_ermita\xF1o_0": -4406054802111853895
+      "talkFront_ermita\xF1o_1": 447152106463197440
+      "talkFront_ermita\xF1o_2": -3702978285094620853
+      "talkFront_ermita\xF1o_3": -5965977380955154391
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

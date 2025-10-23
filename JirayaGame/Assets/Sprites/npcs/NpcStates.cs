@@ -20,6 +20,7 @@ public class NpcStates : MonoBehaviour
 
     public GameObject dialogueBox;
     public ScrollPanel scrollPanel;
+    public GameObject canvasImagen;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -98,17 +99,17 @@ public class NpcStates : MonoBehaviour
             case State.Idle:
                 rb.linearVelocity = Vector2.zero;
                 anim.SetInteger("state", 0);
-                if (dialogueBox != null)
+                /*if (dialogueBox != null)
                 {
                     scrollPanel.ClosePanel();
-                }
+                }*/
                 break;
             case State.Patrol:
                 MoveTowards(patrolPoints[currentPointIndex].position);
-                if (dialogueBox != null)
+                /*if (dialogueBox != null)
                 {
                     scrollPanel.ClosePanel();
-                }
+                }*/
                 break;
             case State.Alerted:
                 rb.linearVelocity = Vector2.zero;
@@ -129,7 +130,14 @@ public class NpcStates : MonoBehaviour
                         anim.SetInteger("state", 4);
                     }
                 }
-                dialogueBox.SetActive(true);
+                if (!scrollPanel.hasTalked)
+                {
+                    dialogueBox.SetActive(true);
+                }
+                else
+                {
+                    canvasImagen.SetActive(false);
+                }
                 break;
         }
 

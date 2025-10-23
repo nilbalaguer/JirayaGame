@@ -6,6 +6,8 @@ public class ScrollPanel : MonoBehaviour
 {
     public GameObject text;
     private Animator animator;
+    public npcReputacion reputacion;
+    public bool hasTalked = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Awake()
@@ -32,10 +34,24 @@ public class ScrollPanel : MonoBehaviour
     public void DisablePanel()
     {
         gameObject.SetActive(false);
-    }  
+    }
 
     public void HideText()
     {
         text.SetActive(false);
-    } 
+    }
+
+    public void botonSi()
+    {
+        reputacion.RespuestaPositiva();
+        animator.SetTrigger("Close");
+        hasTalked = true;
+    }
+    
+    public void botonNo()
+    {
+        reputacion.RespuestaNegativa();
+        animator.SetTrigger("Close");
+        hasTalked = true;
+    }
 }

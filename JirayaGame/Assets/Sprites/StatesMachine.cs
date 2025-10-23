@@ -4,7 +4,7 @@ public class StatesMachine : MonoBehaviour
 {
     private Rigidbody2D body;
     private Animator animator;
-    public enum State {Idle, Walk, Walk_front, Walk_back, Death};
+    public enum State {Idle, Walk, Walk_front, Walk_back, Death, Transforming};
     private State PlayerState;
     public float velocity;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -40,6 +40,10 @@ public class StatesMachine : MonoBehaviour
                             PlayerState = State.Walk_front;
                     }
                 }
+                /*else if (Input.GetKeyDown(KeyCode.T))
+                {
+                    PlayerState = State.Transforming;
+                }*/
                 break;
             case State.Walk:
             case State.Walk_front:
@@ -64,6 +68,9 @@ public class StatesMachine : MonoBehaviour
 
                 }
                 break;
+            /*case State.Transforming:
+                Debug.Log("Transformandose en sapo...");
+                break;*/
         }
         
         //Switch para cambiar animacion y aplicar propiedades
@@ -80,8 +87,8 @@ public class StatesMachine : MonoBehaviour
             case State.Walk_back:
                 animator.SetInteger("state", 3);
                 break;
-            case State.Death:
-                //Animation de muerte
+            case State.Transforming:
+                //animacion de transformacion en sapo
                 break;
         }
     }

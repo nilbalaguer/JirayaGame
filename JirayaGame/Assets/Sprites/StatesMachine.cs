@@ -4,7 +4,7 @@ public class StatesMachine : MonoBehaviour
 {
     private Rigidbody2D body;
     private Animator animator;
-    public enum State {Idle, Walk, Walk_front, Walk_back, Death, Transforming};
+    public enum State {Idle, Walk, Walk_front, Walk_back, Coger, Transforming};
     private State PlayerState;
     public float velocity;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -40,10 +40,10 @@ public class StatesMachine : MonoBehaviour
                             PlayerState = State.Walk_front;
                     }
                 }
-                /*else if (Input.GetKeyDown(KeyCode.T))
+                else if (Input.GetKeyDown(KeyCode.E))
                 {
-                    PlayerState = State.Transforming;
-                }*/
+                    PlayerState = State.Coger;
+                }
                 break;
             case State.Walk:
             case State.Walk_front:
@@ -68,9 +68,26 @@ public class StatesMachine : MonoBehaviour
 
                 }
                 break;
-            /*case State.Transforming:
-                Debug.Log("Transformandose en sapo...");
-                break;*/
+            case State.Coger:
+                if (velocity > 0.1f)
+                {
+                    if (Mathf.Abs(vel.x) > Mathf.Abs(vel.y))
+                    {
+                        PlayerState = State.Walk;
+                    }
+                    else
+                    {
+                        if (vel.y > 0)
+                            PlayerState = State.Walk_back;
+                        else if (vel.y < 0)
+                            PlayerState = State.Walk_front;
+                    }
+                }
+                else
+                {
+                    PlayerState = State.Idle;
+                }
+                break;
         }
         
         //Switch para cambiar animacion y aplicar propiedades
@@ -87,8 +104,9 @@ public class StatesMachine : MonoBehaviour
             case State.Walk_back:
                 animator.SetInteger("state", 3);
                 break;
-            case State.Transforming:
-                //animacion de transformacion en sapo
+            case State.Coger:
+                //animacion de coger
+                
                 break;
         }
     }

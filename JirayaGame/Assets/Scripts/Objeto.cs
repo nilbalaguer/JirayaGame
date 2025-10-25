@@ -39,7 +39,7 @@ public class Objeto : MonoBehaviour
     //Funcion para destruir objeto al cogerlo para guardarlo al inventario
     public void CogerObjeto()
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
     // Update is called once per frame

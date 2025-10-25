@@ -72,6 +72,10 @@ public class StatesMachine : MonoBehaviour
                     }
 
                 }
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    PlayerState = State.Coger;
+                }
                 break;
             case State.Coger:
                 if (velocity > 0.1f)
@@ -111,8 +115,7 @@ public class StatesMachine : MonoBehaviour
                 animator.SetInteger("state", 3);
                 break;
             case State.Coger:
-                //animacion de coger
-                CogerObjeto();
+                animator.SetInteger("state", 6);
                 break;
         }
     }

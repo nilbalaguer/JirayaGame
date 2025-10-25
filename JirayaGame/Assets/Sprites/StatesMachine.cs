@@ -138,6 +138,17 @@ public class StatesMachine : MonoBehaviour
             }
         }
     }
+
+    public void EquiparObjeto(Objeto objetoCercano)
+    {
+        if (objetoSujeto != null)
+        {
+            objetoSujeto.transform.SetParent(null);
+            objetoSujeto.gameObject.SetActive(false);
+        }
+        objetoSujeto = objetoCercano;
+        objetoSujeto.Coger(puntoSujecion);
+    }
     
     private void OnTriggerEnter2D(Collider2D collision)
     {

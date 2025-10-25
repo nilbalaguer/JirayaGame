@@ -5,7 +5,7 @@ public class NpcStates : MonoBehaviour
     private Rigidbody2D rb;
     private Animator anim;
 
-    public enum State { Idle, Patrol, Alerted };
+    public enum State { Idle, Patrol, Alerted, Scared };
     public State currentState;
 
     public Transform[] patrolPoints; 
@@ -16,7 +16,9 @@ public class NpcStates : MonoBehaviour
     private bool waiting = false;
 
     private GameObject player;
+    private GameObject enemy;
     public float rangoPlayer = 2f;
+    public float rangoEnemy = 3f;
 
     public GameObject dialogueBox;
     public ScrollPanel scrollPanel;
@@ -34,6 +36,7 @@ public class NpcStates : MonoBehaviour
             transform.position = patrolPoints[0].position;
         }
         player = GameObject.FindWithTag("Player");
+        enemy = GameObject.FindWithTag("Enemy");
         dialogueBox.SetActive(false);
         //scrollPanel = dialogueBox.GetComponent<ScrollPanel>();
     }
@@ -65,15 +68,22 @@ public class NpcStates : MonoBehaviour
                         waiting = false;
                         currentState = State.Patrol;
                     }
-                }else if (PlayerinRange())
+                }
+                else if (PlayerinRange())
                 {
                     currentState = State.Alerted;
+                }
+                else if (EnemyinRange())
+                {
+                    currentState = State.Scared;
                 }
                 break;
 
             case State.Patrol:
                 if (PlayerinRange()){
                     currentState = State.Alerted;
+                }else if (EnemyinRange()){
+                    currentState = State.Scared;
                 }
                 else
                 {
@@ -87,6 +97,13 @@ public class NpcStates : MonoBehaviour
                 break;
             case State.Alerted:
                 if (!PlayerinRange())
+                {
+                    currentState = State.Idle;
+                    waitCounter = waitTime;
+                }
+                break;
+            case State.Scared:
+                if (!EnemyinRange())
                 {
                     currentState = State.Idle;
                     waitCounter = waitTime;
@@ -139,6 +156,10 @@ public class NpcStates : MonoBehaviour
                     canvasImagen.SetActive(false);
                 }
                 break;
+            case State.Scared:
+                rb.linearVelocity = Vector2.zero;
+                anim.SetInteger("state", 6);
+                break;
         }
 
     }
@@ -179,10 +200,16 @@ public class NpcStates : MonoBehaviour
         }
 
     }
-        
+
     bool PlayerinRange()
     {
         float distancia = Vector2.Distance(transform.position, player.transform.position);
         return distancia <= rangoPlayer;
+    }
+    
+    bool EnemyinRange()
+    {
+        float distancia = Vector2.Distance(transform.position, enemy.transform.position);
+        return distancia <= rangoEnemy;
     }
 }

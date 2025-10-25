@@ -6,6 +6,7 @@ public class Objeto : MonoBehaviour
     //private GameObject objetoSujeto;
     [HideInInspector] public bool estaSujeto = false;
     private Rigidbody2D rb;
+    public Sprite icono;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -47,15 +48,4 @@ public class Objeto : MonoBehaviour
     {
 
     }
-    
-    /*void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            objetoSujeto = collision.gameObject;
-            objetoRigidbody = GetComponent<Rigidbody2D>();
-            transform.position = puntoSujeccion.position;
-            transform.parent = objetoSujeto.transform;
-        }
-    }*/
 }

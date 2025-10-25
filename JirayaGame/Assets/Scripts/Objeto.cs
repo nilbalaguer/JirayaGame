@@ -12,6 +12,7 @@ public class Objeto : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
+    //Funciones para la mecanica de coger y lanzar objetos  
     public void Coger(Transform puntoSujecion)
     {
         estaSujeto = true;
@@ -34,6 +35,11 @@ public class Objeto : MonoBehaviour
         estaSujeto = false;
 
         Destroy(gameObject, 2f);
+    }
+    //Funcion para destruir objeto al cogerlo para guardarlo al inventario
+    public void CogerObjeto()
+    {
+        Destroy(gameObject);
     }
 
     // Update is called once per frame

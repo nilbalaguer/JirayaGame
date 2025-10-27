@@ -12,6 +12,12 @@ public class StatesMachine : MonoBehaviour
     private Objeto objetoSujeto;
     public float fuerzaLanzamiento = 10f;
     private Inventario inventario;
+
+    public GameObject CanvasInfo;
+    public GameObject tsunadePanel;
+    public bool tsunadeCerca = false;
+
+    public ScrollPanel scrollPanel;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -19,6 +25,8 @@ public class StatesMachine : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         PlayerState = State.Idle;
         inventario = GetComponent<Inventario>();
+        CanvasInfo.SetActive(false);
+        tsunadePanel.SetActive(false);
     }
 
     // Update is called once per frame
@@ -129,6 +137,16 @@ public class StatesMachine : MonoBehaviour
         {
             GuardarObjeto();
         }
+        //Soltar el objeto en caso de no necesitarlo
+        else if (Input.GetKeyDown(KeyCode.Z) && objetoSujeto != null)
+        {
+            SoltarObjeto();
+        }
+
+        if (tsunadeCerca && objetoSujeto != null)
+        {
+            EntregarObjeto();
+        }
     }
 
 
@@ -143,6 +161,7 @@ public class StatesMachine : MonoBehaviour
             {
                 objetoSujeto = objetoCercano;
                 objetoSujeto.Coger(puntoSujecion);
+                CanvasInfo.SetActive(true);
             }
             else
             {
@@ -181,23 +200,51 @@ public class StatesMachine : MonoBehaviour
         objetoSujeto.gameObject.SetActive(true);
         objetoSujeto.Coger(puntoSujecion);
     }
+
+    public void SoltarObjeto()
+    {
+        if (objetoSujeto != null)
+        {
+            objetoSujeto.Soltar();
+            objetoSujeto = null;
+        }
+    }
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("ObjetoCogible"))
+        if (collision.CompareTag("intObject"))
         {
             objetoCercano = collision.GetComponent<Objeto>();
+        }else if (collision.CompareTag("Tsunade"))
+        {
+            tsunadeCerca = true;
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("ObjetoCogible"))
+        if (collision.CompareTag("intObject"))
         {
             if (objetoCercano != null && collision.gameObject == objetoCercano.gameObject)
             {
                 objetoCercano = null;
+            }else if (collision.CompareTag("Tsunade"))
+            {
+                tsunadeCerca = false;
             }
         }
+    }
+
+
+
+    public void EntregarObjeto()
+    {
+        tsunadePanel.SetActive(true);
+        if (scrollPanel.entregarObjeto)
+        {
+            inventario.EliminarObjeto(objetoSujeto);
+            objetoSujeto = null;
+        }
+        //inventario.EliminarObjeto(objetoSujeto);
     }
 }

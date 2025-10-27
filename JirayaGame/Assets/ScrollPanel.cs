@@ -8,6 +8,7 @@ public class ScrollPanel : MonoBehaviour
     private Animator animator;
     public npcReputacion reputacion;
     public bool hasTalked = false;
+    public bool entregarObjeto = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Awake()
@@ -47,11 +48,23 @@ public class ScrollPanel : MonoBehaviour
         animator.SetTrigger("Close");
         hasTalked = true;
     }
-    
+
     public void botonNo()
     {
         reputacion.RespuestaNegativa();
         animator.SetTrigger("Close");
         hasTalked = true;
+    }
+
+    //Botones panel tsunade
+
+    public void btnAceptar()
+    {
+        entregarObjeto = true;
+    }
+    
+    public void btnRechazar()
+    {
+        entregarObjeto = false;
     }
 }

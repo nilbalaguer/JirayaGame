@@ -67,5 +67,17 @@ public class Inventario : MonoBehaviour
             });
         }
     }
+
+    public void EliminarObjeto(Objeto objeto)
+    {
+        if (objetos.Contains(objeto))
+        {
+            objetos.Remove(objeto);
+            ActualizarInventario();        }
+        else
+        {
+            Debug.Log("El objeto no está en el inventario.");
+        }
+    }
     
 }

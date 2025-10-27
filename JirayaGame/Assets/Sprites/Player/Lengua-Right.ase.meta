@@ -2,7 +2,12 @@ fileFormatVersion: 2
 guid: 7f555e55a4fb45249a0c534d5f03f32c
 ScriptedImporter:
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Lengua-Right_Clip
+    second: {fileID: 7400000, guid: aef82976f935e3940aeb38558a3fc721, type: 2}
   serializedVersion: 2
   userData: 
   assetBundleName: 
@@ -98,7 +103,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638968466199156238
+  platformSettingsDirtyTick: 638971872031030437
   textureAssetName: 
   singleSpriteImportData:
   - name: 

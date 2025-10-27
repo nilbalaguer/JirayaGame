@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     private Animator tongeAnimator;
 
     private float cooldownMele = 0;
+    private float cooldownTonge = 0.75f;
     [SerializeField] float cooldownForMele = 0.5f;
     private int lastMove;
 
@@ -37,14 +38,56 @@ public class PlayerController : MonoBehaviour
         spriteRendererKatana.enabled = false;
 
         //Lengua
-        toatTongeTonge = toatTonge.GetComponent<SpriteRenderer>();
-        tongeAnimator = toatTonge.GetComponent<Animator>();
+        toatTongeTonge = toatTonge.GetComponentInChildren<SpriteRenderer>();
+        tongeAnimator = toatTonge.GetComponentInChildren<Animator>();
         toatTongeTonge.enabled = false;
+        tongeAnimator.SetFloat("Blend", 0);
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Sistema Katana para el cooldown i para activar i desactivar el katana collider solo por 0.1 segundos
+        if (cooldownMele > 0)
+        {
+            if (cooldownMele == cooldownForMele)
+            {
+                colliderKatana.enabled = true;
+                spriteRendererKatana.enabled = true;
+
+            }
+            else if (colliderKatana.enabled && cooldownMele < (cooldownForMele - 0.1))
+            {
+                colliderKatana.enabled = false;
+            }
+
+            cooldownMele -= Time.deltaTime;
+
+            if (cooldownMele <= 0)
+            {
+                spriteRendererKatana.enabled = false;
+            }
+        }
+
+        //Sistema de cooldown lengua.
+        if (toatTongeTonge.enabled)
+        {
+            cooldownTonge -= Time.deltaTime;
+
+            if (cooldownTonge <= 0)
+            {
+                toatTongeTonge.enabled = false;
+                cooldownTonge = 0.75f;
+            }
+            else
+            {
+                rigidBody.linearVelocity = new Vector2(0, 0);;
+
+                return;
+            }
+        }
+        
+        //Sistema movimiento
         float forceX = Input.GetAxis("Horizontal");
         float forceY = Input.GetAxis("Vertical");
 
@@ -199,26 +242,33 @@ public class PlayerController : MonoBehaviour
                     switch (lastMove)
                     {
                         case 1:
-                            toatTonge.transform.RotateAround(transform.position, Vector3.forward, -90);
+                            toatTonge.transform.rotation = Quaternion.Euler(0, 0, 90);
+                            toatTonge.transform.localPosition = new Vector2(0, 0);
                             break;
 
                         case 2:
-                            toatTonge.transform.RotateAround(transform.position, Vector3.forward, 90);
+                            toatTonge.transform.rotation = Quaternion.Euler(0, 0, -90);
+                            toatTonge.transform.localPosition = new Vector2(0, 0);
                             break;
 
                         case 3:
-                            toatTonge.transform.RotateAround(transform.position, Vector3.forward, 0);
+                            toatTonge.transform.rotation = Quaternion.Euler(0, 0, 0);
+                            toatTonge.transform.localPosition = new Vector2(0, 0.11f);
                             break;
 
                         case 4:
-                            toatTonge.transform.RotateAround(transform.position, Vector3.forward, 180);
+                            toatTonge.transform.rotation = Quaternion.Euler(0, 0, 180);
+                            toatTonge.transform.localPosition = new Vector2(0, 0.11f);
                             break;
 
                         default:
-                            toatTonge.transform.RotateAround(transform.position, Vector3.forward, 180);
+                            toatTonge.transform.rotation = Quaternion.Euler(0, 0, 180);
+                            toatTonge.transform.localPosition = new Vector2(0, 0);
                             break;
                     }
 
+                    toatTongeTonge.enabled = true;
+                    tongeAnimator.Play("Lengua-Right_Clip", 0, 0f);
 
                     state = "idle";
                 }
@@ -230,28 +280,6 @@ public class PlayerController : MonoBehaviour
         //Sincronizar variables animator
         animator.SetFloat("LastDirection", lastMove);
         animator.SetBool("Human", human);
-
-        //Sistema Katana para el cooldown i para activar i desactivar el katana collider solo por 0.1 segundos
-        if (cooldownMele > 0)
-        {
-            if (cooldownMele == cooldownForMele)
-            {
-                colliderKatana.enabled = true;
-                spriteRendererKatana.enabled = true;
-
-            }
-            else if (colliderKatana.enabled && cooldownMele < (cooldownForMele - 0.1))
-            {
-                colliderKatana.enabled = false;
-            }
-
-            cooldownMele -= Time.deltaTime;
-
-            if (cooldownMele <= 0)
-            {
-                spriteRendererKatana.enabled = false;
-            }
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)

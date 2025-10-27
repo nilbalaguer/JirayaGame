@@ -1,13 +1,19 @@
 fileFormatVersion: 2
-guid: 56c8a492ecef31c4595e8b3e53bfb463
+guid: dc6d8d6eb1fd21e48a1ac1b2a560e1ee
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2429685916617502184
-    second: "idleBaston_ermita\xF1o_0"
+      213: -445262345965310092
+    second: "walk_ermita\xF1o_0"
   - first:
-      213: 4553865019079890385
-    second: "idleBaston_ermita\xF1o_1"
+      213: -2131315100689591126
+    second: "walk_ermita\xF1o_1"
+  - first:
+      213: -7306976488528286197
+    second: "walk_ermita\xF1o_2"
+  - first:
+      213: 6113451789696666947
+    second: "walk_ermita\xF1o_3"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -103,32 +109,10 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "idleBaston_ermita\xF1o_0"
+      name: "walk_ermita\xF1o_0"
       rect:
         serializedVersion: 2
         x: 6
-        y: 0
-        width: 20
-        height: 31
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8129e382885084ed0800000000000000
-      internalID: -2429685916617502184
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "idleBaston_ermita\xF1o_1"
-      rect:
-        serializedVersion: 2
-        x: 38
         y: 0
         width: 20
         height: 32
@@ -140,8 +124,74 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1d595518b14923f30800000000000000
-      internalID: 4553865019079890385
+      spriteID: 47f61e4614c12d9f0800000000000000
+      internalID: -445262345965310092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "walk_ermita\xF1o_1"
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 0
+        width: 20
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa498f6453c0c62e0800000000000000
+      internalID: -2131315100689591126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "walk_ermita\xF1o_2"
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 0
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b0ee3230997689a90800000000000000
+      internalID: -7306976488528286197
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "walk_ermita\xF1o_3"
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 0
+        width: 20
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34d8854230857d450800000000000000
+      internalID: 6113451789696666947
       vertices: []
       indices: 
       edges: []
@@ -150,7 +200,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 3a084c73befc1df4c88b6af28730aa97
+    spriteID: 929205d8bb7153e4488c57c8117bafb2
     internalID: 0
     vertices: []
     indices: 
@@ -160,8 +210,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      "idleBaston_ermita\xF1o_0": -2429685916617502184
-      "idleBaston_ermita\xF1o_1": 4553865019079890385
+      "walk_ermita\xF1o_0": -445262345965310092
+      "walk_ermita\xF1o_1": -2131315100689591126
+      "walk_ermita\xF1o_2": -7306976488528286197
+      "walk_ermita\xF1o_3": 6113451789696666947
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

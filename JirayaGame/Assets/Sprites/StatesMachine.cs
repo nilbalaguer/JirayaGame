@@ -10,6 +10,7 @@ public class StatesMachine : MonoBehaviour
     public Transform puntoSujecion;
     private Objeto objetoCercano;
     private Objeto objetoSujeto;
+    public float fuerzaLanzamiento = 10f;
     private Inventario inventario;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -118,8 +119,20 @@ public class StatesMachine : MonoBehaviour
                 animator.SetInteger("state", 6);
                 break;
         }
+
+        //si el objeto esta cogido puedo lanzarlo o guardarlo en el inventario
+        if (Input.GetKeyDown(KeyCode.Space) && objetoSujeto != null)
+        {
+            LanzarObjeto();
+        }
+        else if (Input.GetKeyDown(KeyCode.G) && objetoSujeto != null)
+        {
+            GuardarObjeto();
+        }
     }
 
+
+    //Coger objeto cercano
     public void CogerObjeto()
     {
         if (objetoSujeto == null && objetoCercano != null)
@@ -128,8 +141,8 @@ public class StatesMachine : MonoBehaviour
             float rangoDeteccion = 2f;
             if (distancia <= rangoDeteccion)
             {
-                inventario.AñadirObjeto(objetoCercano);
-                objetoCercano.CogerObjeto();
+                objetoSujeto = objetoCercano;
+                objetoSujeto.Coger(puntoSujecion);
             }
             else
             {
@@ -139,6 +152,24 @@ public class StatesMachine : MonoBehaviour
         }
     }
 
+    //Lanzar objeto sujeto
+    public void LanzarObjeto()
+    {
+        Vector2 direccion = puntoSujecion.right.normalized;
+        objetoSujeto.Lanzar(direccion, fuerzaLanzamiento);
+        objetoSujeto = null;
+    }
+
+    //Guardar objeto en inventario
+    public void GuardarObjeto()
+    {
+        inventario.AñadirObjeto(objetoSujeto);
+        objetoSujeto.CogerObjeto();
+        objetoSujeto = null;
+        Debug.Log("Objeto guardado en inventario.");
+    }
+
+    //Equipar objeto desde inventario
     public void EquiparObjeto(Objeto objetoCercano)
     {
         if (objetoSujeto != null)
@@ -147,6 +178,7 @@ public class StatesMachine : MonoBehaviour
             objetoSujeto.gameObject.SetActive(false);
         }
         objetoSujeto = objetoCercano;
+        objetoSujeto.gameObject.SetActive(true);
         objetoSujeto.Coger(puntoSujecion);
     }
     

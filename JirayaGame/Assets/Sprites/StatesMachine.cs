@@ -215,8 +215,10 @@ public class StatesMachine : MonoBehaviour
         if (collision.CompareTag("intObject"))
         {
             objetoCercano = collision.GetComponent<Objeto>();
-        }else if (collision.CompareTag("Tsunade"))
+        }
+        if (collision.CompareTag("Tsunade"))
         {
+            Debug.Log("Entraste en el rango de Tsunade");
             tsunadeCerca = true;
         }
     }
@@ -228,10 +230,12 @@ public class StatesMachine : MonoBehaviour
             if (objetoCercano != null && collision.gameObject == objetoCercano.gameObject)
             {
                 objetoCercano = null;
-            }else if (collision.CompareTag("Tsunade"))
-            {
-                tsunadeCerca = false;
             }
+        }
+        if (collision.CompareTag("Tsunade"))
+        {
+            Debug.Log("Saliste del rango de Tsunade");
+            tsunadeCerca = false;
         }
     }
 
@@ -240,5 +244,12 @@ public class StatesMachine : MonoBehaviour
         objetoSujeto.Soltar();
         objetoSujeto = null;
         tsunadePanel.SetActive(false);
+        Invoke ("DesactivarObjetoCercano", 0.5f);
+    }
+
+    public void DesactivarObjetoCercano()
+    {
+        objetoCercano.gameObject.SetActive(false);
+        inventario.EliminarObjeto(objetoCercano);
     }
 }

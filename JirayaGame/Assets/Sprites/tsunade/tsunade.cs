@@ -10,11 +10,13 @@ public class tsunade : MonoBehaviour
     private GameObject player;
     public float rangoPlayer = 2f;
     public ScrollPanel scrollPanel;
+    public GameObject panelDialogo;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         player = GameObject.FindWithTag("Player");
+        panelDialogo.SetActive(false);
         anim = GetComponent<Animator>();
         currentState = State.Idle;
     }
@@ -33,7 +35,7 @@ public class tsunade : MonoBehaviour
                 break;
 
             case State.Talking:
-                if (!PlayerinRange())
+                if (!scrollPanel.entregarObjeto)
                 {
                     currentState = State.Idle;
 
@@ -44,11 +46,28 @@ public class tsunade : MonoBehaviour
         switch (currentState)
         {
             case State.Idle:
-                anim.SetInteger("state", 0);
+                Vector2 directionToPlayer = player.transform.position - transform.position;
+                if (Mathf.Abs(directionToPlayer.x) > Mathf.Abs(directionToPlayer.y))
+                {
+                    transform.localScale = new Vector3(directionToPlayer.x < 0 ? -5 : 5, 5, 5);
+                    anim.SetInteger("state", 0);
+                }
+                else
+                {
+                    if (directionToPlayer.y > 0)
+                    {
+                        anim.SetInteger("state", 4);
+                    }
+                    else
+                    {
+                        anim.SetInteger("state", 5);
+                    }
+                }
                 break;
 
             case State.Talking:
                 anim.SetInteger("state", 1);
+                panelDialogo.SetActive(true);
                 break;
         }
     }

@@ -13,6 +13,7 @@ public class panelErmitaño : MonoBehaviour
     private Animator animator;
     public Sprite iconoFlecha;
     public Sprite iconoCruz;
+    public ScrollPanel scrollPanel;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -58,6 +59,23 @@ public class panelErmitaño : MonoBehaviour
         {
             animator.SetTrigger("Close");
             hasTalked = true;
+        }
+    }
+
+    //Boton para el panel de tsunade
+
+    public void NextTsunade()
+    {
+        if (paginaActual < paginas.Length - 1)
+        {
+            paginaActual++;
+            ShowPage();
+        }
+        else
+        {
+            animator.SetTrigger("Close");
+            scrollPanel.entregarObjeto = false;
+            //otorgar recompensa inventario al entregar objeto
         }
     }
 

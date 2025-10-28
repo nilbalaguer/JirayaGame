@@ -14,22 +14,28 @@ public class PlayerController : MonoBehaviour
     [SerializeField] string state = "idle";
     public bool human = true;
 
-
-    public int vida = 10;
-
     [Header("Armas")]
     [SerializeField] GameObject katanaObject;
     [SerializeField] PolygonCollider2D colliderKatana;
     [SerializeField] SpriteRenderer spriteRendererKatana;
     //Tonge
+    // Tonge collider max extension 1.84581
     [SerializeField] GameObject toatTonge;
     private SpriteRenderer toatTongeTonge;
     private Animator tongeAnimator;
+    [SerializeField] GameObject toatTongeColliderObject;
+    private BoxCollider2D tongeCollider;
+
+    private GameObject objectPicked = null;
+    
 
     private float cooldownMele = 0;
     private float cooldownTonge = 0.75f;
     [SerializeField] float cooldownForMele = 0.5f;
     private int lastMove;
+
+    [Header("Vida i Habilidades")]
+    public int vida = 10;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -40,8 +46,10 @@ public class PlayerController : MonoBehaviour
         //Lengua
         toatTongeTonge = toatTonge.GetComponentInChildren<SpriteRenderer>();
         tongeAnimator = toatTonge.GetComponentInChildren<Animator>();
+        tongeCollider = toatTonge.GetComponentInChildren<BoxCollider2D>();
         toatTongeTonge.enabled = false;
         tongeAnimator.SetFloat("Blend", 0);
+        tongeCollider.enabled = false;
     }
 
     // Update is called once per frame
@@ -77,14 +85,22 @@ public class PlayerController : MonoBehaviour
             if (cooldownTonge <= 0)
             {
                 toatTongeTonge.enabled = false;
+                tongeCollider.enabled = false;
                 cooldownTonge = 0.75f;
             }
             else
             {
-                rigidBody.linearVelocity = new Vector2(0, 0);;
+                rigidBody.linearVelocity = new Vector2(0, 0);
 
+                //NO DEJA MOVER NI HACER NADA MIENTRAS SE LANZA LA LENGUA!!!
+                //No colocar nada por debajo de este return que quieres que se ejecute absolutamente siempre
                 return;
             }
+        }
+
+        if (objectPicked != null)
+        {
+            objectPicked.transform.position = toatTongeColliderObject.transform.position;
         }
         
         //Sistema movimiento
@@ -94,14 +110,17 @@ public class PlayerController : MonoBehaviour
         if (forceY > 0)
         {
             lastMove = 1;
-        } else if (forceY < 0) {
+        }
+        else if (forceY < 0)
+        {
             lastMove = 2;
         }
-
-        if (forceX > 0)
+        else if (forceX > 0)
         {
             lastMove = 3;
-        } else if (forceX < 0) {
+        }
+        else if (forceX < 0)
+        {
             lastMove = 4;
         }
 
@@ -145,12 +164,23 @@ public class PlayerController : MonoBehaviour
 
                 if (Input.GetButtonDown("Fire1") && cooldownMele <= 0)
                 {
-                    state = "Attack";
+                    if (objectPicked != null)
+                    {
+                        objectPicked = null;
+                    } else
+                    {
+                        state = "Attack";
+                    }
+                    
                 }
 
                 if (Input.GetButtonDown("Jump"))
                 {
                     human = !human;
+                    if (objectPicked != null)
+                    {
+                        objectPicked = null;
+                    }
                 }
 
                 break;
@@ -180,12 +210,18 @@ public class PlayerController : MonoBehaviour
                 animator.SetFloat("State", 1);
                 animator.SetInteger("State-int", 1);
 
+                toatTonge.transform.rotation = Quaternion.Euler(0, 0, 0);
+                toatTonge.transform.localPosition = new Vector2(0, 0.11f);
+
                 break;
 
             case "MoveLeft":
 
                 animator.SetFloat("State", 2);
                 animator.SetInteger("State-int", 2);
+
+                toatTonge.transform.rotation = Quaternion.Euler(0, 0, 180);
+                toatTonge.transform.localPosition = new Vector2(0, 0.11f);
 
                 break;
 
@@ -194,6 +230,9 @@ public class PlayerController : MonoBehaviour
                 animator.SetFloat("State", 3);
                 animator.SetInteger("State-int", 3);
 
+                toatTonge.transform.rotation = Quaternion.Euler(0, 0, 90);
+                toatTonge.transform.localPosition = new Vector2(0, 0);
+
                 break;
 
             case "MoveDown":
@@ -201,11 +240,15 @@ public class PlayerController : MonoBehaviour
                 animator.SetFloat("State", 4);
                 animator.SetInteger("State-int", 4);
 
+                toatTonge.transform.rotation = Quaternion.Euler(0, 0, -90);
+                toatTonge.transform.localPosition = new Vector2(0, 0);
+
                 break;
 
             case "Attack":
                 if (human)
                 {
+                    //Lanzar ataque katana
                     //Rotacion de las armas siempre igual que el ultimo movimiento del jugador
                     //Setea el cooldown para que empieze el ataque y retrase para el siguiente
                     animator.SetFloat("State", 5);
@@ -236,38 +279,13 @@ public class PlayerController : MonoBehaviour
                     state = "idle";
                 } else
                 {
+                    //Lanzar lengua
+
                     animator.SetFloat("State", 5);
                     animator.SetInteger("State-int", 5);
 
-                    switch (lastMove)
-                    {
-                        case 1:
-                            toatTonge.transform.rotation = Quaternion.Euler(0, 0, 90);
-                            toatTonge.transform.localPosition = new Vector2(0, 0);
-                            break;
-
-                        case 2:
-                            toatTonge.transform.rotation = Quaternion.Euler(0, 0, -90);
-                            toatTonge.transform.localPosition = new Vector2(0, 0);
-                            break;
-
-                        case 3:
-                            toatTonge.transform.rotation = Quaternion.Euler(0, 0, 0);
-                            toatTonge.transform.localPosition = new Vector2(0, 0.11f);
-                            break;
-
-                        case 4:
-                            toatTonge.transform.rotation = Quaternion.Euler(0, 0, 180);
-                            toatTonge.transform.localPosition = new Vector2(0, 0.11f);
-                            break;
-
-                        default:
-                            toatTonge.transform.rotation = Quaternion.Euler(0, 0, 180);
-                            toatTonge.transform.localPosition = new Vector2(0, 0);
-                            break;
-                    }
-
                     toatTongeTonge.enabled = true;
+                    tongeCollider.enabled = true;
                     tongeAnimator.Play("Lengua-Right_Clip", 0, 0f);
 
                     state = "idle";
@@ -288,6 +306,12 @@ public class PlayerController : MonoBehaviour
         {
             vida -= 1;
             textoVida.text = "Vida: " + vida;
+        }
+
+        if (other.CompareTag("intObject") && toatTongeTonge.enabled)
+        {
+            objectPicked = other.gameObject;
+            
         }
     }
 }

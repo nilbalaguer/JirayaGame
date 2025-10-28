@@ -13,12 +13,20 @@ public class Enemigo1Script : MonoBehaviour
 
     public float knockForce = 2;
 
+    [Header("Movimiento")]
+
     private GameObject playerGameObject;
 
     private bool playerInRange = false;
     private float enemigoKnockout = 0f;
-
     private float enemigoKnockBack = 0f;
+    private int lastMove = 1;
+
+    [Header("Armas")]
+    private CircleCollider2D katanaCollider;
+
+    [Header("Animaciones")]
+    [SerializeField] Animator enemyAnimator;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -40,19 +48,23 @@ public class Enemigo1Script : MonoBehaviour
                 if (transform.position.x > playerGameObject.transform.position.x)
                 {
                     forceX = -1;
+                    lastMove = 4;
                 }
                 else if (transform.position.x < playerGameObject.transform.position.x)
                 {
                     forceX = 1;
+                    lastMove = 3;
                 }
 
                 if (transform.position.y > playerGameObject.transform.position.y)
                 {
                     forceY = -1;
+                    lastMove = 2;
                 }
                 else if (transform.position.y < playerGameObject.transform.position.y)
                 {
                     forceY = 1;
+                    lastMove = 1;
                 }
 
                 Vector2 movimiento = new Vector2(forceX, forceY) * maxSpeed;
@@ -68,7 +80,7 @@ public class Enemigo1Script : MonoBehaviour
         {
             rb.linearVelocity = Vector2.zero;
         }
-        
+
         if (enemigoKnockBack > 0)
         {
             Vector2 knockDirection = transform.position - playerGameObject.transform.position;
@@ -82,6 +94,8 @@ public class Enemigo1Script : MonoBehaviour
                 rb.linearVelocity = Vector2.zero;
             }
         }
+
+        enemyAnimator.SetFloat("LastDirection", lastMove);
     }
 
     void FixedUpdate()

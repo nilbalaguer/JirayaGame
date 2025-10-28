@@ -9,6 +9,7 @@ public class tsunade : MonoBehaviour
     private State currentState;
     private GameObject player;
     public float rangoPlayer = 2f;
+    public ScrollPanel scrollPanel;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -24,7 +25,7 @@ public class tsunade : MonoBehaviour
         switch (currentState)
         {
             case State.Idle:
-                if (PlayerinRange())
+                if (PlayerinRange() && scrollPanel.entregarObjeto)
                 {
                     currentState = State.Talking;
 
@@ -57,19 +58,4 @@ public class tsunade : MonoBehaviour
         float distancia = Vector2.Distance(transform.position, player.transform.position);
         return distancia <= rangoPlayer;
     }
-
-    /*void EntregarObjeto()
-    {
-        if (PlayerinRange() && playerScript.objetoSujeto != null)
-        {
-            //Mostrar panel dialogo
-            playerScript.SoltarObjeto();
-
-
-        }
-        else
-        {
-            Debug.Log("No hay nada para entregar");
-        }
-    }*/
 }

@@ -9,6 +9,7 @@ public class ScrollPanel : MonoBehaviour
     public npcReputacion reputacion;
     public bool hasTalked = false;
     public bool entregarObjeto = false;
+    public StatesMachine playerScript;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Awake()
@@ -60,6 +61,7 @@ public class ScrollPanel : MonoBehaviour
 
     public void btnAceptar()
     {
+        playerScript.AceptarEntrega();
         entregarObjeto = true;
     }
     

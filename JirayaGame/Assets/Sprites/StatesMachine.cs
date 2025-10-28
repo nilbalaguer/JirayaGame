@@ -145,7 +145,7 @@ public class StatesMachine : MonoBehaviour
 
         if (tsunadeCerca && objetoSujeto != null)
         {
-            EntregarObjeto();
+            tsunadePanel.SetActive(true);
         }
     }
 
@@ -235,16 +235,10 @@ public class StatesMachine : MonoBehaviour
         }
     }
 
-
-
-    public void EntregarObjeto()
+    public void AceptarEntrega()
     {
-        tsunadePanel.SetActive(true);
-        if (scrollPanel.entregarObjeto)
-        {
-            inventario.EliminarObjeto(objetoSujeto);
-            objetoSujeto = null;
-        }
-        //inventario.EliminarObjeto(objetoSujeto);
+        objetoSujeto.Soltar();
+        objetoSujeto = null;
+        tsunadePanel.SetActive(false);
     }
 }

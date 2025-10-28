@@ -56,6 +56,11 @@ public class Objeto : MonoBehaviour
         Canvas.SetActive(true);
     }
 
+    public void DesactivarObjeto()
+    {
+        gameObject.SetActive(false);
+    }
+
     // Update is called once per frame
     void Update()
     {

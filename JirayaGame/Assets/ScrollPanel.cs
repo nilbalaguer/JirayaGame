@@ -68,5 +68,6 @@ public class ScrollPanel : MonoBehaviour
     public void btnRechazar()
     {
         entregarObjeto = false;
+        animator.SetTrigger("Close");
     }
 }

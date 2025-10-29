@@ -12,6 +12,8 @@ public class tsunade : MonoBehaviour
     public ScrollPanel scrollPanel;
     public GameObject panelDialogo;
 
+    public GameObject recompensa;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -76,5 +78,12 @@ public class tsunade : MonoBehaviour
     {
         float distancia = Vector2.Distance(transform.position, player.transform.position);
         return distancia <= rangoPlayer;
+    }
+
+    public void EntregarRecompensa()
+    {
+        GameObject recompensaInstanciada = Instantiate(recompensa, player.transform.position + new Vector3(1, 0, 0), Quaternion.identity);
+        //StatesMachine playerScript = player.GetComponent<StatesMachine>();
+        //playerScript.RecibirRecompensa(recompensaInstanciada.GetComponent<Objeto>());
     }
 }

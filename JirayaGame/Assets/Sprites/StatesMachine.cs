@@ -252,4 +252,9 @@ public class StatesMachine : MonoBehaviour
         objetoCercano.gameObject.SetActive(false);
         inventario.EliminarObjeto(objetoCercano);
     }
+
+    public void RecibirRecompensa(Objeto recompensa)
+    {
+        //inventario.AñadirObjeto(recompensa);
+    }
 }

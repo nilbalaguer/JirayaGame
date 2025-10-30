@@ -73,7 +73,8 @@ public class Inventario : MonoBehaviour
         if (objetos.Contains(objeto))
         {
             objetos.Remove(objeto);
-            ActualizarInventario();        }
+            ActualizarInventario();        
+        }
         else
         {
             Debug.Log("El objeto no está en el inventario.");

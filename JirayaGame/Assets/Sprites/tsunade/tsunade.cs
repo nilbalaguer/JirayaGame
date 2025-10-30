@@ -13,6 +13,7 @@ public class tsunade : MonoBehaviour
     public GameObject panelDialogo;
 
     public GameObject recompensa;
+    public StatesMachine playerScript;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -85,6 +86,9 @@ public class tsunade : MonoBehaviour
         GameObject recompensaInstanciada = Instantiate(recompensa, player.transform.position + new Vector3(1, 0, 0), Quaternion.identity);
         Objeto objetoRecompensa = recompensaInstanciada.GetComponent<Objeto>();
         objetoRecompensa.esRecompensa = true;
+
+        playerScript.RecibirRecompensa(objetoRecompensa);
+        
         //StatesMachine playerScript = player.GetComponent<StatesMachine>();
         //playerScript.RecibirRecompensa(recompensaInstanciada.GetComponent<Objeto>());
     }

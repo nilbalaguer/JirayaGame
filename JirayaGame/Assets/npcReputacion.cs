@@ -38,15 +38,6 @@ public class npcReputacion : MonoBehaviour
         reputacionActual -= reputacionRespuestaNegativa;
         reputacionActual = Mathf.Clamp(reputacionActual, reputacionMinima, reputacionMaxima);
         ActualizarUI();
-        /*respuestaNegativa++;
-        if (respuestaNegativa == 1)
-        {
-            imagenReputacion.sprite = caraNeutral;
-        }
-        else if (respuestaNegativa == 2)
-        {
-            imagenReputacion.sprite = caraEnfadada;
-        }*/
     }
 
     public void RespuestaPositiva()
@@ -54,16 +45,6 @@ public class npcReputacion : MonoBehaviour
         reputacionActual += reputacionRespuestaPositiva;
         reputacionActual = Mathf.Clamp(reputacionActual, reputacionMinima, reputacionMaxima);
         ActualizarUI();
-        /*respuestaNegativa--;
-        if (respuestaNegativa <= 0)
-        {
-            respuestaNegativa = 0;
-            imagenReputacion.sprite = caraSonriente;
-        }
-        else if (respuestaNegativa == 1)
-        {
-            imagenReputacion.sprite = caraNeutral;
-        }*/
     }
     
     public void ActualizarUI()

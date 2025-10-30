@@ -255,6 +255,6 @@ public class StatesMachine : MonoBehaviour
 
     public void RecibirRecompensa(Objeto recompensa)
     {
-        //inventario.AñadirObjeto(recompensa);
+        inventario.AñadirObjeto(recompensa);
     }
 }

@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
     private float cooldownMele = 0;
     private float cooldownTonge = 0.75f;
     [SerializeField] float cooldownForMele = 0.5f;
-    private int lastMove;
+    public int lastMove;
 
     [Header("Vida i Habilidades")]
     public int vida = 10;
@@ -298,6 +298,16 @@ public class PlayerController : MonoBehaviour
         //Sincronizar variables animator
         animator.SetFloat("LastDirection", lastMove);
         animator.SetBool("Human", human);
+
+        if (Input.GetKey(KeyCode.E))
+        {
+            animator.SetInteger("State-int", 6);
+            maxSpeed = 0.000001f;
+        } else
+        {
+            maxSpeed = 5.0f;
+        }
+        
     }
 
     private void OnTriggerEnter2D(Collider2D other)

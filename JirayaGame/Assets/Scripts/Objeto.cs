@@ -9,6 +9,7 @@ public class Objeto : MonoBehaviour
     public Sprite icono;
     public GameObject Canvas;
     private Transform player;
+    public bool esRecompensa = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

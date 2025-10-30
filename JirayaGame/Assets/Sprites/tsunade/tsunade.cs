@@ -83,6 +83,8 @@ public class tsunade : MonoBehaviour
     public void EntregarRecompensa()
     {
         GameObject recompensaInstanciada = Instantiate(recompensa, player.transform.position + new Vector3(1, 0, 0), Quaternion.identity);
+        Objeto objetoRecompensa = recompensaInstanciada.GetComponent<Objeto>();
+        objetoRecompensa.esRecompensa = true;
         //StatesMachine playerScript = player.GetComponent<StatesMachine>();
         //playerScript.RecibirRecompensa(recompensaInstanciada.GetComponent<Objeto>());
     }

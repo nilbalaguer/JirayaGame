@@ -143,7 +143,7 @@ public class StatesMachine : MonoBehaviour
             SoltarObjeto();
         }
 
-        if (tsunadeCerca && objetoSujeto != null)
+        if (tsunadeCerca && objetoSujeto != null && !objetoSujeto.esRecompensa)
         {
             tsunadePanel.SetActive(true);
         }

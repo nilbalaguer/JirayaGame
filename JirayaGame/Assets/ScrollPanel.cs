@@ -10,6 +10,7 @@ public class ScrollPanel : MonoBehaviour
     public bool hasTalked = false;
     public bool entregarObjeto = false;
     public StatesMachine playerScript;
+    public NpcStates npcScript;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Awake()
@@ -47,14 +48,24 @@ public class ScrollPanel : MonoBehaviour
     {
         reputacion.RespuestaPositiva();
         animator.SetTrigger("Close");
-        hasTalked = true;
+
+        if (npcScript != null)
+        {
+            npcScript.hasTalked = true;
+            npcScript = null;
+        }
     }
 
     public void botonNo()
     {
         reputacion.RespuestaNegativa();
         animator.SetTrigger("Close");
-        hasTalked = true;
+
+        if (npcScript != null)
+        {
+            npcScript.hasTalked = true;
+            npcScript = null;
+        }
     }
 
     //Botones panel tsunade

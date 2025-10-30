@@ -23,6 +23,8 @@ public class NpcStates : MonoBehaviour
     public GameObject dialogueBox;
     public ScrollPanel scrollPanel;
     public GameObject canvasImagen;
+
+    public bool hasTalked = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -147,9 +149,10 @@ public class NpcStates : MonoBehaviour
                         anim.SetInteger("state", 4);
                     }
                 }
-                if (!scrollPanel.hasTalked)
+                if (!hasTalked)
                 {
                     dialogueBox.SetActive(true);
+                    scrollPanel.npcScript = this;
                 }
                 else
                 {

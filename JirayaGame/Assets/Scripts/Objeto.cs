@@ -18,6 +18,11 @@ public class Objeto : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
     }
 
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>(); 
+    }
+
     //Funciones para la mecanica de coger y lanzar objetos  
     public void Coger(Transform puntoSujecion)
     {

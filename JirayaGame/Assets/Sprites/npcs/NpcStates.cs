@@ -137,7 +137,7 @@ public class NpcStates : MonoBehaviour
                 if (Mathf.Abs(directionToPlayer.x) > Mathf.Abs(directionToPlayer.y))
                 {
                     transform.localScale = new Vector3(directionToPlayer.x < 0 ? -5 : 5, 5, 5);
-                    anim.SetInteger("state", 6);
+                    anim.SetInteger("state", 7);
                 }
                 else
                 {
@@ -162,7 +162,8 @@ public class NpcStates : MonoBehaviour
                 break;
             case State.Scared:
                 rb.linearVelocity = Vector2.zero;
-                anim.SetInteger("state", 6);
+                //anim.SetInteger("state", 6);
+                anim.SetTrigger("scared");
                 break;
         }
 

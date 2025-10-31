@@ -14,6 +14,7 @@ public class tsunade : MonoBehaviour
 
     public GameObject recompensa;
     public StatesMachine playerScript;
+    private Objeto objetoSujeto;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -83,11 +84,15 @@ public class tsunade : MonoBehaviour
 
     public void EntregarRecompensa()
     {
-        GameObject recompensaInstanciada = Instantiate(recompensa, player.transform.position + new Vector3(1, 0, 0), Quaternion.identity);
+        GameObject recompensaInstanciada = Instantiate(recompensa, playerScript.puntoSujecion.position, Quaternion.identity);
         Objeto objetoRecompensa = recompensaInstanciada.GetComponent<Objeto>();
         objetoRecompensa.esRecompensa = true;
 
+        objetoSujeto = objetoRecompensa;
+        objetoRecompensa.Coger(playerScript.puntoSujecion);
+
         playerScript.RecibirRecompensa(objetoRecompensa);
+        
         
         //StatesMachine playerScript = player.GetComponent<StatesMachine>();
         //playerScript.RecibirRecompensa(recompensaInstanciada.GetComponent<Objeto>());

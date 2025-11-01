@@ -10,6 +10,10 @@ public class Objeto : MonoBehaviour
     public GameObject Canvas;
     private Transform player;
     public bool esRecompensa = false;
+
+    public enum TipoObjeto { Flor, CollarShizune, PergaminoSagrado, Recompensa};
+    public TipoObjeto tipo;
+    public string nombreObjeto;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

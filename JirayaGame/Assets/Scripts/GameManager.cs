@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +12,24 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+    }
+
+    public void PantallaJefeFinal()
+    {
+
+    }
+
+
+    public void RecolectarMonedas()
+    {
+
+    }
+
+    public void PantallaDerrota()
+    {
         
     }
+    
+    //Mas funciones que afecten al hud del jugador y cosas que pasen en el juego
 }

@@ -12,9 +12,11 @@ public class tsunade : MonoBehaviour
     public ScrollPanel scrollPanel;
     public GameObject panelDialogo;
 
-    public GameObject recompensa;
+    public GameObject[] recompensas;
     public StatesMachine playerScript;
     private Objeto objetoSujeto;
+    public Objeto objetoRecibido;
+    private GameObject prefabRecompensa;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -72,6 +74,7 @@ public class tsunade : MonoBehaviour
             case State.Talking:
                 anim.SetInteger("state", 1);
                 panelDialogo.SetActive(true);
+                panelDialogo.GetComponent<panelTsunade>().ConfigurarDialogo(objetoRecibido.nombreObjeto);
                 break;
         }
     }
@@ -84,7 +87,21 @@ public class tsunade : MonoBehaviour
 
     public void EntregarRecompensa()
     {
-        GameObject recompensaInstanciada = Instantiate(recompensa, playerScript.puntoSujecion.position, Quaternion.identity);
+
+        switch (objetoRecibido.tipo)
+        {
+            case Objeto.TipoObjeto.PergaminoSagrado:
+                prefabRecompensa = recompensas[0];
+                break;
+            case Objeto.TipoObjeto.CollarShizune:
+                prefabRecompensa = recompensas[1];
+                break;
+            case Objeto.TipoObjeto.Flor:
+                prefabRecompensa = recompensas[2];
+                break;
+        }
+        objetoRecibido = null;
+        GameObject recompensaInstanciada = Instantiate(prefabRecompensa, playerScript.puntoSujecion.position, Quaternion.identity);
         Objeto objetoRecompensa = recompensaInstanciada.GetComponent<Objeto>();
         objetoRecompensa.esRecompensa = true;
 
@@ -92,7 +109,6 @@ public class tsunade : MonoBehaviour
         objetoRecompensa.Coger(playerScript.puntoSujecion);
 
         playerScript.RecibirRecompensa(objetoRecompensa);
-        
         
         //StatesMachine playerScript = player.GetComponent<StatesMachine>();
         //playerScript.RecibirRecompensa(recompensaInstanciada.GetComponent<Objeto>());

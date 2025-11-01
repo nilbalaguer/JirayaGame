@@ -241,16 +241,21 @@ public class StatesMachine : MonoBehaviour
 
     public void AceptarEntrega()
     {
-        objetoSujeto.Soltar();
+        /*objetoSujeto.Soltar();
         objetoSujeto = null;
         tsunadePanel.SetActive(false);
-        Invoke ("DesactivarObjetoCercano", 0.5f);
-    }
+        Invoke ("DesactivarObjetoCercano", 0.5f);*/
+        Objeto objetoEntregado = objetoSujeto;
+        tsunade tsunadeScript = GameObject.FindWithTag("Tsunade").GetComponent<tsunade>();
+        tsunadeScript.objetoRecibido = objetoEntregado;
 
-    public void DesactivarObjetoCercano()
-    {
-        objetoCercano.gameObject.SetActive(false);
-        inventario.EliminarObjeto(objetoCercano);
+        objetoSujeto.Soltar();
+        objetoSujeto = null;
+
+        objetoEntregado.gameObject.SetActive(false);
+        inventario.EliminarObjeto(objetoEntregado);
+
+        //Invoke ("DesactivarObjetoCercano", 0.5f);
     }
 
     public void RecibirRecompensa(Objeto recompensa)

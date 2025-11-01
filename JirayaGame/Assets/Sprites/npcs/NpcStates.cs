@@ -1,11 +1,12 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NpcStates : MonoBehaviour
 {
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     private Animator anim;
 
-    public enum State { Idle, Patrol, Alerted, Scared };
+    public enum State { Idle, Patrol, Alerted, Scared, Intro };
     public State currentState;
 
     public Transform[] patrolPoints; 
@@ -21,16 +22,29 @@ public class NpcStates : MonoBehaviour
     public float rangoEnemy = 3f;
 
     public GameObject dialogueBox;
+    public GameObject introDialog;
     public ScrollPanel scrollPanel;
     public GameObject canvasImagen;
 
+    public Image npcIcono;
+    public Sprite iconoNormal;
+    public Sprite iconoIntro;
+
     public bool hasTalked = false;
+    public bool NpcIntro = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        currentState = State.Idle;
+        if (NpcIntro)
+        {
+            currentState = State.Intro;
+        }
+        else
+        {
+            currentState = State.Idle;
+        }
         waitCounter = waitTime;
 
         if (patrolPoints.Length > 0)
@@ -40,6 +54,7 @@ public class NpcStates : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         enemy = GameObject.FindWithTag("Enemy");
         dialogueBox.SetActive(false);
+        introDialog.SetActive(false);
         //scrollPanel = dialogueBox.GetComponent<ScrollPanel>();
     }
 
@@ -111,6 +126,13 @@ public class NpcStates : MonoBehaviour
                     waitCounter = waitTime;
                 }
                 break;
+            case State.Intro:
+                if (!NpcIntro)
+                {
+                    currentState = State.Idle;
+                    waitCounter = waitTime;
+                }
+                break;
         }
 
         switch (currentState)
@@ -165,6 +187,10 @@ public class NpcStates : MonoBehaviour
                 //anim.SetInteger("state", 6);
                 anim.SetTrigger("scared");
                 break;
+            case State.Intro:
+                npcIcono.sprite = iconoIntro;
+                MoveTowardsPlayer();
+                break;
         }
 
     }
@@ -173,6 +199,41 @@ public class NpcStates : MonoBehaviour
             Vector2 dir = (target - (Vector2)transform.position).normalized;
             rb.linearVelocity = dir * speed;
             UpdateSpriteDirection(dir);
+        }
+        void MoveTowardsPlayer()
+        {
+        /*transform.position = Vector2.MoveTowards(transform.position, player.transform.position, 2f * Time.deltaTime);
+        if (Vector2.Distance(transform.position, player.transform.position) < 1.5f)
+        {
+        introDialog.SetActive(true);
+
+        }*/
+        Vector2 playerPos = player.transform.position;
+        Vector2 npcPos = transform.position;
+        Vector2 directionToPlayer = (playerPos - npcPos).normalized;
+
+        float distanciaParada = 1.5f;
+        float distance = Vector2.Distance(npcPos, playerPos);
+        Vector2 targetPos = playerPos - directionToPlayer * distanciaParada;
+        UpdateSpriteDirection(directionToPlayer);
+        
+        if (distance > distanciaParada)
+        {
+            transform.position = Vector2.MoveTowards(
+            npcPos, targetPos,
+            2f * Time.deltaTime
+            );
+        }
+        else
+        {
+            rb.linearVelocity = Vector2.zero;
+            anim.SetInteger("state", 0);
+            introDialog.SetActive(true);
+
+            rb.simulated = false;
+            npcIcono.sprite = iconoNormal;
+        }
+        
         }
 
         void NextPoint()

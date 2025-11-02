@@ -32,6 +32,8 @@ public class NpcStates : MonoBehaviour
 
     public bool hasTalked = false;
     public bool NpcIntro = false;
+
+    public bool necesitaAlejarse = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -86,7 +88,7 @@ public class NpcStates : MonoBehaviour
                         currentState = State.Patrol;
                     }
                 }
-                else if (PlayerinRange())
+                else if (PlayerinRange() && !hasTalked)
                 {
                     currentState = State.Alerted;
                 }
@@ -97,7 +99,7 @@ public class NpcStates : MonoBehaviour
                 break;
 
             case State.Patrol:
-                if (PlayerinRange()){
+                if (PlayerinRange() && !hasTalked){
                     currentState = State.Alerted;
                 }else if (EnemyinRange()){
                     currentState = State.Scared;
@@ -113,7 +115,7 @@ public class NpcStates : MonoBehaviour
                 }
                 break;
             case State.Alerted:
-                if (!PlayerinRange())
+                if (!PlayerinRange() && hasTalked)
                 {
                     currentState = State.Idle;
                     waitCounter = waitTime;
@@ -270,7 +272,11 @@ public class NpcStates : MonoBehaviour
     bool PlayerinRange()
     {
         float distancia = Vector2.Distance(transform.position, player.transform.position);
-        return distancia <= rangoPlayer;
+        if (necesitaAlejarse && distancia > 3f)
+        {
+            necesitaAlejarse = false;
+        }
+        return distancia <= rangoPlayer && !necesitaAlejarse;
     }
     
     bool EnemyinRange()

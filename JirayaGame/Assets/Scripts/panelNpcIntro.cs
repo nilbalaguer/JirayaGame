@@ -54,6 +54,7 @@ public class panelNpcIntro : MonoBehaviour
             animator.SetTrigger("Close");
             //npcScript.currentState = NpcStates.State.Idle;
             npcScript.NpcIntro = false;
+            npcScript.necesitaAlejarse = true;
             npcScript.rb.simulated = true;
         }
     }

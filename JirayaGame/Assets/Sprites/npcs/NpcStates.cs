@@ -229,7 +229,23 @@ public class NpcStates : MonoBehaviour
         else
         {
             rb.linearVelocity = Vector2.zero;
-            anim.SetInteger("state", 0);
+            //anim.SetInteger("state", 0);
+            if (Mathf.Abs(directionToPlayer.x) > Mathf.Abs(directionToPlayer.y))
+                {
+                    transform.localScale = new Vector3(directionToPlayer.x < 0 ? -5 : 5, 5, 5);
+                    anim.SetInteger("state", 7);
+                }
+                else
+                {
+                    if (directionToPlayer.y > 0)
+                    {
+                        anim.SetInteger("state", 5);
+                    }
+                    else
+                    {
+                        anim.SetInteger("state", 4);
+                    }
+                }
             introDialog.SetActive(true);
 
             rb.simulated = false;

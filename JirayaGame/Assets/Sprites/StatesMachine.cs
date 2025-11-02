@@ -15,6 +15,7 @@ public class StatesMachine : MonoBehaviour
 
     public GameObject CanvasInfo;
     public GameObject tsunadePanel;
+    public GameObject tsunadePanel2;
     public bool tsunadeCerca = false;
 
     public ScrollPanel scrollPanel;
@@ -27,6 +28,7 @@ public class StatesMachine : MonoBehaviour
         inventario = GetComponent<Inventario>();
         CanvasInfo.SetActive(false);
         tsunadePanel.SetActive(false);
+        tsunadePanel2.SetActive(false);
     }
 
     // Update is called once per frame
@@ -146,6 +148,9 @@ public class StatesMachine : MonoBehaviour
         if (tsunadeCerca && objetoSujeto != null && !objetoSujeto.esRecompensa)
         {
             tsunadePanel.SetActive(true);
+        }else if (tsunadeCerca && objetoSujeto == null)
+        {
+            tsunadePanel2.SetActive(true);
         }
     }
 

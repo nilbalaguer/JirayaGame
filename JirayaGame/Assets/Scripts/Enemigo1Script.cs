@@ -6,10 +6,10 @@ public class Enemigo1Script : MonoBehaviour
     public int vida = 10;
 
     [SerializeField] Rigidbody2D rb;
-    [SerializeField] CircleCollider2D playerRangeCollider;
     [SerializeField] CircleCollider2D enemyCollider;
     [SerializeField] Image healthFillImage;
     [SerializeField] float maxSpeed = 3;
+    [SerializeField] float desiredSpeed = 0;
 
     public float knockForce = 2;
 
@@ -20,59 +20,80 @@ public class Enemigo1Script : MonoBehaviour
     private bool playerInRange = false;
     private float enemigoKnockout = 0f;
     private float enemigoKnockBack = 0f;
-    private int lastMove = 1;
 
     [Header("Armas")]
-    private CircleCollider2D katanaCollider;
+    [SerializeField] CircleCollider2D katanaCollider;
+    [SerializeField] float preAttackTime = 0.2f;
+    [SerializeField] float cooldownTime = 0.4f;
+    private float cooldownTimer;
+    private float preAttackTimer;
 
     [Header("Animaciones")]
     [SerializeField] Animator enemyAnimator;
+
+    [Header("NavMeshAgent")]
+    private UnityEngine.AI.NavMeshAgent agent;
+    public Transform target;
+
+    [Header("Patrulla")]
+    [SerializeField] Transform puntoA;
+    [SerializeField] Transform puntoB;
+    private Transform destinoActual;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         playerGameObject = GameObject.FindWithTag("Player");
+        katanaCollider.enabled = false;
+
+        cooldownTimer = cooldownTime;
+        preAttackTimer = preAttackTime;
+
+        //Opciones NavMeshAgent
+        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        agent.updateRotation = false;
+        agent.updateUpAxis = false;
+        destinoActual = puntoA;
+
+        agent.speed = desiredSpeed;
+
+        agent.acceleration = 10000f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (playerInRange && Vector2.Distance(transform.position, playerGameObject.transform.position) > 0.7)
+        if (Vector2.Distance(transform.position, playerGameObject.transform.position) < 4)
+        {
+            playerInRange = true;
+            target = playerGameObject.transform;
+            desiredSpeed = maxSpeed;
+        }
+        else
+        {
+            playerInRange = false;
+            target = destinoActual;
+            desiredSpeed = 2;
+
+        }
+        
+        // if (Vector2.Distance(transfrom.position, playerGameObject.transform.position) < 1)
+        // {
+        //     AtaqueKatana();
+        // }
+
+        if (Vector2.Distance(transform.position, playerGameObject.transform.position) > 0.9)
         {
             if (enemigoKnockout <= 0)
             {
-                float forceX = 0;
-
-                float forceY = 0;
-
-                if (transform.position.x > playerGameObject.transform.position.x)
-                {
-                    forceX = -1;
-                    lastMove = 4;
-                }
-                else if (transform.position.x < playerGameObject.transform.position.x)
-                {
-                    forceX = 1;
-                    lastMove = 3;
-                }
-
-                if (transform.position.y > playerGameObject.transform.position.y)
-                {
-                    forceY = -1;
-                    lastMove = 2;
-                }
-                else if (transform.position.y < playerGameObject.transform.position.y)
-                {
-                    forceY = 1;
-                    lastMove = 1;
-                }
-
-                Vector2 movimiento = new Vector2(forceX, forceY) * maxSpeed;
-
-                rb.linearVelocity = movimiento;
+                agent.isStopped = false;
+                agent.SetDestination(target.position);
+                agent.speed = desiredSpeed;
+                
             }
             else
             {
+                agent.isStopped = true;
                 enemigoKnockout -= Time.deltaTime;
             }
         }
@@ -95,7 +116,11 @@ public class Enemigo1Script : MonoBehaviour
             }
         }
 
-        enemyAnimator.SetFloat("LastDirection", lastMove);
+        //Animator
+        Vector2 velocity = agent.velocity;
+
+        enemyAnimator.SetFloat("speedX", velocity.x);
+        enemyAnimator.SetFloat("speedY", velocity.y);
     }
 
     void FixedUpdate()
@@ -104,6 +129,13 @@ public class Enemigo1Script : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        if (Vector2.Distance(transform.position, destinoActual.position) < 0.2)
+        {
+            destinoActual = destinoActual == puntoA ? puntoB : puntoA;
+        }
+
+
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -114,23 +146,24 @@ public class Enemigo1Script : MonoBehaviour
 
             healthFillImage.fillAmount = Mathf.Clamp01(vida * (float)0.1);
 
-            enemigoKnockout = 1f;
+            enemigoKnockout = 0.4f;
             enemigoKnockBack = 0.1f;
             
-        }
-
-        if (other.gameObject.CompareTag("Player") && other.IsTouching(playerRangeCollider))
-        {
-            playerInRange = true;
         }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
 
-        if (other.gameObject.CompareTag("Player") && !other.IsTouching(playerRangeCollider))
+    }
+
+    void AtaqueKatana()
+    {
+        preAttackTimer -= Time.deltaTime;
+
+        if (preAttackTimer <= 0)
         {
-            playerInRange = false;
+            //Atacar activando el collider de katana
         }
     }
 }

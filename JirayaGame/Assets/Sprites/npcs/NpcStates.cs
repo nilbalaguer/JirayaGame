@@ -34,25 +34,27 @@ public class NpcStates : MonoBehaviour
     public bool NpcIntro = false;
 
     public bool necesitaAlejarse = false;
+    public bool introTerminada = false;
+    private bool introAsignada = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        if (NpcIntro)
+        /*if (NpcIntro)
         {
             currentState = State.Intro;
-        }
-        else
-        {
+        }*/
+        //else
+        //{
             currentState = State.Idle;
-        }
+        //}
         waitCounter = waitTime;
 
-        if (patrolPoints.Length > 0)
+        /*if (patrolPoints.Length > 0)
         {
             transform.position = patrolPoints[0].position;
-        }
+        }*/
         player = GameObject.FindWithTag("Player");
         enemy = GameObject.FindWithTag("Enemy");
         dialogueBox.SetActive(false);
@@ -66,6 +68,23 @@ public class NpcStates : MonoBehaviour
         if (player == null)
         {
             player = GameObject.FindWithTag("Player");
+        }
+
+        if (!introAsignada && GameManager.Instance != null)
+        {
+            if (NpcIntro)
+            {
+                currentState = State.Intro;
+                introAsignada = true;
+            }
+            else
+            {
+                introAsignada = true;
+            }
+        }
+        if (!introAsignada)
+        {
+            return;
         }
         
         Vector2 pos = transform.position;
@@ -204,12 +223,6 @@ public class NpcStates : MonoBehaviour
         }
         void MoveTowardsPlayer()
         {
-        /*transform.position = Vector2.MoveTowards(transform.position, player.transform.position, 2f * Time.deltaTime);
-        if (Vector2.Distance(transform.position, player.transform.position) < 1.5f)
-        {
-        introDialog.SetActive(true);
-
-        }*/
         Vector2 playerPos = player.transform.position;
         Vector2 npcPos = transform.position;
         Vector2 directionToPlayer = (playerPos - npcPos).normalized;
@@ -223,7 +236,7 @@ public class NpcStates : MonoBehaviour
         {
             transform.position = Vector2.MoveTowards(
             npcPos, targetPos,
-            2f * Time.deltaTime
+            3f * Time.deltaTime
             );
         }
         else

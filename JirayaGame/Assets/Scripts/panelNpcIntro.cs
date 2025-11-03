@@ -56,6 +56,9 @@ public class panelNpcIntro : MonoBehaviour
             npcScript.NpcIntro = false;
             npcScript.necesitaAlejarse = true;
             npcScript.rb.simulated = true;
+            npcScript.introTerminada = true;
+
+            GameManager.Instance.FinalizarIntro(npcScript);
         }
     }
 

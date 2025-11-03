@@ -5,6 +5,7 @@ public class movement : MonoBehaviour
     private Rigidbody2D body;
     //public float force;
     public float maxSpeed;
+    public bool puedoMoverme = true;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -15,6 +16,12 @@ public class movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!puedoMoverme)
+        {
+            body.linearVelocity = Vector2.zero;
+            return;
+        }
+
         float inputX = Input.GetAxis("Horizontal");
         float inputY = Input.GetAxis("Vertical");
 

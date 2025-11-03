@@ -19,6 +19,7 @@ public class StatesMachine : MonoBehaviour
     public bool tsunadeCerca = false;
 
     public ScrollPanel scrollPanel;
+    public panelErmitaño panelScript;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -145,10 +146,12 @@ public class StatesMachine : MonoBehaviour
             SoltarObjeto();
         }
 
+        //Mostrar paneles tsunade al acercarme a ella
         if (tsunadeCerca && objetoSujeto != null && !objetoSujeto.esRecompensa)
         {
             tsunadePanel.SetActive(true);
-        }else if (tsunadeCerca && objetoSujeto == null)
+        }
+        else if (tsunadeCerca && objetoSujeto == null && !panelScript.hasTalked)
         {
             tsunadePanel2.SetActive(true);
         }

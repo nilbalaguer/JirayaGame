@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class PlayerController : MonoBehaviour
@@ -9,10 +10,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Rigidbody2D rigidBody;
     [SerializeField] float maxSpeed = 5;
 
-    [SerializeField] TextMeshProUGUI textoVida;
-
     [SerializeField] string state = "idle";
     public bool human = true;
+
+    [Header("HUD")]
+    [SerializeField] TextMeshProUGUI textoVida;
+    private Image indicadorParry;
 
     [Header("Armas")]
     [SerializeField] GameObject katanaObject;
@@ -37,6 +40,16 @@ public class PlayerController : MonoBehaviour
     [Header("Vida i Habilidades")]
     public int vida = 10;
 
+    [Header("Parry")]
+    private float staminaParry = 4;
+    [SerializeField] float staminaDuration = 4;
+
+    [Header("Sonido")]
+    [SerializeField] AudioSource fuenteSonido;
+    [SerializeField] AudioClip sonidoBlandirKatana;
+    [SerializeField] AudioClip sonidoFootstep;
+    private float cooldownFootStep = 0.9f;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -50,6 +63,10 @@ public class PlayerController : MonoBehaviour
         toatTongeTonge.enabled = false;
         tongeAnimator.SetFloat("Blend", 0);
         tongeCollider.enabled = false;
+
+        //Obtener indicadores
+        GameObject parryObj = GameObject.Find("parryIndicator");
+        indicadorParry = parryObj.GetComponent<Image>();
     }
 
     // Update is called once per frame
@@ -102,7 +119,7 @@ public class PlayerController : MonoBehaviour
         {
             objectPicked.transform.position = toatTongeColliderObject.transform.position;
         }
-        
+
         //Sistema movimiento
         float forceX = Input.GetAxis("Horizontal");
         float forceY = Input.GetAxis("Vertical");
@@ -167,11 +184,12 @@ public class PlayerController : MonoBehaviour
                     if (objectPicked != null)
                     {
                         objectPicked = null;
-                    } else
+                    }
+                    else
                     {
                         state = "Attack";
                     }
-                    
+
                 }
 
                 if (Input.GetButtonDown("Jump"))
@@ -181,6 +199,16 @@ public class PlayerController : MonoBehaviour
                     {
                         objectPicked = null;
                     }
+                }
+
+                if (Input.GetButton("Fire2") && staminaParry > 0 && human)
+                {
+                    state = "Parry";
+                }
+                else if (staminaParry < staminaDuration)
+                {
+                    staminaParry += Time.deltaTime;
+                    indicadorParry.fillAmount = staminaParry / staminaDuration;
                 }
 
                 break;
@@ -251,6 +279,8 @@ public class PlayerController : MonoBehaviour
                     //Lanzar ataque katana
                     //Rotacion de las armas siempre igual que el ultimo movimiento del jugador
                     //Setea el cooldown para que empieze el ataque y retrase para el siguiente
+                    fuenteSonido.PlayOneShot(sonidoBlandirKatana);
+
                     animator.SetFloat("State", 5);
                     animator.SetInteger("State-int", 5);
 
@@ -277,7 +307,8 @@ public class PlayerController : MonoBehaviour
                     }
 
                     state = "idle";
-                } else
+                }
+                else
                 {
                     //Lanzar lengua
 
@@ -293,11 +324,40 @@ public class PlayerController : MonoBehaviour
 
                 break;
 
+            case "Parry":
+
+                staminaParry -= Time.deltaTime;
+
+                indicadorParry.fillAmount = staminaParry / staminaDuration;
+
+                break;
+
         }
 
         //Sincronizar variables animator
         animator.SetFloat("LastDirection", lastMove);
         animator.SetBool("Human", human);
+    }
+    
+    void FixedUpdate()
+    {
+        //Sonido pasos
+        switch (state)
+        {
+            case "MoveUp":
+            case "MoveDown":
+            case "MoveRight":
+            case "MoveLeft":
+                cooldownFootStep -= Time.deltaTime;
+
+                if (cooldownFootStep <= 0)
+                {
+                    cooldownFootStep = 0.3f;
+                    fuenteSonido.PlayOneShot(sonidoFootstep);
+                }
+
+                break;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -316,7 +376,15 @@ public class PlayerController : MonoBehaviour
         
         if (other.CompareTag("KatanaEnemigo"))
         {
-            vida -= 1;
+            if (staminaParry < 4 && staminaParry > 0.1 && Input.GetButton("Fire2"))
+            {
+                staminaParry -= 0.3f;
+            } else
+            {
+                vida -= 1;
+                textoVida.text = "Vida: " + vida;
+            }
+            
             
         }
     }

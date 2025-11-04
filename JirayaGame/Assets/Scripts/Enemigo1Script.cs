@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+
 
 public class Enemigo1Script : MonoBehaviour
 {
@@ -63,7 +65,9 @@ public class Enemigo1Script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Vector2.Distance(transform.position, playerGameObject.transform.position) < 4)
+        float distanceToPlayer = Vector2.Distance(transform.position, playerGameObject.transform.position);
+
+        if (distanceToPlayer < 4)
         {
             playerInRange = true;
             target = playerGameObject.transform;
@@ -74,25 +78,21 @@ public class Enemigo1Script : MonoBehaviour
             playerInRange = false;
             target = destinoActual;
             desiredSpeed = 2;
-
-        }
-        
-        if (Vector2.Distance(transform.position, playerGameObject.transform.position) < 1)
-        {
-            AtaqueKatana();
-        } else
-        {
-            preAttackTimer = preAttackTime;
         }
 
-        if (Vector2.Distance(transform.position, playerGameObject.transform.position) > 0.9)
+        // Nuevo sistema de ataque
+        if (distanceToPlayer <= 1f)
+        {
+            TryAttack();
+        }
+
+        if (distanceToPlayer > 0.9f)
         {
             if (enemigoKnockout <= 0)
             {
                 agent.isStopped = false;
                 agent.SetDestination(target.position);
                 agent.speed = desiredSpeed;
-                
             }
             else
             {
@@ -102,15 +102,13 @@ public class Enemigo1Script : MonoBehaviour
         }
         else
         {
-            rb.linearVelocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero; // corregido (era linearVelocity)
         }
 
         if (enemigoKnockBack > 0)
         {
             Vector2 knockDirection = transform.position - playerGameObject.transform.position;
-
             rb.linearVelocity = knockDirection * knockForce;
-
             enemigoKnockBack -= Time.deltaTime;
 
             if (enemigoKnockBack < 0)
@@ -121,10 +119,10 @@ public class Enemigo1Script : MonoBehaviour
 
         //Animator
         Vector2 velocity = agent.velocity;
-
         enemyAnimator.SetFloat("speedX", velocity.x);
         enemyAnimator.SetFloat("speedY", velocity.y);
     }
+
 
     void FixedUpdate()
     {
@@ -160,16 +158,39 @@ public class Enemigo1Script : MonoBehaviour
 
     }
 
-    void AtaqueKatana()
+    void TryAttack()
     {
+        // Si todavía está en cooldown, no puede atacar
+        if (cooldownTimer > 0)
+        {
+            cooldownTimer -= Time.deltaTime;
+            return;
+        }
+
+        // Empieza el pre-ataque
         preAttackTimer -= Time.deltaTime;
-        katanaCollider.enabled = false;
+
+        // Mientras prepara el ataque, puede reproducir una animación de "wind-up"
+        // enemyAnimator.SetBool("isAttacking", true);
 
         if (preAttackTimer <= 0)
         {
-            //Atacar activando el collider de katana
-            katanaCollider.enabled = true;
+            // Ejecutar el ataque real
+            StartCoroutine(AttackCoroutine());
             preAttackTimer = preAttackTime;
+            cooldownTimer = cooldownTime;
         }
     }
+
+    private IEnumerator AttackCoroutine()
+    {
+        // Activar el collider por un breve momento (golpe)
+        katanaCollider.enabled = true;
+        yield return new WaitForSeconds(0.15f); // duración del golpe
+        katanaCollider.enabled = false;
+
+        // Desactivar animación
+        // enemyAnimator.SetBool("isAttacking", false);
+    }
+
 }

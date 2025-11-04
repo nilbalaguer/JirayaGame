@@ -311,6 +311,12 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("intObject") && toatTongeTonge.enabled)
         {
             objectPicked = other.gameObject;
+
+        }
+        
+        if (other.CompareTag("KatanaEnemigo"))
+        {
+            vida -= 1;
             
         }
     }

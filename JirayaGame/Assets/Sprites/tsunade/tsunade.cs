@@ -8,13 +8,15 @@ public class tsunade : MonoBehaviour
     public enum State {Idle, Talking};
     private State currentState;
     private GameObject player;
-    public float rangoPlayer = 2f;
+    public float rangoPlayer = 1f;
     public ScrollPanel scrollPanel;
     public GameObject panelDialogo;
+    public GameObject tsunadePanel2;
 
     public GameObject[] recompensas;
     public StatesMachine playerScript;
-    private Objeto objetoSujeto;
+    //private Objeto objetoSujeto;
+    private Objeto objetoRecompensa;
     public Objeto objetoRecibido;
     private GameObject prefabRecompensa;
 
@@ -25,6 +27,7 @@ public class tsunade : MonoBehaviour
         panelDialogo.SetActive(false);
         anim = GetComponent<Animator>();
         currentState = State.Idle;
+        tsunadePanel2.SetActive(false);
     }
 
     // Update is called once per frame
@@ -48,7 +51,7 @@ public class tsunade : MonoBehaviour
                 }
                 break;
         }
-        
+
         switch (currentState)
         {
             case State.Idle:
@@ -74,8 +77,16 @@ public class tsunade : MonoBehaviour
             case State.Talking:
                 anim.SetInteger("state", 1);
                 panelDialogo.SetActive(true);
-                panelDialogo.GetComponent<panelTsunade>().ConfigurarDialogo(objetoRecibido.nombreObjeto);
+                panelDialogo.GetComponent<panelTsunade>().DialogoSetup(objetoRecibido.nombreObjeto);
                 break;
+        }
+        
+        if (PlayerinRange() && playerScript.objetoSujeto == null && !scrollPanel.entregarObjeto)
+        {
+            tsunadePanel2.SetActive(true);
+        }else if (PlayerinRange() && playerScript.objetoSujeto != null && objetoRecompensa.esRecompensa)
+        {
+            tsunadePanel2.SetActive(false);
         }
     }
 
@@ -102,10 +113,10 @@ public class tsunade : MonoBehaviour
         }
         objetoRecibido = null;
         GameObject recompensaInstanciada = Instantiate(prefabRecompensa, playerScript.puntoSujecion.position, Quaternion.identity);
-        Objeto objetoRecompensa = recompensaInstanciada.GetComponent<Objeto>();
+        objetoRecompensa = recompensaInstanciada.GetComponent<Objeto>();
         objetoRecompensa.esRecompensa = true;
 
-        objetoSujeto = objetoRecompensa;
+        playerScript.objetoSujeto = objetoRecompensa;
         objetoRecompensa.Coger(playerScript.puntoSujecion);
 
         playerScript.RecibirRecompensa(objetoRecompensa);

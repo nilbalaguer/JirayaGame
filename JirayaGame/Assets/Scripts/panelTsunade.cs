@@ -35,7 +35,7 @@ public class panelTsunade : MonoBehaviour
     {
 
     }
-    public void ConfigurarDialogo(string nombreObjetoEntregado)
+    public void DialogoSetup(string nombreObjetoEntregado)
     {
         switch (nombreObjetoEntregado)
         {

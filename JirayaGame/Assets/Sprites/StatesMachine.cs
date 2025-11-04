@@ -9,7 +9,7 @@ public class StatesMachine : MonoBehaviour
     public float velocity;
     public Transform puntoSujecion;
     private Objeto objetoCercano;
-    private Objeto objetoSujeto;
+    public Objeto objetoSujeto;
     public float fuerzaLanzamiento = 10f;
     private Inventario inventario;
 
@@ -29,7 +29,7 @@ public class StatesMachine : MonoBehaviour
         inventario = GetComponent<Inventario>();
         CanvasInfo.SetActive(false);
         tsunadePanel.SetActive(false);
-        tsunadePanel2.SetActive(false);
+        //tsunadePanel2.SetActive(false);
     }
 
     // Update is called once per frame
@@ -151,10 +151,10 @@ public class StatesMachine : MonoBehaviour
         {
             tsunadePanel.SetActive(true);
         }
-        else if (tsunadeCerca && objetoSujeto == null && !panelScript.hasTalked)
+        /*else if (tsunadeCerca && objetoSujeto == null && !panelScript.hasTalked)
         {
             tsunadePanel2.SetActive(true);
-        }
+        }*/
     }
 
 

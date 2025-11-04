@@ -74,6 +74,7 @@ public class ScrollPanel : MonoBehaviour
     {
         playerScript.AceptarEntrega();
         entregarObjeto = true;
+        animator.SetTrigger("Close");
     }
     
     public void btnRechazar()

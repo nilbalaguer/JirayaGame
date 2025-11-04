@@ -14,7 +14,7 @@ public class Inventario : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        inventarioUI.SetActive(false);
+        //inventarioUI.SetActive(false);
     }
 
     // Update is called once per frame
@@ -50,10 +50,10 @@ public class Inventario : MonoBehaviour
 
     public void ActualizarInventario()
     {
-        /*foreach (Transform child in btnContenedorBotones)
+        foreach (Transform child in btnContenedorBotones)
         {
             Destroy(child.gameObject);
-        }*/
+        }
 
         foreach (Objeto obj in objetos)
         {

@@ -205,8 +205,8 @@ public class NpcStates : MonoBehaviour
                 break;
             case State.Scared:
                 rb.linearVelocity = Vector2.zero;
-                //anim.SetInteger("state", 6);
-                anim.SetTrigger("scared");
+                anim.SetInteger("state", 6);
+                //anim.SetTrigger("scared");
                 break;
             case State.Intro:
                 npcIcono.sprite = iconoIntro;

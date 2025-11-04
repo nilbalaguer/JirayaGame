@@ -77,10 +77,13 @@ public class Enemigo1Script : MonoBehaviour
 
         }
         
-        // if (Vector2.Distance(transfrom.position, playerGameObject.transform.position) < 1)
-        // {
-        //     AtaqueKatana();
-        // }
+        if (Vector2.Distance(transform.position, playerGameObject.transform.position) < 1)
+        {
+            AtaqueKatana();
+        } else
+        {
+            preAttackTimer = preAttackTime;
+        }
 
         if (Vector2.Distance(transform.position, playerGameObject.transform.position) > 0.9)
         {
@@ -160,10 +163,13 @@ public class Enemigo1Script : MonoBehaviour
     void AtaqueKatana()
     {
         preAttackTimer -= Time.deltaTime;
+        katanaCollider.enabled = false;
 
         if (preAttackTimer <= 0)
         {
             //Atacar activando el collider de katana
+            katanaCollider.enabled = true;
+            preAttackTimer = preAttackTime;
         }
     }
 }

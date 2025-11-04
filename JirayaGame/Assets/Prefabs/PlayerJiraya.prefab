@@ -1,36 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &793181001204443957
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8651808385327145938}
-  m_Layer: 0
-  m_Name: ColliderObjective
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8651808385327145938
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 793181001204443957}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.092, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4808086272189414746}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1608729913664290579
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,7 +191,7 @@ Transform:
   m_GameObject: {fileID: 1960582784928442442}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.584, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -262,7 +231,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.33944422, y: 0.06709945}
+  m_Offset: {x: 0.5953237, y: -0.0014660358}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -272,7 +241,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.15533653, y: 0.14744258}
+  m_Size: {x: 1.8458104, y: 0.12}
   m_EdgeRadius: 0
 --- !u!1 &4370449086356678382
 GameObject:
@@ -351,7 +320,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 1318274861457965402, guid: 779c0e97b005a384ba2ab1b6c8cbf5fb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -398,7 +367,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShadowGroup: 0
-  m_Priority: 1
+  m_Priority: 2
   m_ComponentVersion: 5
   m_HasRenderer: 1
   m_UseRendererSilhouette: 1
@@ -514,7 +483,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 5062877447956680764, guid: 7f555e55a4fb45249a0c534d5f03f32c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -667,14 +636,13 @@ MonoBehaviour:
   textoVida: {fileID: 0}
   state: idle
   human: 1
-  vida: 10
   katanaObject: {fileID: 1608729913664290579}
   colliderKatana: {fileID: 5445482418505120430}
   spriteRendererKatana: {fileID: 8932164626406919758}
   toatTonge: {fileID: 5204658483920344078}
-  toatTongeObjective: {fileID: 793181001204443957}
-  tongeColliderGameObject: {fileID: 1960582784928442442}
+  toatTongeColliderObject: {fileID: 1960582784928442442}
   cooldownForMele: 0.5
+  vida: 10
 --- !u!1 &5204658483920344078
 GameObject:
   m_ObjectHideFlags: 0
@@ -706,7 +674,6 @@ Transform:
   m_Children:
   - {fileID: 7701682136928707986}
   - {fileID: 9051021958807585685}
-  - {fileID: 8651808385327145938}
   m_Father: {fileID: 8225301138991784742}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6250482713098002766

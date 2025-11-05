@@ -5,7 +5,8 @@ using UnityEngine.UI;
 public class Inventario : MonoBehaviour
 {
     public List<Objeto> objetos = new List<Objeto>();
-    public int capacidadMaxima = 10;
+    private List<GameObject> btnSlots = new List<GameObject>();
+    public int capacidadMaxima = 3;
 
     public GameObject inventarioUI;
     public GameObject btnPrefab;
@@ -14,7 +15,14 @@ public class Inventario : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        //inventarioUI.SetActive(false);
+        for (int i = 0; i < capacidadMaxima; i++)
+        {
+            GameObject btnObj = Instantiate(btnPrefab, btnContenedorBotones);
+            btnObj.SetActive(true);
+            btnObj.GetComponent<Image>().enabled = false;
+            btnObj.GetComponent<Button>().interactable = false;
+            btnSlots.Add(btnObj);
+        }
     }
 
     // Update is called once per frame
@@ -49,22 +57,36 @@ public class Inventario : MonoBehaviour
     }
 
     public void ActualizarInventario()
-    {
-        foreach (Transform child in btnContenedorBotones)
+    {  
+        for (int i = 0; i < btnSlots.Count; i++)
         {
-            Destroy(child.gameObject);
-        }
+            GameObject btn = btnSlots[i];
+            Image img = btn.GetComponent<Image>();
+            Button btnComp = btn.GetComponent<Button>();
 
-        foreach (Objeto obj in objetos)
-        {
-            GameObject btnObj = Instantiate(btnPrefab, btnContenedorBotones);
-            btnObj.GetComponent<Image>().sprite = obj.icono;
-
-            btnObj.GetComponent<Button>().onClick.AddListener(() =>
+            if (i < objetos.Count)
             {
-                player.EquiparObjeto(obj);
-                CerrarInventario();
-            });
+                Objeto obj = objetos[i];
+                img.sprite = obj.icono;
+                img.enabled = true;
+                btnComp.interactable = true;
+
+                btnComp.onClick.RemoveAllListeners();
+
+                Objeto objetoCapturado = obj;
+                btnComp.onClick.AddListener(() =>
+                {
+                    player.EquiparObjeto(objetoCapturado);
+                    EliminarObjeto(objetoCapturado);
+                });
+            }
+            else
+            {
+                img.sprite = null;
+                img.enabled = false;
+                btnComp.interactable = false;
+                btnComp.onClick.RemoveAllListeners();
+            }
         }
     }
 

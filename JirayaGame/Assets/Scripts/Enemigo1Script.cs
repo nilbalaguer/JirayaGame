@@ -14,6 +14,7 @@ public class Enemigo1Script : MonoBehaviour
     [SerializeField] float desiredSpeed = 0;
 
     public float knockForce = 2;
+    [SerializeField] GameObject sangre;
 
     [Header("Movimiento")]
 
@@ -42,6 +43,12 @@ public class Enemigo1Script : MonoBehaviour
     [SerializeField] Transform puntoB;
     private Transform destinoActual;
 
+    [Header("Sonidos")]
+    private AudioSource audioSource;
+    [SerializeField] AudioClip sonidoDamage;
+    [SerializeField] AudioClip sonidoMuerte;
+    [SerializeField] AudioClip sonidoKatana;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -60,6 +67,9 @@ public class Enemigo1Script : MonoBehaviour
         agent.speed = desiredSpeed;
 
         agent.acceleration = 10000f;
+
+        //Sonido
+        audioSource = gameObject.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -126,10 +136,6 @@ public class Enemigo1Script : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (vida <= 0)
-        {
-            Destroy(gameObject);
-        }
 
         if (Vector2.Distance(transform.position, destinoActual.position) < 0.2)
         {
@@ -149,7 +155,16 @@ public class Enemigo1Script : MonoBehaviour
 
             enemigoKnockout = 0.4f;
             enemigoKnockBack = 0.1f;
-            
+
+            if (vida <= 0)
+            {
+                audioSource.PlayOneShot(sonidoMuerte);
+                Instantiate(sangre, transform.position, Quaternion.identity);
+                Destroy(gameObject, 1f);
+            } else
+            {
+                audioSource.PlayOneShot(sonidoDamage);
+            }
         }
     }
 
@@ -160,18 +175,13 @@ public class Enemigo1Script : MonoBehaviour
 
     void TryAttack()
     {
-        // Si todavía está en cooldown, no puede atacar
         if (cooldownTimer > 0)
         {
             cooldownTimer -= Time.deltaTime;
             return;
         }
 
-        // Empieza el pre-ataque
         preAttackTimer -= Time.deltaTime;
-
-        // Mientras prepara el ataque, puede reproducir una animación de "wind-up"
-        // enemyAnimator.SetBool("isAttacking", true);
 
         if (preAttackTimer <= 0)
         {
@@ -184,13 +194,11 @@ public class Enemigo1Script : MonoBehaviour
 
     private IEnumerator AttackCoroutine()
     {
-        // Activar el collider por un breve momento (golpe)
         katanaCollider.enabled = true;
-        yield return new WaitForSeconds(0.15f); // duración del golpe
+        audioSource.PlayOneShot(sonidoKatana);
+        yield return new WaitForSeconds(0.15f);
         katanaCollider.enabled = false;
 
-        // Desactivar animación
-        // enemyAnimator.SetBool("isAttacking", false);
     }
 
 }

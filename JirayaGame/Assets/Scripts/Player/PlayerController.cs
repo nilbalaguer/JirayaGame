@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     private BoxCollider2D tongeCollider;
 
     private GameObject objectPicked = null;
+    [SerializeField] Transform objectTravelPosition;
     
 
     private float cooldownMele = 0;
@@ -47,8 +48,15 @@ public class PlayerController : MonoBehaviour
     [Header("Sonido")]
     [SerializeField] AudioSource fuenteSonido;
     [SerializeField] AudioClip sonidoBlandirKatana;
+
+    [SerializeField] AudioClip sonidoFootstepFrog;
     [SerializeField] AudioClip sonidoFootstep;
     private float cooldownFootStep = 0.9f;
+
+    [SerializeField] AudioClip sonidoLengua;
+    [SerializeField] AudioClip sonidoDamage;
+    [SerializeField] AudioClip sonidoParry;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -117,7 +125,7 @@ public class PlayerController : MonoBehaviour
 
         if (objectPicked != null)
         {
-            objectPicked.transform.position = toatTongeColliderObject.transform.position;
+            objectPicked.transform.position = objectTravelPosition.position;
         }
 
         //Sistema movimiento
@@ -183,6 +191,8 @@ public class PlayerController : MonoBehaviour
                 {
                     if (objectPicked != null)
                     {
+                        BoxCollider2D tempBoxCollider = objectPicked.GetComponent<BoxCollider2D>();
+                        tempBoxCollider.enabled = true;
                         objectPicked = null;
                     }
                     else
@@ -192,13 +202,20 @@ public class PlayerController : MonoBehaviour
 
                 }
 
-                if (Input.GetButtonDown("Jump"))
+                if (Input.GetButtonDown("Fire3"))
                 {
                     human = !human;
                     if (objectPicked != null)
                     {
+                        BoxCollider2D tempBoxCollider = objectPicked.GetComponent<BoxCollider2D>();
+                        tempBoxCollider.enabled = true;
                         objectPicked = null;
                     }
+                }
+
+                if (Input.GetButton("Jump"))
+                {
+                    saltarSapo();
                 }
 
                 if (Input.GetButton("Fire2") && staminaParry > 0 && human)
@@ -311,6 +328,7 @@ public class PlayerController : MonoBehaviour
                 else
                 {
                     //Lanzar lengua
+                    fuenteSonido.PlayOneShot(sonidoLengua);
 
                     animator.SetFloat("State", 5);
                     animator.SetInteger("State-int", 5);
@@ -352,8 +370,16 @@ public class PlayerController : MonoBehaviour
 
                 if (cooldownFootStep <= 0)
                 {
-                    cooldownFootStep = 0.3f;
-                    fuenteSonido.PlayOneShot(sonidoFootstep);
+                    if (human)
+                    {
+                        cooldownFootStep = 0.25f;
+                        fuenteSonido.PlayOneShot(sonidoFootstep);
+                    } else
+                    {
+                        cooldownFootStep = 0.25f;
+                        fuenteSonido.PlayOneShot(sonidoFootstepFrog);
+                    }
+                    
                 }
 
                 break;
@@ -371,21 +397,46 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("intObject") && toatTongeTonge.enabled)
         {
             objectPicked = other.gameObject;
+            BoxCollider2D colliderTemp = objectPicked.GetComponent<BoxCollider2D>();
+            colliderTemp.enabled = false;
 
         }
-        
+
         if (other.CompareTag("KatanaEnemigo"))
         {
             if (staminaParry < 4 && staminaParry > 0.1 && Input.GetButton("Fire2"))
             {
                 staminaParry -= 0.3f;
-            } else
+                fuenteSonido.PlayOneShot(sonidoParry);
+            }
+            else
             {
                 vida -= 1;
                 textoVida.text = "Vida: " + vida;
+
+                fuenteSonido.PlayOneShot(sonidoDamage);
             }
-            
-            
+
+
+        }
+    }
+    
+    void saltarSapo()
+    {
+
+        float rayDistance = 4f;
+        Vector2 rayDirection = Vector2.right;
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, rayDirection, rayDistance);
+
+        Debug.DrawRay(transform.position, rayDirection * rayDistance, Color.red);
+
+        if (hit.collider != null)
+        {
+            if (hit.collider.CompareTag("nenufar"))
+            {
+                Debug.Log("¡Golpeó un nenúfar!");
+            }
         }
     }
 }

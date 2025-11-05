@@ -20,6 +20,7 @@ public class StatesMachine : MonoBehaviour
 
     public ScrollPanel scrollPanel;
     public panelErmitaño panelScript;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -228,6 +229,10 @@ public class StatesMachine : MonoBehaviour
         {
             Debug.Log("Entraste en el rango de Tsunade");
             tsunadeCerca = true;
+        }
+        if (collision.CompareTag("Moneda"))
+        {
+            GameManager.Instance.RecolectarMonedas();
         }
     }
 

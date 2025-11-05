@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,10 +13,14 @@ public class GameManager : MonoBehaviour
 
     public NpcStates npcIntro;
     private NpcStates npcIntroActual;
+    public TextMeshProUGUI textoMonedas;
+    private int monedas = 0;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         IniciarIntro();
+        monedas = 0;
+        textoMonedas.text = monedas.ToString();
     }
 
     // Update is called once per frame
@@ -70,7 +76,8 @@ public class GameManager : MonoBehaviour
 
     public void RecolectarMonedas()
     {
-
+        monedas += 1;
+        textoMonedas.text = monedas.ToString();
     }
 
     public void PantallaDerrota()

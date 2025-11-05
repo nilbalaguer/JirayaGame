@@ -4,7 +4,7 @@ public class BehaviourErmitaño : MonoBehaviour
 {
     private Animator anim;
 
-    public enum State { Idle, Patrol, Talking };
+    public enum State { Idle, Patrol, Talking, TalkingShop };
     public State currentState;
 
     public Transform[] puntosPatrulla;
@@ -17,7 +17,9 @@ public class BehaviourErmitaño : MonoBehaviour
     private GameObject player;
     public float rangoPlayer = 2f;
     public GameObject panelDialogo;
+    public GameObject panelTienda; 
     public panelErmitaño panelScript;
+    public bool esErmitañoTienda = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -26,12 +28,13 @@ public class BehaviourErmitaño : MonoBehaviour
 
         player = GameObject.FindWithTag("Player");
         panelDialogo.SetActive(false);
+        panelTienda.SetActive(false);
 
         waitCounter = waitTime;
-        if (puntosPatrulla.Length > 0)
+        /*if (puntosPatrulla.Length > 0)
         {
             transform.position = puntosPatrulla[0].position;
-        }
+        }*/
     }
 
     // Update is called once per frame
@@ -48,15 +51,18 @@ public class BehaviourErmitaño : MonoBehaviour
                 else if (!PlayerinRange())
                 {
                     waitCounter -= Time.deltaTime;
-                    if (waitCounter <= 0f)
+                    if (waitCounter <= 0f && !esErmitañoTienda)
                     {
                         waiting = false;
                         currentState = State.Patrol;
                     }
                 }
-                else if (PlayerinRange())
+                else if (PlayerinRange() && !panelScript.hasTalked && !esErmitañoTienda)
                 {
                     currentState = State.Talking;
+                }else if (PlayerinRange() && esErmitañoTienda)
+                {
+                    currentState = State.TalkingShop;
                 }
                 
                 break;
@@ -69,7 +75,12 @@ public class BehaviourErmitaño : MonoBehaviour
                 }
                 break;
             case State.Patrol:
-                if (PlayerinRange())
+                if (esErmitañoTienda)
+                {
+                    currentState = State.Idle;
+                    break;
+                }
+                if (PlayerinRange() && !panelScript.hasTalked)
                 {
                     currentState = State.Talking;
                 }
@@ -107,7 +118,7 @@ public class BehaviourErmitaño : MonoBehaviour
 
     void NextPoint()
     {
-        if (puntosPatrulla.Length == 0) return;
+        if (esErmitañoTienda && puntosPatrulla.Length == 0) return;
 
         Transform destino = puntosPatrulla[indiceActual];
         transform.position = Vector2.MoveTowards(transform.position, destino.position, speed * Time.deltaTime);

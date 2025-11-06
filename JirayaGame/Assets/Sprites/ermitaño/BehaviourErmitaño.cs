@@ -20,6 +20,7 @@ public class BehaviourErmitaño : MonoBehaviour
     public GameObject panelTienda; 
     public panelErmitaño panelScript;
     public bool esErmitañoTienda = false;
+    public GameObject CanvasTienda;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -35,6 +36,7 @@ public class BehaviourErmitaño : MonoBehaviour
         {
             transform.position = puntosPatrulla[0].position;
         }*/
+        CanvasTienda.SetActive(false);
     }
 
     // Update is called once per frame
@@ -60,9 +62,19 @@ public class BehaviourErmitaño : MonoBehaviour
                 else if (PlayerinRange() && !panelScript.hasTalked && !esErmitañoTienda)
                 {
                     currentState = State.Talking;
-                }else if (PlayerinRange() && esErmitañoTienda)
+                }
+                else if (PlayerinRange() && esErmitañoTienda && Input.GetKeyDown(KeyCode.E))
                 {
                     currentState = State.TalkingShop;
+                }
+                
+                if (PlayerinRange() && esErmitañoTienda)
+                {
+                    CanvasTienda.SetActive(true);
+                }
+                else
+                {
+                    CanvasTienda.SetActive(false);
                 }
                 
                 break;
@@ -106,6 +118,9 @@ public class BehaviourErmitaño : MonoBehaviour
                 break;
             case State.Patrol:
                 anim.SetInteger("state", 1);
+                break;
+            case State.TalkingShop:
+                panelTienda.SetActive(true);
                 break;
         }
     }

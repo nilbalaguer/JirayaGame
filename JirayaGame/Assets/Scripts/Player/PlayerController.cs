@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
@@ -40,6 +41,9 @@ public class PlayerController : MonoBehaviour
 
     [Header("Vida i Habilidades")]
     public int vida = 10;
+
+    [SerializeField] LayerMask nenufarLayerMask;
+    private bool estaSaltando = false;
 
     [Header("Parry")]
     private float staminaParry = 4;
@@ -213,7 +217,7 @@ public class PlayerController : MonoBehaviour
                     }
                 }
 
-                if (Input.GetButton("Jump"))
+                if (Input.GetButtonDown("Jump"))
                 {
                     saltarSapo();
                 }
@@ -419,15 +423,47 @@ public class PlayerController : MonoBehaviour
 
 
         }
+
+        if (other.CompareTag("nenufar"))
+        {
+            other.gameObject.layer = 0;
+        }
     }
-    
+
+    private void OnTriggerExit2D(Collider2D other) {
+        if (other.CompareTag("nenufar"))
+        {
+            other.gameObject.layer = 3;
+        }
+    }
+
     void saltarSapo()
     {
+        if (human || estaSaltando)
+        {
+            return;
+        }
 
-        float rayDistance = 4f;
+        float rayDistance = 7f;
         Vector2 rayDirection = Vector2.right;
 
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, rayDirection, rayDistance);
+        switch (lastMove)
+        {
+            case 3:
+                rayDirection = Vector2.right;
+                break;
+            case 4:
+                rayDirection = Vector2.left;
+                break;
+            case 1:
+                rayDirection = Vector2.up;
+                break;
+            case 2:
+                rayDirection = Vector2.down;
+                break;
+        }
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, rayDirection, rayDistance, nenufarLayerMask);
 
         Debug.DrawRay(transform.position, rayDirection * rayDistance, Color.red);
 
@@ -435,8 +471,50 @@ public class PlayerController : MonoBehaviour
         {
             if (hit.collider.CompareTag("nenufar"))
             {
-                Debug.Log("¡Golpeó un nenúfar!");
+                StartCoroutine(SaltoPlano(hit.collider.transform.position));
             }
         }
     }
+    
+    //Prueva de corrutina para salto de sapo
+    private IEnumerator SaltoPlano(Vector3 destino)
+    {
+        estaSaltando = true;
+
+        float duracion = 0.70f;
+        float tiempo = 0f;
+        Vector3 inicio = transform.position;
+
+        Vector3 escalaInicial = transform.localScale;
+        Vector3 escalaMax = escalaInicial * 1.8f; //Efecto de salto (escala)
+
+        rigidBody.linearVelocity = Vector2.zero;
+        rigidBody.simulated = false; // pausa fisica
+
+        fuenteSonido.PlayOneShot(sonidoFootstepFrog);
+
+        while (tiempo < duracion)
+        {
+            tiempo += Time.deltaTime;
+            float t = tiempo / duracion;
+
+            //Interpolacion
+            transform.position = Vector3.Lerp(inicio, destino, t);
+
+            if (t < 0.5f)
+                transform.localScale = Vector3.Lerp(escalaInicial, escalaMax, t * 2);
+            else
+                transform.localScale = Vector3.Lerp(escalaMax, escalaInicial, (t - 0.5f) * 2);
+
+            yield return null;
+        }
+
+        transform.position = destino;
+        transform.localScale = escalaInicial;
+
+        rigidBody.simulated = true;
+
+        estaSaltando = false;
+    }
+
 }

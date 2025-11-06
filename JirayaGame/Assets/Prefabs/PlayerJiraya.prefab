@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &959973387160991751
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3793525182742143689}
+  m_Layer: 0
+  m_Name: ObjectTravel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3793525182742143689
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 959973387160991751}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.266, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4808086272189414746}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1608729913664290579
 GameObject:
   m_ObjectHideFlags: 0
@@ -820,11 +851,16 @@ MonoBehaviour:
   spriteRendererKatana: {fileID: 8932164626406919758}
   toatTonge: {fileID: 5204658483920344078}
   toatTongeColliderObject: {fileID: 1960582784928442442}
+  objectTravelPosition: {fileID: 3793525182742143689}
   cooldownForMele: 0.5
   vida: 10
+  nenufarLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
   staminaDuration: 4
   fuenteSonido: {fileID: 2048195043642005362}
   sonidoBlandirKatana: {fileID: 8300000, guid: a7c12aedb8536de48b28f29f560c21f5, type: 3}
+  sonidoFootstepFrog: {fileID: 8300000, guid: 0d7e2d1e4bd5c49458cdb747122893d5, type: 3}
   sonidoFootstep: {fileID: 8300000, guid: 8ffb58abc9882c249929778d4366c289, type: 3}
   sonidoLengua: {fileID: 8300000, guid: 32fe078981d61fc4eb7d54fe4a485cb0, type: 3}
   sonidoDamage: {fileID: 8300000, guid: 158e2252b80ef4245ab44991ee6b9173, type: 3}
@@ -957,6 +993,7 @@ Transform:
   m_Children:
   - {fileID: 7701682136928707986}
   - {fileID: 9051021958807585685}
+  - {fileID: 3793525182742143689}
   m_Father: {fileID: 8225301138991784742}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6250482713098002766

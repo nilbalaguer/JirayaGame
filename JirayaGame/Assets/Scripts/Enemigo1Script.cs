@@ -70,6 +70,9 @@ public class Enemigo1Script : MonoBehaviour
 
         //Sonido
         audioSource = gameObject.GetComponent<AudioSource>();
+
+        //Animator
+        enemyAnimator.SetInteger("State", 1);
     }
 
     // Update is called once per frame
@@ -131,6 +134,24 @@ public class Enemigo1Script : MonoBehaviour
         Vector2 velocity = agent.velocity;
         enemyAnimator.SetFloat("speedX", velocity.x);
         enemyAnimator.SetFloat("speedY", velocity.y);
+
+        if (velocity.x > 0)
+        {
+            enemyAnimator.SetFloat("LastDirection", 3);
+        }
+        else if (velocity.x < 0)
+        {
+            enemyAnimator.SetFloat("LastDirection", 4);
+        }
+
+        if (velocity.y > 0)
+        {
+            enemyAnimator.SetFloat("LastDirection", 1);
+        }
+        else if (velocity.y < 0)
+        {
+            enemyAnimator.SetFloat("LastDirection", 2);
+        }
     }
 
 
@@ -186,6 +207,7 @@ public class Enemigo1Script : MonoBehaviour
         if (preAttackTimer <= 0)
         {
             // Ejecutar el ataque real
+            enemyAnimator.SetInteger("State", 2);
             StartCoroutine(AttackCoroutine());
             preAttackTimer = preAttackTime;
             cooldownTimer = cooldownTime;
@@ -198,6 +220,7 @@ public class Enemigo1Script : MonoBehaviour
         audioSource.PlayOneShot(sonidoKatana);
         yield return new WaitForSeconds(0.15f);
         katanaCollider.enabled = false;
+        enemyAnimator.SetInteger("State", 1);
 
     }
 

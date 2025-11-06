@@ -19,8 +19,6 @@ public class Enemigo1Script : MonoBehaviour
     [Header("Movimiento")]
 
     private GameObject playerGameObject;
-
-    private bool playerInRange = false;
     private float enemigoKnockout = 0f;
     private float enemigoKnockBack = 0f;
 
@@ -82,13 +80,13 @@ public class Enemigo1Script : MonoBehaviour
 
         if (distanceToPlayer < 4)
         {
-            playerInRange = true;
+            
             target = playerGameObject.transform;
             desiredSpeed = maxSpeed;
         }
         else
         {
-            playerInRange = false;
+            
             target = destinoActual;
             desiredSpeed = 2;
         }
@@ -135,22 +133,27 @@ public class Enemigo1Script : MonoBehaviour
         enemyAnimator.SetFloat("speedX", velocity.x);
         enemyAnimator.SetFloat("speedY", velocity.y);
 
-        if (velocity.x > 0)
+        if (Mathf.Abs(velocity.x) > Mathf.Abs(velocity.y))
         {
-            enemyAnimator.SetFloat("LastDirection", 3);
+            if (velocity.x > 0)
+            {
+                enemyAnimator.SetFloat("LastDirection", 3); // Derecha
+            }
+            else if (velocity.x < 0)
+            {
+                enemyAnimator.SetFloat("LastDirection", 4); // Izquierda
+            }
         }
-        else if (velocity.x < 0)
+        else if (Mathf.Abs(velocity.y) > 0)
         {
-            enemyAnimator.SetFloat("LastDirection", 4);
-        }
-
-        if (velocity.y > 0)
-        {
-            enemyAnimator.SetFloat("LastDirection", 1);
-        }
-        else if (velocity.y < 0)
-        {
-            enemyAnimator.SetFloat("LastDirection", 2);
+            if (velocity.y > 0)
+            {
+                enemyAnimator.SetFloat("LastDirection", 1); // Arriba
+            }
+            else if (velocity.y < 0)
+            {
+                enemyAnimator.SetFloat("LastDirection", 2); // Abajo
+            }
         }
     }
 

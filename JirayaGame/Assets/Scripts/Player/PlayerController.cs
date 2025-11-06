@@ -15,7 +15,6 @@ public class PlayerController : MonoBehaviour
     public bool human = true;
 
     [Header("HUD")]
-    [SerializeField] TextMeshProUGUI textoVida;
     private Image indicadorParry;
 
     [Header("Armas")]
@@ -40,7 +39,8 @@ public class PlayerController : MonoBehaviour
     private int lastMove;
 
     [Header("Vida i Habilidades")]
-    public int vida = 10;
+
+    public GameManager gameManager;
 
     [SerializeField] LayerMask nenufarLayerMask;
     private bool estaSaltando = false;
@@ -79,6 +79,9 @@ public class PlayerController : MonoBehaviour
         //Obtener indicadores
         GameObject parryObj = GameObject.Find("parryIndicator");
         indicadorParry = parryObj.GetComponent<Image>();
+
+        //Obtener GameManager
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
@@ -392,12 +395,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("objetoCaida"))
-        {
-            vida -= 1;
-            textoVida.text = "Vida: " + vida;
-        }
-
         if (other.CompareTag("intObject") && toatTongeTonge.enabled)
         {
             objectPicked = other.gameObject;
@@ -415,10 +412,10 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                vida -= 1;
-                textoVida.text = "Vida: " + vida;
+                gameManager.ReducirVida(1);
 
                 fuenteSonido.PlayOneShot(sonidoDamage);
+
             }
 
 

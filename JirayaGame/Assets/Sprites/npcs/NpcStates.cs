@@ -174,7 +174,6 @@ public class NpcStates : MonoBehaviour
                 }*/
                 break;
             case State.Alerted:
-            //Cambiar animaciones por las de talk
                 rb.linearVelocity = Vector2.zero;
                 Vector2 directionToPlayer = (player.transform.position - transform.position).normalized;
                 if (Mathf.Abs(directionToPlayer.x) > Mathf.Abs(directionToPlayer.y))

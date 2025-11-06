@@ -10,11 +10,12 @@ public class GameManager : MonoBehaviour
     public Estado estadoActual = Estado.Normal;
     public Inventario inventario;
     public StatesMachine player;
+    private Objeto objetoCompradoNuevo;
 
     public NpcStates npcIntro;
     private NpcStates npcIntroActual;
     public TextMeshProUGUI textoMonedas;
-    private int monedas = 0;
+    public int monedas = 0;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -78,6 +79,26 @@ public class GameManager : MonoBehaviour
     {
         monedas += 1;
         textoMonedas.text = monedas.ToString();
+    }
+
+    public void ComprarObjetos(Objeto objetoComprado)
+    {
+        int precio = objetoComprado.precioTienda;
+
+        if (monedas >= precio)
+        {
+            monedas -= precio;
+            textoMonedas.text = monedas.ToString();
+            Debug.Log("Objeto comprado");
+            //Equipar objeto comprado
+            GameObject ObjInstanciado = Instantiate(objetoComprado.gameObject);
+            objetoCompradoNuevo = ObjInstanciado.GetComponent<Objeto>();
+            inventario.AñadirObjeto(objetoCompradoNuevo);
+        }
+        else
+        {
+            Debug.Log("No tienes suficientes monedas para comprar este objeto");
+        }
     }
 
     public void PantallaDerrota()

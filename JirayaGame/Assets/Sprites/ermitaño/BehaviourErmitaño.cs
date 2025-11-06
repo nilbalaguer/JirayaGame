@@ -101,6 +101,7 @@ public class BehaviourErmitaño : MonoBehaviour
                     NextPoint();
                 }
                 break;
+            //Cerrar panel tienda
         }
 
         switch (currentState)

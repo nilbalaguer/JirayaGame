@@ -183,7 +183,7 @@ public class StatesMachine : MonoBehaviour
     //Lanzar objeto sujeto
     public void LanzarObjeto()
     {
-        Vector2 direccion = puntoSujecion.right.normalized;
+        Vector2 direccion = puntoSujecion.position - transform.position;
         objetoSujeto.Lanzar(direccion, fuerzaLanzamiento);
         objetoSujeto = null;
     }

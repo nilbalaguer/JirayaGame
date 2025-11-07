@@ -71,9 +71,4 @@ public class Tienda : MonoBehaviour
 
         }
     }
-    
-    public void DisablePanel()
-    {
-        gameObject.SetActive(false);
-    }
 }

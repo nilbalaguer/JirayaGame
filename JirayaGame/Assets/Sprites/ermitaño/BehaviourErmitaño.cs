@@ -101,7 +101,7 @@ public class BehaviourErmitaño : MonoBehaviour
                     NextPoint();
                 }
                 break;
-            //Cerrar panel tienda
+            
         }
 
         switch (currentState)
@@ -121,7 +121,10 @@ public class BehaviourErmitaño : MonoBehaviour
                 anim.SetInteger("state", 1);
                 break;
             case State.TalkingShop:
-                panelTienda.SetActive(true);
+                if (!panelTienda.activeSelf)
+                {
+                    panelTienda.SetActive(true);
+                }
                 break;
         }
     }
@@ -157,10 +160,16 @@ public class BehaviourErmitaño : MonoBehaviour
             anim.SetInteger("state", 0);
             return;
         }
-        
+
         if (absX > absY)
         {
             transform.localScale = new Vector3(dir.x < 0 ? -5 : 5, 5, 5);
         }
+    }
+    
+    public void CerrarTienda()
+    {
+        panelTienda.SetActive(false);
+        currentState = State.Idle;
     }
 }

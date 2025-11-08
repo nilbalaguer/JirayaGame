@@ -16,12 +16,15 @@ public class GameManager : MonoBehaviour
     private NpcStates npcIntroActual;
     public TextMeshProUGUI textoMonedas;
     public int monedas = 0;
+
+    public GameObject tiendaAlerta;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         IniciarIntro();
         monedas = 0;
         textoMonedas.text = monedas.ToString();
+        tiendaAlerta.SetActive(false);
     }
 
     // Update is called once per frame
@@ -71,7 +74,7 @@ public class GameManager : MonoBehaviour
 
     public void PantallaJefeFinal()
     {
-
+        
     }
 
 
@@ -98,13 +101,18 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.Log("No tienes suficientes monedas para comprar este objeto");
+            tiendaAlerta.SetActive(true);
+            Invoke("DesactivartiendaAlerta", 1f);
         }
+    }
+    
+    private void DesactivartiendaAlerta()
+    {
+        tiendaAlerta.SetActive(false);
     }
 
     public void PantallaDerrota()
     {
-        
+        //Si la vida del player es 0 se muestra esta pantalla
     }
-    
-    //Mas funciones que afecten al hud del jugador y cosas que pasen en el juego
 }

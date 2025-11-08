@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using TMPro;
 
 public class Inventario : MonoBehaviour
 {
@@ -21,6 +22,8 @@ public class Inventario : MonoBehaviour
             btnObj.SetActive(true);
             btnObj.GetComponent<Image>().enabled = false;
             btnObj.GetComponent<Button>().interactable = false;
+            TextMeshProUGUI textoCantidad = btnObj.GetComponentInChildren<TextMeshProUGUI>();
+            textoCantidad.gameObject.SetActive(true);
             btnSlots.Add(btnObj);
         }
     }
@@ -33,7 +36,8 @@ public class Inventario : MonoBehaviour
 
     public void AñadirObjeto(Objeto objeto)
     {
-        if (objetos.Count < capacidadMaxima)
+        Objeto existe = objetos.Find(obj => obj.nombreObjeto == objeto.nombreObjeto);
+        if (objetos.Count < capacidadMaxima && existe == null)
         {
             objetos.Add(objeto);
             ActualizarInventario();
@@ -41,7 +45,8 @@ public class Inventario : MonoBehaviour
         }
         else
         {
-            Debug.Log("Inventario lleno. No se puede añadir más objetos.");
+            //Debug.Log("Inventario lleno. No se puede añadir más objetos.");
+            existe.cantidad++;
         }
     }
 
@@ -63,6 +68,7 @@ public class Inventario : MonoBehaviour
             GameObject btn = btnSlots[i];
             Image img = btn.GetComponent<Image>();
             Button btnComp = btn.GetComponent<Button>();
+            TextMeshProUGUI cantidadTexto = btn.GetComponentInChildren<TextMeshProUGUI>();
 
             if (i < objetos.Count)
             {
@@ -70,6 +76,15 @@ public class Inventario : MonoBehaviour
                 img.sprite = obj.icono;
                 img.enabled = true;
                 btnComp.interactable = true;
+                if (obj.cantidad > 1)
+                {
+                    cantidadTexto.text = obj.cantidad.ToString();
+                }
+                else
+                {
+                    cantidadTexto.text = "";
+                }
+
 
                 btnComp.onClick.RemoveAllListeners();
 
@@ -92,7 +107,8 @@ public class Inventario : MonoBehaviour
 
     public void EliminarObjeto(Objeto objeto)
     {
-        if (objetos.Contains(objeto))
+        objeto.cantidad--;
+        /*if (objetos.Contains(objeto))
         {
             objetos.Remove(objeto);
             ActualizarInventario();        
@@ -100,6 +116,11 @@ public class Inventario : MonoBehaviour
         else
         {
             Debug.Log("El objeto no está en el inventario.");
+        }*/
+        if (objeto.cantidad <= 0)
+        {
+            objetos.Remove(objeto);
+            ActualizarInventario();
         }
     }
     

@@ -11,6 +11,7 @@ public class Objeto : MonoBehaviour
     private Transform player;
     public bool esRecompensa = false;
     public int precioTienda = 10;
+    public int cantidad = 1;
 
     public enum TipoObjeto { Flor, CollarShizune, PergaminoSagrado, Recompensa, Arma};
     public TipoObjeto tipo;

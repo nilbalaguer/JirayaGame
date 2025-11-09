@@ -20,6 +20,10 @@ public class tsunade : MonoBehaviour
     public Objeto objetoRecibido;
     private GameObject prefabRecompensa;
 
+    [HideInInspector]
+    public float ultimoDialogo = 0f;
+    public float cooldownDialogo = 2f;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -83,7 +87,10 @@ public class tsunade : MonoBehaviour
         
         if (PlayerinRange() && playerScript.objetoSujeto == null && !scrollPanel.entregarObjeto)
         {
-            tsunadePanel2.SetActive(true);
+            if (Time.time - ultimoDialogo >= cooldownDialogo)
+            {
+                tsunadePanel2.SetActive(true);
+            }
         }else if (PlayerinRange() && playerScript.objetoSujeto != null && objetoRecompensa.esRecompensa)
         {
             tsunadePanel2.SetActive(false);

@@ -207,9 +207,21 @@ public class StatesMachine : MonoBehaviour
         }
         objetoSujeto = objetoCercano;
         objetoSujeto.gameObject.SetActive(true);
+        //Resetar valores del rididbody cada vez que se equipe un objeto
+        Rigidbody2D rb = objetoSujeto.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.angularVelocity = 0f;
+            rb.rotation = 0f;
+            rb.bodyType = RigidbodyType2D.Kinematic;
+            rb.gravityScale = 0;
+        }
+        objetoSujeto.transform.position = puntoSujecion.position;
+        objetoSujeto.transform.rotation = puntoSujecion.rotation;
+        
         objetoSujeto.Coger(puntoSujecion);
     }
-
     public void SoltarObjeto()
     {
         if (objetoSujeto != null)

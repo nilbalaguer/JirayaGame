@@ -109,8 +109,10 @@ MonoBehaviour:
   Canvas: {fileID: 5743349435266379697}
   esRecompensa: 0
   precioTienda: 10
+  cantidad: 1
   tipo: 4
   nombreObjeto: Shuriken
+  objetoPrefab: {fileID: 2617785827019593988}
 --- !u!58 &8730068182615225330
 CircleCollider2D:
   m_ObjectHideFlags: 0

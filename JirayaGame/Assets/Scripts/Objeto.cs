@@ -50,7 +50,10 @@ public class Objeto : MonoBehaviour
         rb.linearVelocity = dirNormalizada * fuerza;
         estaSujeto = false;
 
-        Destroy(gameObject, 2f);
+        if (cantidad <= 0)
+        {
+            Destroy(gameObject, 2f);   
+        }
         Canvas.SetActive(false);
     }
     //Funcion para destruir objeto al cogerlo para guardarlo al inventario

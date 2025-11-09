@@ -40,7 +40,6 @@ public class Inventario : MonoBehaviour
         if (objetos.Count < capacidadMaxima && existe == null)
         {
             objetos.Add(objeto);
-            ActualizarInventario();
             Debug.Log("Objeto añadido al inventario. Total de objetos: " + objetos.Count);
         }
         else
@@ -48,6 +47,7 @@ public class Inventario : MonoBehaviour
             //Debug.Log("Inventario lleno. No se puede añadir más objetos.");
             existe.cantidad++;
         }
+        ActualizarInventario();
     }
 
     public void MostrarInventario()
@@ -120,8 +120,8 @@ public class Inventario : MonoBehaviour
         if (objeto.cantidad <= 0)
         {
             objetos.Remove(objeto);
-            ActualizarInventario();
         }
+        ActualizarInventario();
     }
     
 }

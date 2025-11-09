@@ -31,7 +31,7 @@ public class panelErmitaño : MonoBehaviour
     void OnEnable()
     {
         paginaActual = 0;
-        //ShowPage();
+        textoPanel.gameObject.SetActive(true);
     }
 
     public void ShowPage()
@@ -77,6 +77,21 @@ public class panelErmitaño : MonoBehaviour
             animator.SetTrigger("Close");
             scrollPanel.entregarObjeto = false;
             tsunadeScript.EntregarRecompensa();
+        }
+    }
+
+    //Boton para panel2 de tsunade
+    public void NextTsunade2()
+    {
+        if (paginaActual < paginas.Length - 1)
+        {
+            paginaActual++;
+            ShowPage();
+        }
+        else
+        {
+            animator.SetTrigger("Close");
+            tsunadeScript.ultimoDialogo = Time.time;
         }
     }
 

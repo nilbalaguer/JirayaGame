@@ -22,6 +22,9 @@ public class GameManager : MonoBehaviour
     //Estadisticas
     private int enemiesKilled = 0;
 
+    [Header("Sprites")]
+    [SerializeField] GameObject sangrePrefab;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -58,8 +61,9 @@ public class GameManager : MonoBehaviour
     public void PlayerDie()
     {
         audioSource.PlayOneShot(deathSound);
-        // SpriteRenderer spriteRenderer = playerGameObject.GetComponent<SpriteRenderer>();
-        // spriteRenderer.enabled = false;
+        Transform playerTransform = playerGameObject.transform;
+        Instantiate(sangrePrefab, playerTransform.position, Quaternion.identity);
+
         Time.timeScale = 0f;
     }
 

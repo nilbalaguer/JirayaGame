@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
     
 
     private float cooldownMele = 0;
-    private float cooldownTonge = 0.75f;
+    private float cooldownTonge = 0.375f;
     [SerializeField] float cooldownForMele = 0.5f;
     private int lastMove;
 
@@ -118,7 +118,7 @@ public class PlayerController : MonoBehaviour
             {
                 toatTongeTonge.enabled = false;
                 tongeCollider.enabled = false;
-                cooldownTonge = 0.75f;
+                cooldownTonge = 0.375f;
             }
             else
             {

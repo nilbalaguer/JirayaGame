@@ -93,10 +93,12 @@ public class GameManager : MonoBehaviour
             monedas -= precio;
             textoMonedas.text = monedas.ToString();
             Debug.Log("Objeto comprado");
-            //Equipar objeto comprado
+            //player.EquiparObjeto(objetoComprado);
             GameObject ObjInstanciado = Instantiate(objetoComprado.gameObject);
             objetoCompradoNuevo = ObjInstanciado.GetComponent<Objeto>();
             inventario.AñadirObjeto(objetoCompradoNuevo);
+            player.EquiparObjeto(objetoCompradoNuevo);
+            //Equipar objeto y cada vez que se use restar cantidad en el inventario
         }
         else
         {

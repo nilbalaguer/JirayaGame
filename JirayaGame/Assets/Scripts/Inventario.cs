@@ -41,11 +41,21 @@ public class Inventario : MonoBehaviour
         {
             objetos.Add(objeto);
             Debug.Log("Objeto añadido al inventario. Total de objetos: " + objetos.Count);
+
+            if (player.objetoSujeto == null)
+            {
+                player.EquiparObjeto(objeto);
+            }
         }
         else
         {
             //Debug.Log("Inventario lleno. No se puede añadir más objetos.");
             existe.cantidad++;
+
+            if (player.objetoSujeto == null || player.objetoSujeto.nombreObjeto == existe.nombreObjeto)
+            {
+                player.EquiparObjeto(existe);
+            }
         }
         ActualizarInventario();
     }

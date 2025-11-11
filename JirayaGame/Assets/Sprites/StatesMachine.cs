@@ -152,10 +152,6 @@ public class StatesMachine : MonoBehaviour
         {
             tsunadePanel.SetActive(true);
         }
-        /*else if (tsunadeCerca && objetoSujeto == null && !panelScript.hasTalked)
-        {
-            tsunadePanel2.SetActive(true);
-        }*/
     }
 
 
@@ -183,9 +179,31 @@ public class StatesMachine : MonoBehaviour
     //Lanzar objeto sujeto
     public void LanzarObjeto()
     {
+        /*if (objetoSujeto == null)
+        {
+            return;
+        }*/
+        
         Vector2 direccion = puntoSujecion.position - transform.position;
         objetoSujeto.Lanzar(direccion, fuerzaLanzamiento);
-        objetoSujeto = null;
+
+        string nombre = objetoSujeto.nombreObjeto;
+        //Objeto objetoLanzado = objetoSujeto;
+        //inventario.EliminarObjeto(objetoSujeto);
+
+        Objeto instancia = inventario.objetos.Find(o => o.nombreObjeto == nombre);
+        if (instancia != null && instancia.cantidad > 0)
+        {
+            //objetoLanzado.gameObject.SetActive(false);
+            objetoSujeto = instancia;
+            EquiparObjeto(objetoSujeto);
+            inventario.EliminarObjeto(objetoSujeto);
+        }
+        else
+        {
+            objetoSujeto = null;
+            //objetoLanzado.gameObject.SetActive(false);
+        }
     }
 
     //Guardar objeto en inventario

@@ -16,6 +16,7 @@ public class Objeto : MonoBehaviour
     public enum TipoObjeto { Flor, CollarShizune, PergaminoSagrado, Recompensa, Arma};
     public TipoObjeto tipo;
     public string nombreObjeto;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -50,10 +51,10 @@ public class Objeto : MonoBehaviour
         rb.linearVelocity = dirNormalizada * fuerza;
         estaSujeto = false;
 
-        if (cantidad <= 0)
+        /*if (cantidad <= 0)
         {
             Destroy(gameObject, 2f);   
-        }
+        }*/
         Canvas.SetActive(false);
     }
     //Funcion para destruir objeto al cogerlo para guardarlo al inventario

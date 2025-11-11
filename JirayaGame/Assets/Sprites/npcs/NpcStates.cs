@@ -196,6 +196,7 @@ public class NpcStates : MonoBehaviour
                 {
                     dialogueBox.SetActive(true);
                     scrollPanel.npcScript = this;
+                    player.GetComponent<movement>().puedoMoverme = false;
                 }
                 else
                 {

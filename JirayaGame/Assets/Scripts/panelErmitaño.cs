@@ -15,6 +15,7 @@ public class panelErmitaño : MonoBehaviour
     public Sprite iconoCruz;
     public ScrollPanel scrollPanel;
     public tsunade tsunadeScript;
+    public StatesMachine playerScript;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -60,6 +61,7 @@ public class panelErmitaño : MonoBehaviour
         {
             animator.SetTrigger("Close");
             hasTalked = true;
+            playerScript.GetComponent<movement>().puedoMoverme = true;
         }
     }
 

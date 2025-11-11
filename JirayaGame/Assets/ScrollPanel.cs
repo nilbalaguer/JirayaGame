@@ -54,6 +54,7 @@ public class ScrollPanel : MonoBehaviour
             npcScript.hasTalked = true;
             npcScript = null;
         }
+        playerScript.GetComponent<movement>().puedoMoverme = true;
     }
 
     public void botonNo()
@@ -66,6 +67,7 @@ public class ScrollPanel : MonoBehaviour
             npcScript.hasTalked = true;
             npcScript = null;
         }
+        playerScript.GetComponent<movement>().puedoMoverme = true;
     }
 
     //Botones panel tsunade

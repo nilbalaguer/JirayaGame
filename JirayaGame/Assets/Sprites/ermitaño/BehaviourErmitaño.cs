@@ -115,6 +115,7 @@ public class BehaviourErmitaño : MonoBehaviour
                 if (!panelScript.hasTalked)
                 {
                     panelDialogo.SetActive(true);
+                    player.GetComponent<movement>().puedoMoverme = false;
                 }
                 break;
             case State.Patrol:

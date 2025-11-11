@@ -672,7 +672,7 @@ MonoBehaviour:
   reputacion: {fileID: 1882487342}
   hasTalked: 0
   entregarObjeto: 0
-  playerScript: {fileID: 0}
+  playerScript: {fileID: 109440460}
   npcScript: {fileID: 0}
 --- !u!1 &167268237
 GameObject:
@@ -826,7 +826,7 @@ MonoBehaviour:
     rid: 96108846958772312
   m_ShadowCastingSource: 2
   m_ShadowMesh:
-    m_Mesh: {fileID: 2044105550}
+    m_Mesh: {fileID: 2144114112}
     m_LocalBounds:
       m_Center: {x: 0, y: 0, z: 0}
       m_Extent: {x: 0.069992065, y: 0.069992065, z: 0}
@@ -4133,6 +4133,7 @@ MonoBehaviour:
   iconoCruz: {fileID: 21300000, guid: 61d853d693a6ca84687c5b32193ef206, type: 3}
   scrollPanel: {fileID: 724580555}
   tsunadeScript: {fileID: 1187993220}
+  playerScript: {fileID: 0}
 --- !u!1 &830050549
 GameObject:
   m_ObjectHideFlags: 0
@@ -8047,6 +8048,7 @@ MonoBehaviour:
   iconoCruz: {fileID: 21300000, guid: 61d853d693a6ca84687c5b32193ef206, type: 3}
   scrollPanel: {fileID: 724580555}
   tsunadeScript: {fileID: 0}
+  playerScript: {fileID: 109440460}
 --- !u!1 &1770738700
 GameObject:
   m_ObjectHideFlags: 0
@@ -9366,7 +9368,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2025893769}
   m_CullTransparentMesh: 1
---- !u!43 &2044105550
+--- !u!43 &2144114112
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

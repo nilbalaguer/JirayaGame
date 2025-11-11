@@ -425,6 +425,12 @@ public class PlayerController : MonoBehaviour
         {
             other.gameObject.layer = 0;
         }
+
+        if (other.CompareTag("deathArea"))
+        {
+            gameManager.PlayerDie();
+        }
+
     }
 
     private void OnTriggerExit2D(Collider2D other) {

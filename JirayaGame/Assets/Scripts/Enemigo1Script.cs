@@ -47,6 +47,9 @@ public class Enemigo1Script : MonoBehaviour
     [SerializeField] AudioClip sonidoMuerte;
     [SerializeField] AudioClip sonidoKatana;
 
+    [Header("GameManager")]
+    private GameManager gameManager;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -71,6 +74,9 @@ public class Enemigo1Script : MonoBehaviour
 
         //Animator
         enemyAnimator.SetInteger("State", 1);
+
+        //GameManager
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
@@ -182,9 +188,10 @@ public class Enemigo1Script : MonoBehaviour
 
             if (vida <= 0)
             {
-                audioSource.PlayOneShot(sonidoMuerte);
+                gameManager.PlayDeathSound();
                 Instantiate(sangre, transform.position, Quaternion.identity);
-                Destroy(gameObject, 1f);
+                Instantiate(sangre, transform.position, Quaternion.identity);
+                Destroy(gameObject);
             } else
             {
                 audioSource.PlayOneShot(sonidoDamage);

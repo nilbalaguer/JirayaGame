@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     //Sonidos
     [Header("Sonidos")]
     [SerializeField] AudioClip deathSound;
+    [SerializeField] AudioClip enemyDeathSound;
     private AudioSource audioSource;
     //Vida
     public float vidaPlayer;
@@ -24,6 +25,9 @@ public class GameManager : MonoBehaviour
 
     [Header("Sprites")]
     [SerializeField] GameObject sangrePrefab;
+
+    //Partituras obtendias
+    public int partiturasNumero = 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -70,5 +74,15 @@ public class GameManager : MonoBehaviour
     public void ChangeUbication(string ubi)
     {
         ubicacion = ubi;
+    }
+
+    public void PlayDeathSound()
+    {
+        audioSource.PlayOneShot(enemyDeathSound);
+    }
+
+    public void ObtenerPartitura()
+    {
+        partiturasNumero += 1;
     }
 }

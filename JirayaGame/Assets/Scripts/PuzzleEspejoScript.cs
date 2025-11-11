@@ -20,6 +20,9 @@ public class PuzzleEspejoScript : MonoBehaviour
     [SerializeField] Sprite RightSprite;
     [SerializeField] Sprite LeftSprite;
 
+    [Header("Prefab")]
+    [SerializeField] GameObject partituraPrefab;
+
     private void Start()
     {
         // Configurar LineRenderer
@@ -49,12 +52,15 @@ public class PuzzleEspejoScript : MonoBehaviour
         if (final && reciviendoLuz)
         {
             Debug.Log("Final");
+            Instantiate(partituraPrefab, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+            reciviendoLuz = false;
         }
     }
 
     private void Rotar()
     {
-        if (playerTouching && Input.GetKeyDown(KeyCode.R))
+        if (playerTouching && Input.GetButtonDown("Fire1"))
         {
             direccion += 1;
             if (direccion > 4)
@@ -114,6 +120,15 @@ public class PuzzleEspejoScript : MonoBehaviour
             reciviendoLuz = true;
 
             if (hit.collider.CompareTag("intObject"))
+            {
+                PuzzleEspejoScript otroEspejo = hit.collider.GetComponent<PuzzleEspejoScript>();
+                if (otroEspejo != null)
+                {
+                    otroEspejo.reciviendoLuz = true;
+                }
+            }
+
+            if (hit.collider.CompareTag("espejoFinal"))
             {
                 PuzzleEspejoScript otroEspejo = hit.collider.GetComponent<PuzzleEspejoScript>();
                 if (otroEspejo != null)

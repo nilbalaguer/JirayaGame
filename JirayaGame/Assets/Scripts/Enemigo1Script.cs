@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+
 
 public class Enemigo1Script : MonoBehaviour
 {
@@ -12,12 +14,11 @@ public class Enemigo1Script : MonoBehaviour
     [SerializeField] float desiredSpeed = 0;
 
     public float knockForce = 2;
+    [SerializeField] GameObject sangre;
 
     [Header("Movimiento")]
 
     private GameObject playerGameObject;
-
-    private bool playerInRange = false;
     private float enemigoKnockout = 0f;
     private float enemigoKnockBack = 0f;
 
@@ -40,6 +41,15 @@ public class Enemigo1Script : MonoBehaviour
     [SerializeField] Transform puntoB;
     private Transform destinoActual;
 
+    [Header("Sonidos")]
+    private AudioSource audioSource;
+    [SerializeField] AudioClip sonidoDamage;
+    [SerializeField] AudioClip sonidoMuerte;
+    [SerializeField] AudioClip sonidoKatana;
+
+    [Header("GameManager")]
+    private GameManager gameManager;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -58,41 +68,48 @@ public class Enemigo1Script : MonoBehaviour
         agent.speed = desiredSpeed;
 
         agent.acceleration = 10000f;
+
+        //Sonido
+        audioSource = gameObject.GetComponent<AudioSource>();
+
+        //Animator
+        enemyAnimator.SetInteger("State", 1);
+
+        //GameManager
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Vector2.Distance(transform.position, playerGameObject.transform.position) < 4)
+        float distanceToPlayer = Vector2.Distance(transform.position, playerGameObject.transform.position);
+
+        if (distanceToPlayer < 4)
         {
-            playerInRange = true;
+            
             target = playerGameObject.transform;
             desiredSpeed = maxSpeed;
         }
         else
         {
-            playerInRange = false;
+            
             target = destinoActual;
             desiredSpeed = 2;
-
-        }
-        
-        if (Vector2.Distance(transform.position, playerGameObject.transform.position) < 1)
-        {
-            AtaqueKatana();
-        } else
-        {
-            preAttackTimer = preAttackTime;
         }
 
-        if (Vector2.Distance(transform.position, playerGameObject.transform.position) > 0.9)
+        // Nuevo sistema de ataque
+        if (distanceToPlayer <= 1f)
+        {
+            TryAttack();
+        }
+
+        if (distanceToPlayer > 0.9f)
         {
             if (enemigoKnockout <= 0)
             {
                 agent.isStopped = false;
                 agent.SetDestination(target.position);
                 agent.speed = desiredSpeed;
-                
             }
             else
             {
@@ -102,15 +119,13 @@ public class Enemigo1Script : MonoBehaviour
         }
         else
         {
-            rb.linearVelocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero; // corregido (era linearVelocity)
         }
 
         if (enemigoKnockBack > 0)
         {
             Vector2 knockDirection = transform.position - playerGameObject.transform.position;
-
             rb.linearVelocity = knockDirection * knockForce;
-
             enemigoKnockBack -= Time.deltaTime;
 
             if (enemigoKnockBack < 0)
@@ -121,17 +136,36 @@ public class Enemigo1Script : MonoBehaviour
 
         //Animator
         Vector2 velocity = agent.velocity;
-
         enemyAnimator.SetFloat("speedX", velocity.x);
         enemyAnimator.SetFloat("speedY", velocity.y);
+
+        if (Mathf.Abs(velocity.x) > Mathf.Abs(velocity.y))
+        {
+            if (velocity.x > 0)
+            {
+                enemyAnimator.SetFloat("LastDirection", 3); // Derecha
+            }
+            else if (velocity.x < 0)
+            {
+                enemyAnimator.SetFloat("LastDirection", 4); // Izquierda
+            }
+        }
+        else if (Mathf.Abs(velocity.y) > 0)
+        {
+            if (velocity.y > 0)
+            {
+                enemyAnimator.SetFloat("LastDirection", 1); // Arriba
+            }
+            else if (velocity.y < 0)
+            {
+                enemyAnimator.SetFloat("LastDirection", 2); // Abajo
+            }
+        }
     }
+
 
     void FixedUpdate()
     {
-        if (vida <= 0)
-        {
-            Destroy(gameObject);
-        }
 
         if (Vector2.Distance(transform.position, destinoActual.position) < 0.2)
         {
@@ -151,7 +185,17 @@ public class Enemigo1Script : MonoBehaviour
 
             enemigoKnockout = 0.4f;
             enemigoKnockBack = 0.1f;
-            
+
+            if (vida <= 0)
+            {
+                gameManager.PlayDeathSound();
+                Instantiate(sangre, transform.position, Quaternion.identity);
+                Instantiate(sangre, transform.position, Quaternion.identity);
+                Destroy(gameObject);
+            } else
+            {
+                audioSource.PlayOneShot(sonidoDamage);
+            }
         }
     }
 
@@ -160,16 +204,34 @@ public class Enemigo1Script : MonoBehaviour
 
     }
 
-    void AtaqueKatana()
+    void TryAttack()
     {
+        if (cooldownTimer > 0)
+        {
+            cooldownTimer -= Time.deltaTime;
+            return;
+        }
+
         preAttackTimer -= Time.deltaTime;
-        katanaCollider.enabled = false;
 
         if (preAttackTimer <= 0)
         {
-            //Atacar activando el collider de katana
-            katanaCollider.enabled = true;
+            // Ejecutar el ataque real
+            enemyAnimator.SetInteger("State", 2);
+            StartCoroutine(AttackCoroutine());
             preAttackTimer = preAttackTime;
+            cooldownTimer = cooldownTime;
         }
     }
+
+    private IEnumerator AttackCoroutine()
+    {
+        katanaCollider.enabled = true;
+        audioSource.PlayOneShot(sonidoKatana);
+        yield return new WaitForSeconds(0.15f);
+        katanaCollider.enabled = false;
+        enemyAnimator.SetInteger("State", 1);
+
+    }
+
 }

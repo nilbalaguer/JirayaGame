@@ -52,17 +52,35 @@ public class ShamisenScriptMelodia : MonoBehaviour
         { KeyCode.K, "do5" }
     };
 
+    //GameManager
+    private GameManager gameManager;
+
+    //Touchin player
+    private bool touchingPlayer;
+
     void Start()
     {
-        StartCoroutine(TocarMelodia());
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
     }
 
     void Update()
     {
-        foreach (var kvp in keyNoteMap)
+        // foreach (var kvp in keyNoteMap)
+        // {
+        //     if (Input.GetKeyDown(kvp.Key))
+        //         PlayNoteByName(kvp.Value);
+        // }
+        if (touchingPlayer && Input.GetButtonDown("Fire1"))
         {
-            if (Input.GetKeyDown(kvp.Key))
-                PlayNoteByName(kvp.Value);
+            if (gameManager.partiturasNumero == 2)
+            {
+                StartCoroutine(TocarMelodia());
+            } else
+            {
+                Debug.Log("Te faltan las partituras! Poner un mensaje en pantalla de esto");
+            }
+            
         }
     }
 
@@ -86,5 +104,20 @@ public class ShamisenScriptMelodia : MonoBehaviour
         int semitoneOffset = noteOffsets[noteName.ToLower()];
         shamisenAudioSource.pitch = Mathf.Pow(2f, semitoneOffset / 12f);
         shamisenAudioSource.Play();
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            touchingPlayer = true;
+        }
+    }
+    
+    private void OnTriggerExit2D(Collider2D other) {
+        if (other.CompareTag("Player"))
+        {
+            touchingPlayer = false;
+        }
     }
 }

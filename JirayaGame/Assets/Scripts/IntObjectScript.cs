@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class IntObjectScript : MonoBehaviour
 {
@@ -8,12 +9,15 @@ public class IntObjectScript : MonoBehaviour
     [SerializeField] Sprite spriteLengua;
     // [SerializeField] Sprite spriteRoto;
 
+    public List<string> frutas = new List<string> {"Manzana", "Banana", "Naranja" };
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         spriteRenderer = gameObject.GetComponentInChildren<SpriteRenderer>();
 
         spriteRenderer.sprite = spriteNormal;
+
     }
 
     // Update is called once per frame

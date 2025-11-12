@@ -31,6 +31,9 @@ public class move : MonoBehaviour
         float angle = Mathf.Atan2(inputY, inputX) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle);
         body.linearVelocity = new Vector2(inputX * maxSpeed, inputY * maxSpeed);
+        body.AddForce(new Vector2(inputX * force, inputY * force));
+
+        body.linearVelocity = Vector2.ClampMagnitude(body.linearVelocity, maxSpeed);
         
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -57,6 +60,8 @@ public class move : MonoBehaviour
 
                 Vector2 direccion = puntoSujecion.right.normalized;
                 objetoSujeto.Lanzar(direccion, fuerzaLanzamiento);
+                Vector2 direccion = transform.localScale.x > 0 ? Vector2.right : Vector2.left;
+                objetoSujeto.Lanzar(direccion * fuerzaLanzamiento);
                 objetoSujeto = null;
             }
         }

@@ -31,6 +31,8 @@ public class Objeto : MonoBehaviour
     }
 
     //Funciones para la mecanica de coger y lanzar objetos  
+    }
+
     public void Coger(Transform puntoSujecion)
     {
         estaSujeto = true;
@@ -77,6 +79,19 @@ public class Objeto : MonoBehaviour
     public void DesactivarObjeto()
     {
         gameObject.SetActive(false);
+        
+    }
+
+
+    public void Lanzar(Vector2 fuerza)
+    {
+        transform.SetParent(null);
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        rb.AddForce(fuerza, ForceMode2D.Impulse);
+        rb.gravityScale = 0;
+        estaSujeto = false;
+
+        Destroy(gameObject, 2f);
     }
 
     // Update is called once per frame
@@ -98,4 +113,17 @@ public class Objeto : MonoBehaviour
             Canvas.SetActive(false);
         }
     }
+
+    }
+    
+    /*void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            objetoSujeto = collision.gameObject;
+            objetoRigidbody = GetComponent<Rigidbody2D>();
+            transform.position = puntoSujeccion.position;
+            transform.parent = objetoSujeto.transform;
+        }
+    }*/
 }

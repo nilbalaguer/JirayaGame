@@ -60,7 +60,7 @@ public class PuzzleEspejoScript : MonoBehaviour
 
     private void Rotar()
     {
-        if (playerTouching && Input.GetButtonDown("Fire1"))
+        if (playerTouching && Input.GetButtonDown("Fire2"))
         {
             direccion += 1;
             if (direccion > 4)

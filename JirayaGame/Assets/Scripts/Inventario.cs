@@ -14,7 +14,7 @@ public class Inventario : MonoBehaviour
         public Sprite icono;
         public int cantidad = 1;
         public Objeto.TipoObjeto tipo;
-        public Vector3 escalaOriginal = Vector3.one;
+        public Vector3 escalaOriginal = Transform.localScale;
     }
 
     public List<InventoryEntry> objetos = new List<InventoryEntry>();
@@ -48,8 +48,6 @@ public class Inventario : MonoBehaviour
 
     public void AñadirObjeto(Objeto objeto)
     {
-        Debug.Log($"[Inventario] Añadiendo '{objeto?.nombreObjeto}' -- entradas.count={objetos.Count}");
-
         InventoryEntry existe = objetos.Find(e => e.nombre == objeto.nombreObjeto);
 
         if (existe == null)
@@ -64,7 +62,6 @@ public class Inventario : MonoBehaviour
                 entry.cantidad = objeto.cantidad > 0 ? objeto.cantidad : 1;
                 entry.escalaOriginal = new Vector3(1, 1, 1);
                 objetos.Add(entry);
-                Debug.Log($"[Inventario] Nueva entrada añadida '{entry.nombre}' cantidad={entry.cantidad}");
 
                 // Auto-equip si no tiene nada equipado
                 if (player.objetoSujeto == null)
@@ -74,25 +71,23 @@ public class Inventario : MonoBehaviour
                     nueva.transform.localScale = entry.escalaOriginal;
                     if (nuevoObj != null)
                     {
-                        Debug.Log($"[Inventario] Auto-equipo (instanciado) '{entry.nombre}'");
                         player.EquiparObjeto(nuevoObj);
                         EliminarObjeto(entry);
                     }
                     else
                     {
-                        Debug.LogWarning("[Inventario] No se pudo instanciar objeto para equipar.");
+                        Debug.Log("No se pudo instanciar objeto para equipar.");
                     }
                 }
             }
             else
             {
-                Debug.LogWarning("[Inventario] Capacidad maxima alcanzada, no se pudo añadir nueva entrada.");
+                Debug.Log("Capacidad maxima alcanzada, no se pudo añadir nueva entrada.");
             }
         }
         else
         {
             existe.cantidad++;
-            Debug.Log($"[Inventario] Incrementado cantidad de '{existe.nombre}' a {existe.cantidad}");
 
             if (player.objetoSujeto == null)
             {
@@ -103,11 +98,6 @@ public class Inventario : MonoBehaviour
                 {
                     player.EquiparObjeto(nuevoDesdeExist);
                     EliminarObjeto(existe);
-                    Debug.Log($"[Inventario] Equipado desde existencia (instanciado) '{existe.nombre}'");
-                }
-                else
-                {
-                    Debug.LogWarning("[Inventario] No se pudo instanciar objeto desde existencia para equipar.");
                 }
             }
         }
@@ -177,7 +167,7 @@ public class Inventario : MonoBehaviour
     public void EliminarObjeto(InventoryEntry entry)
     {
         entry.cantidad--;
-        Debug.Log($"[Inventario] Eliminando/consumiendo '{entry.nombre}'. Nueva cantidad={entry.cantidad}");
+
         /*if (objetos.Contains(objeto))
         {
             objetos.Remove(objeto);
@@ -204,7 +194,7 @@ public class Inventario : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"[Inventario] No se encontró entrada para eliminar '{objeto.nombreObjeto}'");
+            Debug.Log("No se ha encontrado nada para eliminar");
         }
     }
     

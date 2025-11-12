@@ -47,10 +47,10 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        IniciarIntro();
+        //IniciarIntro();
         monedas = 0;
-        textoMonedas.text = monedas.ToString();
-        tiendaAlerta.SetActive(false);
+        //textoMonedas.text = monedas.ToString();
+        //tiendaAlerta.SetActive(false);
 
         textoVida = GameObject.Find("TextoVida").GetComponent<TextMeshProUGUI>();
         audioSource = gameObject.GetComponent<AudioSource>();

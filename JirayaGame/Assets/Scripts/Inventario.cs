@@ -14,7 +14,7 @@ public class Inventario : MonoBehaviour
         public Sprite icono;
         public int cantidad = 1;
         public Objeto.TipoObjeto tipo;
-        public Vector3 escalaOriginal = Transform.localScale;
+        public Vector3 escalaOriginal;
     }
 
     public List<InventoryEntry> objetos = new List<InventoryEntry>();
@@ -60,7 +60,7 @@ public class Inventario : MonoBehaviour
                 entry.icono = objeto.icono;
                 entry.tipo = objeto.tipo;
                 entry.cantidad = objeto.cantidad > 0 ? objeto.cantidad : 1;
-                entry.escalaOriginal = new Vector3(1, 1, 1);
+                entry.escalaOriginal = objeto.transform.localScale;
                 objetos.Add(entry);
 
                 // Auto-equip si no tiene nada equipado

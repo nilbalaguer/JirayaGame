@@ -14,7 +14,7 @@ public class Inventario : MonoBehaviour
         public Sprite icono;
         public int cantidad = 1;
         public Objeto.TipoObjeto tipo;
-        public Vector3 escalaOriginal = Transform.localScale;
+        public Vector3 escalaOriginal;
     }
 
     public List<InventoryEntry> objetos = new List<InventoryEntry>();

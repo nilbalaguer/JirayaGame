@@ -179,25 +179,57 @@ public class StatesMachine : MonoBehaviour
     //Lanzar objeto sujeto
     public void LanzarObjeto()
     {
-        /*if (objetoSujeto == null)
+        if (objetoSujeto == null)
         {
             return;
-        }*/
+        }
+
+    Vector2 direccion = puntoSujecion.position - transform.position;
+    if (direccion.sqrMagnitude < 0.01)
+    {
+        if (body != null && body.linearVelocity.magnitude > 0.01f)
+            direccion = body.linearVelocity.normalized;
+        else
+            direccion = Vector2.right; 
+    }
+
+    
+    Objeto objetoLanzado = objetoSujeto;
+    objetoLanzado.Lanzar(direccion, fuerzaLanzamiento);
+    
+    objetoSujeto = null;
+
         
-        Vector2 direccion = puntoSujecion.position - transform.position;
-        objetoSujeto.Lanzar(direccion, fuerzaLanzamiento);
+        string nombre = objetoLanzado != null ? objetoLanzado.nombreObjeto : null;
 
-        string nombre = objetoSujeto.nombreObjeto;
-        //Objeto objetoLanzado = objetoSujeto;
-        //inventario.EliminarObjeto(objetoSujeto);
-
-        Objeto instancia = inventario.objetos.Find(o => o.nombreObjeto == nombre);
-        if (instancia != null && instancia.cantidad > 0)
+        var entrada = inventario.objetos.Find(e => e.nombre == nombre);
+    if (entrada != null && entrada.cantidad > 0)
         {
-            //objetoLanzado.gameObject.SetActive(false);
-            objetoSujeto = instancia;
-            EquiparObjeto(objetoSujeto);
-            inventario.EliminarObjeto(objetoSujeto);
+
+            GameObject nuevaGO = Instantiate(entrada.prefab, puntoSujecion.position, puntoSujecion.rotation);
+            Objeto nuevoObjeto = nuevaGO.GetComponent<Objeto>();
+            if (nuevoObjeto != null)
+            {
+                nuevaGO.SetActive(true);
+                //Rigidbody2D rb = nuevoObjeto.GetComponent<Rigidbody2D>();
+                /*if (rb != null)
+                {
+                    rb.linearVelocity = Vector2.zero;
+                    rb.angularVelocity = 0f;
+                    rb.rotation = 0f;
+                    rb.bodyType = RigidbodyType2D.Kinematic;
+                    rb.gravityScale = 0;
+                }*/
+
+                // Equipar el nuevo objeto y decrementar la cantidad en el inventario
+                EquiparObjeto(nuevoObjeto);
+                inventario.EliminarObjeto(entrada);
+            }
+            else
+            {
+                Debug.LogWarning("El objeto instanciado no tiene componente Objeto.");
+                objetoSujeto = null;
+            }
         }
         else
         {
@@ -224,6 +256,7 @@ public class StatesMachine : MonoBehaviour
             objetoSujeto.gameObject.SetActive(false);
         }
         objetoSujeto = objetoCercano;
+        Debug.Log($"[StatesMachine] Equipando objeto '{objetoCercano?.nombreObjeto}'");
         objetoSujeto.gameObject.SetActive(true);
         //Resetar valores del rididbody cada vez que se equipe un objeto
         Rigidbody2D rb = objetoSujeto.GetComponent<Rigidbody2D>();

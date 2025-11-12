@@ -5,7 +5,19 @@ using TMPro;
 
 public class Inventario : MonoBehaviour
 {
-    public List<Objeto> objetos = new List<Objeto>();
+    //Guardar los datos del objeto en el inventario
+    [System.Serializable]
+    public class InventoryEntry
+    {
+        public GameObject prefab;
+        public string nombre;
+        public Sprite icono;
+        public int cantidad = 1;
+        public Objeto.TipoObjeto tipo;
+        public Vector3 escalaOriginal = Vector3.one;
+    }
+
+    public List<InventoryEntry> objetos = new List<InventoryEntry>();
     private List<GameObject> btnSlots = new List<GameObject>();
     public int capacidadMaxima = 3;
 
@@ -36,25 +48,67 @@ public class Inventario : MonoBehaviour
 
     public void AñadirObjeto(Objeto objeto)
     {
-        Objeto existe = objetos.Find(obj => obj.nombreObjeto == objeto.nombreObjeto);
-        if (objetos.Count < capacidadMaxima && existe == null)
-        {
-            objetos.Add(objeto);
-            Debug.Log("Objeto añadido al inventario. Total de objetos: " + objetos.Count);
+        Debug.Log($"[Inventario] Añadiendo '{objeto?.nombreObjeto}' -- entradas.count={objetos.Count}");
 
-            if (player.objetoSujeto == null)
+        InventoryEntry existe = objetos.Find(e => e.nombre == objeto.nombreObjeto);
+
+        if (existe == null)
+        {
+            if (objetos.Count < capacidadMaxima)
             {
-                player.EquiparObjeto(objeto);
+                InventoryEntry entry = new InventoryEntry();
+                entry.prefab = objeto.gameObject;
+                entry.nombre = objeto.nombreObjeto;
+                entry.icono = objeto.icono;
+                entry.tipo = objeto.tipo;
+                entry.cantidad = objeto.cantidad > 0 ? objeto.cantidad : 1;
+                entry.escalaOriginal = new Vector3(1, 1, 1);
+                objetos.Add(entry);
+                Debug.Log($"[Inventario] Nueva entrada añadida '{entry.nombre}' cantidad={entry.cantidad}");
+
+                // Auto-equip si no tiene nada equipado
+                if (player.objetoSujeto == null)
+                {
+                    GameObject nueva = Instantiate(entry.prefab);
+                    Objeto nuevoObj = nueva.GetComponent<Objeto>();
+                    nueva.transform.localScale = entry.escalaOriginal;
+                    if (nuevoObj != null)
+                    {
+                        Debug.Log($"[Inventario] Auto-equipo (instanciado) '{entry.nombre}'");
+                        player.EquiparObjeto(nuevoObj);
+                        EliminarObjeto(entry);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("[Inventario] No se pudo instanciar objeto para equipar.");
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogWarning("[Inventario] Capacidad maxima alcanzada, no se pudo añadir nueva entrada.");
             }
         }
         else
         {
-            //Debug.Log("Inventario lleno. No se puede añadir más objetos.");
             existe.cantidad++;
+            Debug.Log($"[Inventario] Incrementado cantidad de '{existe.nombre}' a {existe.cantidad}");
 
-            if (player.objetoSujeto == null || player.objetoSujeto.nombreObjeto == existe.nombreObjeto)
+            if (player.objetoSujeto == null)
             {
-                player.EquiparObjeto(existe);
+                GameObject nuevaExist = Instantiate(existe.prefab);
+                Objeto nuevoDesdeExist = nuevaExist.GetComponent<Objeto>();
+                nuevaExist.transform.localScale = existe.escalaOriginal;
+                if (nuevoDesdeExist != null)
+                {
+                    player.EquiparObjeto(nuevoDesdeExist);
+                    EliminarObjeto(existe);
+                    Debug.Log($"[Inventario] Equipado desde existencia (instanciado) '{existe.nombre}'");
+                }
+                else
+                {
+                    Debug.LogWarning("[Inventario] No se pudo instanciar objeto desde existencia para equipar.");
+                }
             }
         }
         ActualizarInventario();
@@ -82,27 +136,32 @@ public class Inventario : MonoBehaviour
 
             if (i < objetos.Count)
             {
-                Objeto obj = objetos[i];
-                img.sprite = obj.icono;
+                InventoryEntry entry = objetos[i];
+                img.sprite = entry.icono;
                 img.enabled = true;
                 btnComp.interactable = true;
-                if (obj.cantidad > 1)
+                if (entry.cantidad > 1)
                 {
-                    cantidadTexto.text = obj.cantidad.ToString();
+                    cantidadTexto.text = entry.cantidad.ToString();
                 }
                 else
                 {
                     cantidadTexto.text = "";
                 }
 
-
                 btnComp.onClick.RemoveAllListeners();
 
-                Objeto objetoCapturado = obj;
+                InventoryEntry captured = entry;
                 btnComp.onClick.AddListener(() =>
                 {
-                    player.EquiparObjeto(objetoCapturado);
-                    EliminarObjeto(objetoCapturado);
+                    GameObject go = Instantiate(captured.prefab);
+                    Objeto objInst = go.GetComponent<Objeto>();
+                    go.transform.localScale = captured.escalaOriginal;
+                    if (objInst != null)
+                    {
+                        player.EquiparObjeto(objInst);
+                        EliminarObjeto(captured);
+                    }
                 });
             }
             else
@@ -115,9 +174,10 @@ public class Inventario : MonoBehaviour
         }
     }
 
-    public void EliminarObjeto(Objeto objeto)
+    public void EliminarObjeto(InventoryEntry entry)
     {
-        objeto.cantidad--;
+        entry.cantidad--;
+        Debug.Log($"[Inventario] Eliminando/consumiendo '{entry.nombre}'. Nueva cantidad={entry.cantidad}");
         /*if (objetos.Contains(objeto))
         {
             objetos.Remove(objeto);
@@ -127,11 +187,25 @@ public class Inventario : MonoBehaviour
         {
             Debug.Log("El objeto no está en el inventario.");
         }*/
-        if (objeto.cantidad <= 0)
+        if (entry.cantidad <= 0)
         {
-            objetos.Remove(objeto);
+            objetos.Remove(entry);
         }
         ActualizarInventario();
+    }
+
+    public void EliminarObjeto(Objeto objeto)
+    {
+        if (objeto == null) return;
+        InventoryEntry entry = objetos.Find(e => e.nombre == objeto.nombreObjeto);
+        if (entry != null)
+        {
+            EliminarObjeto(entry);
+        }
+        else
+        {
+            Debug.LogWarning($"[Inventario] No se encontró entrada para eliminar '{objeto.nombreObjeto}'");
+        }
     }
     
 }

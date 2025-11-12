@@ -48,7 +48,9 @@ public class Objeto : MonoBehaviour
         rb.gravityScale = 0;
 
         Vector2 dirNormalizada = direccion.normalized;
-        rb.linearVelocity = dirNormalizada * fuerza;
+        Vector2 asignada = dirNormalizada * fuerza;
+        rb.linearVelocity = asignada;
+        Debug.Log($"[Lanzar] '{nombreObjeto}' dir={dirNormalizada} linearVel={asignada} drag={rb.linearDamping} bodyType={rb.bodyType} gravityScale={rb.gravityScale}");
         estaSujeto = false;
 
         /*if (cantidad <= 0)

@@ -11,6 +11,7 @@ public class ScrollPanel : MonoBehaviour
     public bool entregarObjeto = false;
     public StatesMachine playerScript;
     public NpcStates npcScript;
+    public Misions misionsScript;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Awake()
@@ -53,6 +54,15 @@ public class ScrollPanel : MonoBehaviour
         {
             npcScript.hasTalked = true;
             npcScript = null;
+        }
+        if (Misions.Mision[1].Equals(false)){
+            misionsScript.panelMision.SetActive(true);
+            misionsScript.texto.text = misionsScript.textoMision;
+        }
+        else
+        {
+            misionsScript.panelMision.SetActive(true);
+            misionsScript.texto.text = misionsScript.textoFinalizarMision;
         }
         playerScript.GetComponent<movement>().puedoMoverme = true;
     }

@@ -79,6 +79,7 @@ public class panelErmitaño : MonoBehaviour
             animator.SetTrigger("Close");
             scrollPanel.entregarObjeto = false;
             tsunadeScript.EntregarRecompensa();
+            playerScript.GetComponent<movement>().puedoMoverme = true;
         }
     }
 
@@ -94,6 +95,7 @@ public class panelErmitaño : MonoBehaviour
         {
             animator.SetTrigger("Close");
             tsunadeScript.ultimoDialogo = Time.time;
+            playerScript.GetComponent<movement>().puedoMoverme = true;
         }
     }
 

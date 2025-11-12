@@ -151,6 +151,7 @@ public class StatesMachine : MonoBehaviour
         if (tsunadeCerca && objetoSujeto != null && !objetoSujeto.esRecompensa)
         {
             tsunadePanel.SetActive(true);
+            gameObject.GetComponent<movement>().puedoMoverme = false;
         }
     }
 

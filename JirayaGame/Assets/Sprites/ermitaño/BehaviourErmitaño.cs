@@ -15,7 +15,7 @@ public class BehaviourErmitaño : MonoBehaviour
     public float speed = 2f;
 
     private GameObject player;
-    public float rangoPlayer = 2f;
+    public float rangoPlayer = 1f;
     public GameObject panelDialogo;
     public GameObject panelTienda; 
     public panelErmitaño panelScript;

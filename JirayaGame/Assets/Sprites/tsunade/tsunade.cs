@@ -82,6 +82,7 @@ public class tsunade : MonoBehaviour
                 anim.SetInteger("state", 1);
                 panelDialogo.SetActive(true);
                 panelDialogo.GetComponent<panelTsunade>().DialogoSetup(objetoRecibido.nombreObjeto);
+                playerScript.GetComponent<movement>().puedoMoverme = false;
                 break;
         }
         
@@ -90,8 +91,9 @@ public class tsunade : MonoBehaviour
             if (Time.time - ultimoDialogo >= cooldownDialogo)
             {
                 tsunadePanel2.SetActive(true);
+                playerScript.GetComponent<movement>().puedoMoverme = false;
             }
-        }else if (PlayerinRange() && playerScript.objetoSujeto != null && objetoRecompensa.esRecompensa)
+        }else if (PlayerinRange() && playerScript.objetoSujeto != null && objetoRecompensa != null &&objetoRecompensa.esRecompensa)
         {
             tsunadePanel2.SetActive(false);
         }

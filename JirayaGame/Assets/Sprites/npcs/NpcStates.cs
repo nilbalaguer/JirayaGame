@@ -36,6 +36,8 @@ public class NpcStates : MonoBehaviour
     public bool necesitaAlejarse = false;
     public bool introTerminada = false;
     private bool introAsignada = false;
+
+    public Misions misionNpc;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -197,6 +199,8 @@ public class NpcStates : MonoBehaviour
                     dialogueBox.SetActive(true);
                     scrollPanel.npcScript = this;
                     player.GetComponent<movement>().puedoMoverme = false;
+
+                    scrollPanel.misionsScript = misionNpc;
                 }
                 else
                 {

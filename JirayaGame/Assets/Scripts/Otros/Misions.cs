@@ -9,6 +9,7 @@ public class Misions : MonoBehaviour
     public static bool[] Mision;
     public string textoMision, textoFinalizarMision;
     public int MisionActual;
+    public bool misionCompletada = false;
     public static Misions misiones;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -22,5 +23,24 @@ public class Misions : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void MostrarMision()
+    {
+        panelMision.SetActive(true);
+        if (misionCompletada)
+        {
+            texto.text = textoFinalizarMision;
+        }
+        else
+        {
+            texto.text = textoMision;
+        }
+    }
+
+    public void CompletarMision()
+    {
+        Mision[MisionActual] = true;
+        misionCompletada = true;
     }
 }

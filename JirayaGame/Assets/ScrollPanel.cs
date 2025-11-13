@@ -55,7 +55,7 @@ public class ScrollPanel : MonoBehaviour
             npcScript.hasTalked = true;
             npcScript = null;
         }
-        if (Misions.Mision[1].Equals(false)){
+        /*if (Misions.Mision[1].Equals(false)){
             misionsScript.panelMision.SetActive(true);
             misionsScript.texto.text = misionsScript.textoMision;
         }
@@ -63,7 +63,8 @@ public class ScrollPanel : MonoBehaviour
         {
             misionsScript.panelMision.SetActive(true);
             misionsScript.texto.text = misionsScript.textoFinalizarMision;
-        }
+        }*/
+        misionsScript.MostrarMision();
         playerScript.GetComponent<movement>().puedoMoverme = true;
     }
 

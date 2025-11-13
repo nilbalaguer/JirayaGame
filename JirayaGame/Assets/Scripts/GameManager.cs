@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
     public GameObject tiendaAlerta;
 
     private Vector2 posicionInicioSiguienteEscena;
+    private Image indicadorVida;
 
     void Awake()
     {
@@ -70,8 +71,6 @@ public class GameManager : MonoBehaviour
         //textoMonedas.text = monedas.ToString();
         //tiendaAlerta.SetActive(false);
 
-        textoVida = GameObject.Find("TextoVida").GetComponent<TextMeshProUGUI>();
-        audioSource = gameObject.GetComponent<AudioSource>();
         playerGameObject = GameObject.Find("Player");
     }
 
@@ -157,6 +156,7 @@ public class GameManager : MonoBehaviour
         vidaPlayer -= reduccion;
 
         textoVida.text = "Vida: " + vidaPlayer;
+        indicadorVida.fillAmount = vidaPlayer / 10;
 
         if (vidaPlayer <= 0)
         {
@@ -208,6 +208,13 @@ public class GameManager : MonoBehaviour
         if (playerGameObject != null)
         {
             playerGameObject.transform.position = posicionInicioSiguienteEscena;
+
+            textoVida = GameObject.Find("TextoVida").GetComponent<TextMeshProUGUI>();
+            audioSource = gameObject.GetComponent<AudioSource>();
+
+            GameObject parryObj = GameObject.Find("vidaIndicator");
+            indicadorVida = parryObj.GetComponent<Image>();
+            indicadorVida.fillAmount = vidaPlayer / 10;
         }
         else
         {

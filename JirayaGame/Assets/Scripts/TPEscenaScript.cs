@@ -8,6 +8,9 @@ public class TPEscenaScript : MonoBehaviour
 
     private GameManager gameManager;
 
+    [Tooltip("Clave usada para activar i desactivar puerta")]
+    public string claveTP;
+
     private void Start()
     {
         GameObject gameManagerObject = GameObject.Find("GameManager");
@@ -25,6 +28,11 @@ public class TPEscenaScript : MonoBehaviour
     {
         if (gameManager != null)
         {
+            if (!gameManager.EstaTpHabilitado(claveTP))
+            {
+                return;
+            }
+
             gameManager.CambiarEscena(nombreEscenaObjetivo, posicionObjetivoEscena);
         }
         else

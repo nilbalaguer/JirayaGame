@@ -52,7 +52,9 @@ public class PuzzleEspejoScript : MonoBehaviour
         if (final && reciviendoLuz)
         {
             Debug.Log("Final");
-            Instantiate(partituraPrefab, transform.position, Quaternion.identity);
+            GameObject tempPartitura = Instantiate(partituraPrefab, transform.position, Quaternion.identity);
+            PartituraItemScript tempPartituraItemScript = tempPartitura.GetComponent<PartituraItemScript>();
+            tempPartituraItemScript.claveTPdesactivar = "mazzmorraEspjeos";
             Destroy(gameObject);
             reciviendoLuz = false;
         }

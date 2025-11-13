@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -48,6 +49,9 @@ public class GameManager : MonoBehaviour
     private Vector2 posicionInicioSiguienteEscena;
     private Image indicadorVida;
 
+    //Controlar Que Puertas estan activadas
+    public Dictionary<string, bool> estadosTP = new Dictionary<string, bool>();
+
     void Awake()
     {
         if (Instance == null)
@@ -56,6 +60,9 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
 
             SceneManager.sceneLoaded += OnSceneLoaded;
+
+            estadosTP["mazzmorraEspjeos"] = true;
+            estadosTP["mazzmorraBotones"] = true;
         }
         else
         {
@@ -220,5 +227,24 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogWarning("No se encontró el jugador en la nueva escena.");
         }
+    }
+
+    public bool EstaTpHabilitado(string claveTP)
+    {
+        if (string.IsNullOrEmpty(claveTP)) return true; // si no se asigna una clave, dejar pasar
+        if (estadosTP.TryGetValue(claveTP, out bool estado))
+        {
+            return estado;
+        }
+        else
+        {
+            Debug.LogWarning($"No se encontró la clave '{claveTP}' en el diccionario de TPs.");
+            return false;
+        }
+    }
+
+    public void DesabilitarTP(string claveTP)
+    {
+        estadosTP[claveTP] = false;
     }
 }

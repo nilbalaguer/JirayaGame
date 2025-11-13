@@ -38,6 +38,7 @@ public class NpcStates : MonoBehaviour
     private bool introAsignada = false;
 
     public Misions misionNpc;
+    public GameManager gameManager;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -61,6 +62,7 @@ public class NpcStates : MonoBehaviour
         enemy = GameObject.FindWithTag("Enemy");
         dialogueBox.SetActive(false);
         introDialog.SetActive(false);
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         //scrollPanel = dialogueBox.GetComponent<ScrollPanel>();
     }
 
@@ -317,4 +319,46 @@ public class NpcStates : MonoBehaviour
         float distancia = Vector2.Distance(transform.position, enemy.transform.position);
         return distancia <= rangoEnemy;
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            /*misionNpc.CompletarMision();
+            gameManager.monedas -= 1; 
+            gameManager.textoMonedas.text = gameManager.monedas.ToString();*/
+
+            switch (scrollPanel.misionsScript.tipoMision)
+            {
+                case scrollPanel.misionsScript.MisionTipo.RecolectarMoneda:
+                    MisionMonedas();
+                    break;
+               case scrollPanel.misionsScript.MisionTipo.BuscarObjeto:
+                    MisionObjeto();
+                    break;
+            }  
+
+        }//else if (collision.CompareTag("Player"))
+    }
+
+    public void MisionMonedas()
+    {
+        if (gameManager.monedas >= 1)
+        {
+            misionNpc.CompletarMision();
+            gameManager.monedas -= 1; 
+            gameManager.textoMonedas.text = gameManager.monedas.ToString();
+        }
+    }
+
+    public void MisionObjeto()
+    {
+        if (player.objetoSujeto.nombreObjeto = "ObjetoCampesino")
+        {
+            misionNpc.CompletarMision();
+            player.SoltarObjeto();
+        }
+    }
+
+
 }

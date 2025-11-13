@@ -4,6 +4,12 @@ using TMPro;
 
 public class Misions : MonoBehaviour
 {
+    public enum MisionTipo
+    {
+        RecolectarMoneda,
+        BuscarObjeto
+    }
+    public MisionTipo tipoMision;
     public TextMeshProUGUI texto;
     public GameObject panelMision;
     public static bool[] Mision;
@@ -14,7 +20,7 @@ public class Misions : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Mision[MisionActual] = false;
+        //Mision[MisionActual] = false;
         //texto.gameObject.SetActive(false);
         panelMision.SetActive(false);
     }
@@ -40,7 +46,14 @@ public class Misions : MonoBehaviour
 
     public void CompletarMision()
     {
-        Mision[MisionActual] = true;
+        //Mision[MisionActual] = true;
         misionCompletada = true;
+        texto.text = textoFinalizarMision;
+        Invoke ("DesactivarPanel", 1f);
+    }
+
+    public void DesactivarPanel()
+    {
+        panelMision.SetActive(false);
     }
 }

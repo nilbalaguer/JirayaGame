@@ -228,7 +228,7 @@ public class StatesMachine : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("El objeto instanciado no tiene componente Objeto.");
+                Debug.Log("El objeto instanciado no tiene componente Objeto.");
                 objetoSujeto = null;
             }
         }

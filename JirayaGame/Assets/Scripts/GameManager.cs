@@ -179,9 +179,4 @@ public class GameManager : MonoBehaviour
     {
         tiendaAlerta.SetActive(false);
     }
-
-    public void PantallaDerrota()
-    {
-        //Si la vida del player es 0 se muestra esta pantalla
-    }
 }

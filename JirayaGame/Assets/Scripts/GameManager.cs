@@ -6,7 +6,7 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    public enum Estado {Normal, Intro};
+    public enum Estado { Normal, Intro };
     public Estado estadoActual = Estado.Normal;
     public Inventario inventario;
     public StatesMachine player;
@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI textoMonedas;
     public int monedas = 0;
 
-    
+
     private string ubicacion = "overworld";
 
     //HUD
@@ -44,6 +44,24 @@ public class GameManager : MonoBehaviour
     public int partiturasNumero = 0;
 
     public GameObject tiendaAlerta;
+
+    private Vector2 posicionInicioSiguienteEscena;
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -71,19 +89,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
     public void IniciarIntro()
     {
         estadoActual = Estado.Intro;
@@ -104,7 +109,7 @@ public class GameManager : MonoBehaviour
 
     public void PantallaJefeFinal()
     {
-        
+
     }
 
 
@@ -136,7 +141,7 @@ public class GameManager : MonoBehaviour
             Invoke("DesactivartiendaAlerta", 1f);
         }
     }
-    
+
     private void DesactivartiendaAlerta()
     {
         tiendaAlerta.SetActive(false);
@@ -188,5 +193,25 @@ public class GameManager : MonoBehaviour
     public void ObtenerPartitura()
     {
         partiturasNumero += 1;
+    }
+
+    public void CambiarEscena(string escenaObjetivo, Vector2 posicionObjetivo)
+    {
+        posicionInicioSiguienteEscena = posicionObjetivo;
+        SceneManager.LoadScene(escenaObjetivo);
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        playerGameObject = GameObject.FindGameObjectWithTag("Player");
+
+        if (playerGameObject != null)
+        {
+            playerGameObject.transform.position = posicionInicioSiguienteEscena;
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró el jugador en la nueva escena.");
+        }
     }
 }

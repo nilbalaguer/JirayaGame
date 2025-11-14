@@ -203,7 +203,7 @@ public class StatesMachine : MonoBehaviour
         
         string nombre = objetoLanzado != null ? objetoLanzado.nombreObjeto : null;
 
-        var entrada = inventario.objetos.Find(e => e.nombre == nombre);
+        Inventario.InventoryEntry entrada = inventario.objetos.Find(e => e.nombre == nombre);
     if (entrada != null && entrada.cantidad > 0)
         {
 

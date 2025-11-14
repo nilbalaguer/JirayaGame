@@ -37,6 +37,8 @@ public class NpcStates : MonoBehaviour
     public bool introTerminada = false;
     private bool introAsignada = false;
 
+    public bool puedeInteractuar = true;
+
     public Misions misionNpc;
     public GameManager gameManager;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -111,7 +113,7 @@ public class NpcStates : MonoBehaviour
                         currentState = State.Patrol;
                     }
                 }
-                else if (PlayerinRange() && !hasTalked)
+                else if (puedeInteractuar && PlayerinRange() && !hasTalked)
                 {
                     currentState = State.Alerted;
                 }
@@ -122,7 +124,7 @@ public class NpcStates : MonoBehaviour
                 break;
 
             case State.Patrol:
-                if (PlayerinRange() && !hasTalked){
+                if (puedeInteractuar && PlayerinRange() && !hasTalked){
                     currentState = State.Alerted;
                 }else if (EnemyinRange()){
                     currentState = State.Scared;
@@ -330,10 +332,10 @@ public class NpcStates : MonoBehaviour
 
             switch (scrollPanel.misionsScript.tipoMision)
             {
-                case scrollPanel.misionsScript.MisionTipo.RecolectarMoneda:
+                case Misions.MisionTipo.RecolectarMoneda:
                     MisionMonedas();
                     break;
-               case scrollPanel.misionsScript.MisionTipo.BuscarObjeto:
+               case Misions.MisionTipo.BuscarObjeto:
                     MisionObjeto();
                     break;
             }  
@@ -353,10 +355,11 @@ public class NpcStates : MonoBehaviour
 
     public void MisionObjeto()
     {
-        if (player.objetoSujeto.nombreObjeto = "ObjetoCampesino")
+        Objeto objeto = player.GetComponent<StatesMachine>().objetoSujeto;
+        if (objeto != null && objeto.nombreObjeto == "ObjetoCampesino")
         {
             misionNpc.CompletarMision();
-            player.SoltarObjeto();
+            player.GetComponent<StatesMachine>().SoltarObjeto();
         }
     }
 

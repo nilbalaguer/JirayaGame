@@ -20,12 +20,17 @@ public class Misions : MonoBehaviour
 
     public NpcStates npcScript;
     public bool misionActiva = false;
+    private GameObject prefabRecompensa;
+    public GameObject[] recompensas;
+    private Objeto objetoRecompensa;
+    public StatesMachine playerScript;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         //Mision[MisionActual] = false;
         //texto.gameObject.SetActive(false);
         panelMision.SetActive(false);
+        playerScript = GameObject.Find("player").GetComponent<StatesMachine>();
     }
 
     // Update is called once per frame
@@ -57,6 +62,20 @@ public class Misions : MonoBehaviour
         misionCompletada = true;
         texto.text = textoFinalizarMision;
         npcScript.canvasImagen.SetActive(false);
+        switch (tipoMision)
+        {
+            case MisionTipo.RecolectarMoneda:
+                prefabRecompensa = recompensas[0];
+                break;
+            case MisionTipo.BuscarObjeto:
+                prefabRecompensa = recompensas[1];
+                break;
+        }
+        GameObject recompensaInstanciada = Instantiate(prefabRecompensa, playerScript.puntoSujecion.position, Quaternion.identity);
+        objetoRecompensa = recompensaInstanciada.GetComponent<Objeto>();
+        objetoRecompensa.esRecompensa = true;
+        playerScript.objetoSujeto = objetoRecompensa;
+        objetoRecompensa.Coger(playerScript.puntoSujecion);
         Invoke ("DesactivarPanel", 1f);
     }
 

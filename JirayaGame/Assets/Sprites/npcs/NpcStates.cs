@@ -366,7 +366,10 @@ public class NpcStates : MonoBehaviour
         if (objeto != null && objeto.nombreObjeto == "ObjetoCampesino")
         {
             misionNpc.CompletarMision();
-            player.GetComponent<StatesMachine>().SoltarObjeto();
+            Objeto objetoEntregado = objeto;
+            objeto.Soltar();
+            objeto = null;
+            objetoEntregado.gameObject.SetActive(false);
         }
     }
 

@@ -208,7 +208,14 @@ public class NpcStates : MonoBehaviour
                 }
                 else
                 {
-                    canvasImagen.SetActive(false);
+                    if (!misionNpc.misionActiva)
+                    {
+                        canvasImagen.SetActive(false);
+                    }
+                    else
+                    {
+                        canvasImagen.SetActive(true);
+                    }
                 }
                 break;
             case State.Scared:

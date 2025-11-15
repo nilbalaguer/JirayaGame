@@ -17,6 +17,9 @@ public class Misions : MonoBehaviour
     public int MisionActual;
     public bool misionCompletada = false;
     public static Misions misiones;
+
+    public NpcStates npcScript;
+    public bool misionActiva = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -40,15 +43,20 @@ public class Misions : MonoBehaviour
         }
         else
         {
+            misionActiva = true;
             texto.text = textoMision;
+            npcScript.npcIcono.sprite = npcScript.iconoIntro;
+            npcScript.canvasImagen.SetActive(true);
         }
     }
 
     public void CompletarMision()
     {
         //Mision[MisionActual] = true;
+        misionActiva = false;
         misionCompletada = true;
         texto.text = textoFinalizarMision;
+        npcScript.canvasImagen.SetActive(false);
         Invoke ("DesactivarPanel", 1f);
     }
 

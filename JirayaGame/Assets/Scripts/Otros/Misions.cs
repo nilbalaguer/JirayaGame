@@ -24,6 +24,9 @@ public class Misions : MonoBehaviour
     public GameObject[] recompensas;
     private Objeto objetoRecompensa;
     public StatesMachine playerScript;
+    public GameObject[] panelMisionesCompletadas;
+    [HideInInspector]
+    public bool panelCompletadoMostrado = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -31,6 +34,11 @@ public class Misions : MonoBehaviour
         //texto.gameObject.SetActive(false);
         panelMision.SetActive(false);
         playerScript = GameObject.Find("player").GetComponent<StatesMachine>();
+        foreach (GameObject panel in panelMisionesCompletadas)
+        {
+            if (panel != null)
+                panel.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -60,23 +68,42 @@ public class Misions : MonoBehaviour
         //Mision[MisionActual] = true;
         misionActiva = false;
         misionCompletada = true;
-        texto.text = textoFinalizarMision;
+        //texto.text = textoFinalizarMision;
         npcScript.canvasImagen.SetActive(false);
-        switch (tipoMision)
+        if (!panelCompletadoMostrado)
+        {
+            switch (tipoMision)
+            {
+                case MisionTipo.RecolectarMoneda:
+                    GameManager.Instance.monedas += 10;
+                    panelMisionesCompletadas[0].SetActive(true); 
+                    break;
+                case MisionTipo.BuscarObjeto:
+                    GameManager.Instance.monedas += 20;
+                    panelMisionesCompletadas[1].SetActive(true); 
+                    break;
+            }
+            panelCompletadoMostrado = true;
+        }
+        /*switch (tipoMision)
         {
             case MisionTipo.RecolectarMoneda:
-                prefabRecompensa = recompensas[0];
+                //prefabRecompensa = recompensas[0];
+                GameManager.Instance.monedas += 10;
+                panelMisionesCompletadas[0].SetActive(true); 
                 break;
             case MisionTipo.BuscarObjeto:
-                prefabRecompensa = recompensas[1];
+                //prefabRecompensa = recompensas[1];
+                panelMisionesCompletadas[1].SetActive(true); 
                 break;
-        }
-        GameObject recompensaInstanciada = Instantiate(prefabRecompensa, playerScript.puntoSujecion.position, Quaternion.identity);
+        }*/
+        /*GameObject recompensaInstanciada = Instantiate(prefabRecompensa, playerScript.puntoSujecion.position, Quaternion.identity);
         objetoRecompensa = recompensaInstanciada.GetComponent<Objeto>();
         objetoRecompensa.esRecompensa = true;
         playerScript.objetoSujeto = objetoRecompensa;
-        objetoRecompensa.Coger(playerScript.puntoSujecion);
-        Invoke ("DesactivarPanel", 1f);
+        objetoRecompensa.Coger(playerScript.puntoSujecion);*/
+        //Invoke ("DesactivarPanel", 1f);
+        panelMision.SetActive(false);
     }
 
     public void DesactivarPanel()

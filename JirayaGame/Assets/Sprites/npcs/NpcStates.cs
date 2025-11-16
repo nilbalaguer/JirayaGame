@@ -65,7 +65,11 @@ public class NpcStates : MonoBehaviour
         dialogueBox.SetActive(false);
         introDialog.SetActive(false);
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        //scrollPanel = dialogueBox.GetComponent<ScrollPanel>();
+        if (puedeInteractuar == false)
+        {
+            hasTalked = true;
+            canvasImagen.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -336,6 +340,8 @@ public class NpcStates : MonoBehaviour
             /*misionNpc.CompletarMision();
             gameManager.monedas -= 1; 
             gameManager.textoMonedas.text = gameManager.monedas.ToString();*/
+            if (!misionNpc.misionActiva) return;
+            if (misionNpc.misionCompletada) return;
 
             switch (scrollPanel.misionsScript.tipoMision)
             {

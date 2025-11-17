@@ -13,7 +13,7 @@ public class Objeto : MonoBehaviour
     public int precioTienda = 10;
     public int cantidad = 1;
 
-    public enum TipoObjeto { Flor, CollarShizune, PergaminoSagrado, Recompensa, Arma};
+    public enum TipoObjeto { Flor, CollarShizune, PergaminoSagrado, Recompensa, Arma, Otro};
     public TipoObjeto tipo;
     public string nombreObjeto;
 
@@ -51,7 +51,6 @@ public class Objeto : MonoBehaviour
         Vector2 dirNormalizada = direccion.normalized;
         Vector2 asignada = dirNormalizada * fuerza;
         rb.linearVelocity = asignada;
-        Debug.Log($"[Lanzar] '{nombreObjeto}' dir={dirNormalizada} linearVel={asignada} drag={rb.linearDamping} bodyType={rb.bodyType} gravityScale={rb.gravityScale}");
         estaSujeto = false;
 
         /*if (cantidad <= 0)
@@ -112,16 +111,4 @@ public class Objeto : MonoBehaviour
             Canvas.SetActive(false);
         }
     }
-
-    
-    /*void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            objetoSujeto = collision.gameObject;
-            objetoRigidbody = GetComponent<Rigidbody2D>();
-            transform.position = puntoSujeccion.position;
-            transform.parent = objetoSujeto.transform;
-        }
-    }*/
 }

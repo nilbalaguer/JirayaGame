@@ -42,6 +42,7 @@ public class NpcStates : MonoBehaviour
     public Misions misionNpc;
     public bool dialogMisionMostrado = false;
     public GameManager gameManager;
+    public string nameNpc;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -390,7 +391,7 @@ public class NpcStates : MonoBehaviour
                     break;
             }  
 
-        }//else if (collision.CompareTag("Player"))
+        }
     }
 
     public void MisionMonedas()
@@ -411,8 +412,8 @@ public class NpcStates : MonoBehaviour
             misionNpc.CompletarMision();
             Objeto objetoEntregado = objeto;
             objeto.Soltar();
+            Destroy(objetoEntregado.gameObject);
             objeto = null;
-            objetoEntregado.gameObject.SetActive(false);
         }
     }
 

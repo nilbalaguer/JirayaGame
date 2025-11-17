@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a5dd163b4499b5645b60bbfba7fc87bc
+guid: 08437f7057e55d64facacd8035d64428
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5010984901643150312
-    second: objetoCampesino_0
+      213: -2472730673765305521
+    second: camp2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 200
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: objetoCampesino_0
+      name: camp2_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 33
-        height: 34
+        x: 5
+        y: 5
+        width: 17
+        height: 20
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8e3294df7389a8540800000000000000
-      internalID: 5010984901643150312
+      spriteID: f43b105ad881fadd0800000000000000
+      internalID: -2472730673765305521
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      objetoCampesino_0: 5010984901643150312
+      camp2_0: -2472730673765305521
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

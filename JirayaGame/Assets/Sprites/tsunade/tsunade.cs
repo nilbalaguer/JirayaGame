@@ -128,7 +128,7 @@ public class tsunade : MonoBehaviour
         playerScript.objetoSujeto = objetoRecompensa;
         objetoRecompensa.Coger(playerScript.puntoSujecion);
 
-        playerScript.RecibirRecompensa(objetoRecompensa);
+        //playerScript.RecibirRecompensa(objetoRecompensa);
         
         //StatesMachine playerScript = player.GetComponent<StatesMachine>();
         //playerScript.RecibirRecompensa(recompensaInstanciada.GetComponent<Objeto>());

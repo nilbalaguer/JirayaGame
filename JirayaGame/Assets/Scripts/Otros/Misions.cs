@@ -11,6 +11,8 @@ public class Misions : MonoBehaviour
     }
     public MisionTipo tipoMision;
     public TextMeshProUGUI texto;
+    //public Image[] npcIconos;
+    //public Image panelIconoNpc;
     public GameObject panelMision;
     public static bool[] Mision;
     public string textoMision, textoFinalizarMision;
@@ -60,6 +62,11 @@ public class Misions : MonoBehaviour
             texto.text = textoMision;
             npcScript.npcIcono.sprite = npcScript.iconoIntro;
             npcScript.canvasImagen.SetActive(true);
+            /*if (npcScript.nameNpc == "campesino1"){
+                panelIconoNpc.sprite = npcIconos[0].sprite;
+            }else if (npcScript.nameNpc == "campesino2"){
+                panelIconoNpc.sprite = npcIconos[1].sprite;
+            }*/
         }
     }
 
@@ -82,6 +89,7 @@ public class Misions : MonoBehaviour
                     break;
                 case MisionTipo.BuscarObjeto:
                     GameManager.Instance.monedas += 20;
+                    GameManager.Instance.textoMonedas.text = GameManager.Instance.monedas.ToString();
                     panelMisionesCompletadas[1].SetActive(true); 
                     panelInfoManager info2 = panelMisionesCompletadas[1].GetComponent<panelInfoManager>();
                     info2.npcScript = npcScript;

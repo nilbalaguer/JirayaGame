@@ -1,26 +1,30 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections; 
 
 public class habilidaddeintercambio : MonoBehaviour
 {
 
-    public Transform rotation;
     public GameObject player;
     public GameObject selectedObject;
     public Collider2D prefabHitboxRadius;
+    public Animator focusAnimator;
     public SpriteRenderer abilityUI; // asignar en el Inspector: la UI que se muestra mientras se mantiene E
-
-
+    public SpriteRenderer spriterendersmoke;
+    public float cooldownTime = 3f;
+    public bool isOnCooldown = false;
     void Start()
     {
+
+       focusAnimator.enabled = false;
         
-            prefabHitboxRadius.enabled = false;
-            abilityUI.enabled = false;
+        prefabHitboxRadius.enabled = false;
+        abilityUI.enabled = false;
     }
 
+
     void Update()
-    {
-        // Mantener E: mostrar UI y activar área de detección
+    { 
         if (Input.GetKey(KeyCode.E))
         {
             prefabHitboxRadius.enabled = true;
@@ -28,18 +32,16 @@ public class habilidaddeintercambio : MonoBehaviour
             abilityUI.enabled = true;
             if (selectedObject != null)
             {
-                selectedObject.GetComponentInChildren<SpriteRenderer>().color = Color.yellow; // Cambiar color para indicar selección
+                selectedObject.GetComponentInChildren<SpriteRenderer>().color = Color.yellow; 
             }
         }
 
-        // Al soltar E: ocultar UI, desactivar área y, si hay objeto seleccionado, intercambiar posiciones
+    
         if (Input.GetKeyUp(KeyCode.E) && selectedObject != null)
         {
             SwapPositionsWithSelected();
             prefabHitboxRadius.enabled = false;
-
             abilityUI.enabled = false;
-
             
             
             
@@ -55,8 +57,35 @@ public class habilidaddeintercambio : MonoBehaviour
     {
         Vector2 tempPosition = player.transform.position;
         player.transform.position = selectedObject.transform.position;
+
+        focusAnimator.enabled = true;
+        spriterendersmoke.enabled = true;
+        focusAnimator.Play("humocambiodeposicion_Clip", 0, 0f);
+        StartCoroutine(Cooldown());
         selectedObject.transform.position = tempPosition;
 
+
+    }
+    
+    IEnumerator Cooldown()
+    {
+        isOnCooldown = true;
+
+        float elapsed = 0f;
+
+        while (elapsed < cooldownTime)
+        {
+            elapsed += Time.deltaTime; // suma el tiempo que pasa cada frame
+            yield return null;         // espera al siguiente frame
+        }
+
+        if (elapsed >= cooldownTime)
+        {
+            focusAnimator.enabled = false;
+            spriterendersmoke.enabled = false;
+            isOnCooldown = false;
+            yield return null;         // espera al siguiente frame
+        }
         
     }
 

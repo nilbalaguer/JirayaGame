@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 [RequireComponent(typeof(LineRenderer))]
 public class PuzzleEspejoScript : MonoBehaviour
@@ -23,6 +24,12 @@ public class PuzzleEspejoScript : MonoBehaviour
     [Header("Prefab")]
     [SerializeField] GameObject partituraPrefab;
 
+    //Fase final
+    private float contdown = 0;
+    private AudioSource audioSource;
+    private Light2D light2D;
+    [SerializeField] AudioClip explosionFinal;
+
     private void Start()
     {
         // Configurar LineRenderer
@@ -32,6 +39,10 @@ public class PuzzleEspejoScript : MonoBehaviour
         lineRenderer.endWidth = 0.05f;
         lineRenderer.startColor = Color.yellow;
         lineRenderer.endColor = Color.red;
+
+        //Fase final
+        audioSource = gameObject.GetComponent<AudioSource>();
+        light2D = gameObject.GetComponent<Light2D>();
     }
 
     private void Update()
@@ -49,12 +60,37 @@ public class PuzzleEspejoScript : MonoBehaviour
             Rotar();
         }
 
-        if (final && reciviendoLuz)
+        if (final && reciviendoLuz && contdown <= 0)
         {
-            Debug.Log("Final");
-            Instantiate(partituraPrefab, transform.position, Quaternion.identity);
-            Destroy(gameObject);
+            contdown = 0.01f;
             reciviendoLuz = false;
+            Debug.Log("Se activa el final");
+        }
+
+        if (contdown > 0 && contdown < 10)
+        {
+            contdown += Time.deltaTime;
+
+            audioSource.pitch = contdown*2;
+            light2D.intensity = contdown*10;
+
+            if (contdown < 0.2)
+            {
+                audioSource.Play();
+            }
+
+            if (contdown >= 10)
+            {
+                GameObject tempPartitura = Instantiate(partituraPrefab, transform.position, Quaternion.identity);
+                PartituraItemScript tempPartituraItemScript = tempPartitura.GetComponent<PartituraItemScript>();
+                tempPartituraItemScript.claveTPdesactivar = "mazzmorraEspjeos";
+                audioSource.Stop();
+                audioSource.pitch = 1;
+                audioSource.PlayOneShot(explosionFinal);
+                light2D.pointLightOuterRadius = 200;
+                Destroy(gameObject, 2f);
+                
+            }
         }
     }
 

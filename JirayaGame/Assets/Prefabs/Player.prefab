@@ -42,7 +42,6 @@ GameObject:
   - component: {fileID: 3189020352421777212}
   - component: {fileID: 5445482418505120430}
   - component: {fileID: 8932164626406919758}
-  - component: {fileID: 6347802663907290645}
   m_Layer: 0
   m_Name: Katana
   m_TagString: KatanaFriend
@@ -102,9 +101,9 @@ PolygonCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 1.6, y: -0.5833334}
-    oldSize: {x: 0.3125, y: 0.375}
-    newSize: {x: 0.1, y: 0.12}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.5, y: 1}
+    newSize: {x: 1.5, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -162,40 +161,18 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.1, y: 0.12}
+  m_Size: {x: 1.5, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &6347802663907290645
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1608729913664290579}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: dd3282b5c2ffdb64a93fc616675614a0, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1960582784928442442
 GameObject:
   m_ObjectHideFlags: 0
@@ -599,14 +576,14 @@ MonoBehaviour:
     m_Mesh: {fileID: 0}
     m_LocalBounds:
       m_Center: {x: 0, y: 0.234375, z: 0}
-      m_Extent: {x: 0.22999573, y: 0.21437073, z: 0}
+      m_Extent: {x: 0.16000366, y: 0.14437866, z: 0}
     m_EdgeProcessing: 1
-    m_TrimEdge: 0.02
+    m_TrimEdge: 0.09
     m_FlipX: 0
     m_FlipY: 0
     m_InitialTrim: 0
   m_CastingOption: 1
-  m_PreviousTrimEdge: 0.02
+  m_PreviousTrimEdge: 0.09
   m_PreviousEdgeProcessing: 1
   m_PreviousShadowCastingSource: 2
   m_PreviousShadowShape2DSource: {fileID: 2870363542816328045}
@@ -865,6 +842,11 @@ MonoBehaviour:
   sonidoLengua: {fileID: 8300000, guid: 32fe078981d61fc4eb7d54fe4a485cb0, type: 3}
   sonidoDamage: {fileID: 8300000, guid: 158e2252b80ef4245ab44991ee6b9173, type: 3}
   sonidoParry: {fileID: 8300000, guid: d47969ac8077ac14fa7e71045144a72f, type: 3}
+  spritesBloqueo:
+  - {fileID: -7849336076534311795, guid: 270651189394e2445b4a423d3dfb6f83, type: 3}
+  - {fileID: 3033264242019182023, guid: 873ef587842e3f343ab503417da3a683, type: 3}
+  - {fileID: -1207318269965180788, guid: 9cf1737ad7453064abceb61204275e7a, type: 3}
+  - {fileID: -4171051826557252156, guid: c1bbb9eb3fe866348bc313e5e31a0420, type: 3}
 --- !u!82 &2048195043642005362
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1120,7 +1102,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 1, g: 0.6, b: 0.21568629, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.4
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
   m_ApplyToSortingLayers: 00000000

@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour
     [Header("HUD")]
     private Image indicadorParry;
 
+    private SpriteRenderer spriteRendererPlayer;
+
     [Header("Armas")]
     [SerializeField] GameObject katanaObject;
     [SerializeField] PolygonCollider2D colliderKatana;
@@ -62,6 +64,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] AudioClip sonidoDamage;
     [SerializeField] AudioClip sonidoParry;
 
+    [Header("Sprites Bloqueo")]
+    [SerializeField] Sprite[] spritesBloqueo;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -83,6 +88,9 @@ public class PlayerController : MonoBehaviour
 
         //Obtener GameManager
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
+        //Obtener sprite renderer
+        spriteRendererPlayer = gameObject.GetComponentInChildren<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -405,6 +413,14 @@ public class PlayerController : MonoBehaviour
         {
             maxSpeed = 5f;
             state = "idle";
+
+        if (state == "Parry")
+        {
+            animator.enabled = false;
+            spriteRendererPlayer.sprite = spritesBloqueo[lastMove - 1];
+        } else
+        {
+            animator.enabled = true;
         }
     }
     

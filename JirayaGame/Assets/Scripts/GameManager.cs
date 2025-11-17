@@ -22,7 +22,6 @@ public class GameManager : MonoBehaviour
     private string ubicacion = "overworld";
 
     //HUD
-    private TextMeshProUGUI textoVida;
 
     //Sonidos
     [Header("Sonidos")]
@@ -162,7 +161,6 @@ public class GameManager : MonoBehaviour
     {
         vidaPlayer -= reduccion;
 
-        textoVida.text = "Vida: " + vidaPlayer;
         indicadorVida.fillAmount = vidaPlayer / 10;
 
         if (vidaPlayer <= 0)
@@ -175,7 +173,6 @@ public class GameManager : MonoBehaviour
     {
         vidaPlayer += incrementacion;
 
-        textoVida.text = "Vida: " + vidaPlayer;
     }
 
     public void PlayerDie()
@@ -216,7 +213,6 @@ public class GameManager : MonoBehaviour
         {
             playerGameObject.transform.position = posicionInicioSiguienteEscena;
 
-            textoVida = GameObject.Find("TextoVida").GetComponent<TextMeshProUGUI>();
             audioSource = gameObject.GetComponent<AudioSource>();
 
             GameObject parryObj = GameObject.Find("vidaIndicator");

@@ -11,6 +11,7 @@ public class panelInfoManager : MonoBehaviour
      private Animator animator;
     public Sprite iconoFlecha;
     public Sprite iconoCruz;
+    public NpcStates npcScript;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -54,6 +55,20 @@ public class panelInfoManager : MonoBehaviour
         else
         {
             animator.SetTrigger("Close");
+        }
+    }
+
+    public void NextMision()
+    {
+        if (paginaActual < paginas.Length - 1)
+        {
+            paginaActual++;
+            ShowPage();
+        }
+        else
+        {
+            animator.SetTrigger("Close");
+            npcScript.dialogMisionMostrado = true;
         }
     }
 

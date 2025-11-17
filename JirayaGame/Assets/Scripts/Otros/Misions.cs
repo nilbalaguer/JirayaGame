@@ -65,7 +65,7 @@ public class Misions : MonoBehaviour
 
     public void CompletarMision()
     {
-        //Mision[MisionActual] = true;
+        //npcScript.currentState = NpcStates.State.EndMision;
         misionActiva = false;
         misionCompletada = true;
         //texto.text = textoFinalizarMision;
@@ -77,10 +77,14 @@ public class Misions : MonoBehaviour
                 case MisionTipo.RecolectarMoneda:
                     GameManager.Instance.monedas += 10;
                     panelMisionesCompletadas[0].SetActive(true); 
+                    panelInfoManager info = panelMisionesCompletadas[0].GetComponent<panelInfoManager>();
+                    info.npcScript = npcScript;
                     break;
                 case MisionTipo.BuscarObjeto:
                     GameManager.Instance.monedas += 20;
                     panelMisionesCompletadas[1].SetActive(true); 
+                    panelInfoManager info2 = panelMisionesCompletadas[1].GetComponent<panelInfoManager>();
+                    info2.npcScript = npcScript;
                     break;
             }
             panelCompletadoMostrado = true;

@@ -6,7 +6,7 @@ public class NpcStates : MonoBehaviour
     public Rigidbody2D rb;
     private Animator anim;
 
-    public enum State { Idle, Patrol, Alerted, Scared, Intro };
+    public enum State { Idle, Patrol, Alerted, Scared, Intro, EndMision };
     public State currentState;
 
     public Transform[] patrolPoints; 
@@ -40,6 +40,7 @@ public class NpcStates : MonoBehaviour
     public bool puedeInteractuar = true;
 
     public Misions misionNpc;
+    public bool dialogMisionMostrado = false;
     public GameManager gameManager;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -124,6 +125,9 @@ public class NpcStates : MonoBehaviour
                 else if (EnemyinRange())
                 {
                     currentState = State.Scared;
+                }else if (misionNpc.misionCompletada && !dialogMisionMostrado)
+                {
+                    currentState = State.EndMision;
                 }
                 break;
 
@@ -132,6 +136,9 @@ public class NpcStates : MonoBehaviour
                     currentState = State.Alerted;
                 }else if (EnemyinRange()){
                     currentState = State.Scared;
+                }else if (misionNpc.misionCompletada && !dialogMisionMostrado)
+                {
+                    currentState = State.EndMision;
                 }
                 else
                 {
@@ -159,6 +166,13 @@ public class NpcStates : MonoBehaviour
                 break;
             case State.Intro:
                 if (!NpcIntro)
+                {
+                    currentState = State.Idle;
+                    waitCounter = waitTime;
+                }
+                break;
+            case State.EndMision:
+                if (dialogMisionMostrado)
                 {
                     currentState = State.Idle;
                     waitCounter = waitTime;
@@ -231,6 +245,29 @@ public class NpcStates : MonoBehaviour
                 npcIcono.sprite = iconoIntro;
                 MoveTowardsPlayer();
                 break;
+            case State.EndMision:
+                rb.linearVelocity = Vector2.zero;
+                directionToPlayer = (player.transform.position - transform.position).normalized;
+                if (Mathf.Abs(directionToPlayer.x) > Mathf.Abs(directionToPlayer.y))
+                {
+                    transform.localScale = new Vector3(directionToPlayer.x < 0 ? -5 : 5, 5, 5);
+                    anim.SetInteger("state", 7);
+                }
+                else
+                {
+                    if (directionToPlayer.y > 0)
+                    {
+                        anim.SetInteger("state", 5);
+                    }
+                    else
+                    {
+                        anim.SetInteger("state", 4);
+                    }
+                }
+                 //Añadir logica para mostrar dialogo de mision completada
+                break;
+
+
         }
 
     }

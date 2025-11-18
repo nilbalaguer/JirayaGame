@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
     private GameObject playerGameObject;
 
     //Estadisticas
-    private int enemiesKilled = 0;
+    public float tiempoDeJuego = 0f;
 
     [Header("Sprites")]
     [SerializeField] GameObject sangrePrefab;
@@ -92,6 +92,8 @@ public class GameManager : MonoBehaviour
                 npcIntroActual = null;
             }
         }
+
+        tiempoDeJuego += Time.deltaTime;
     }
 
     public void IniciarIntro()

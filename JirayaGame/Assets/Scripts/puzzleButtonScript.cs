@@ -4,6 +4,7 @@ public class puzzleButtonScript : MonoBehaviour
 {
 
     public GameObject objetivo;
+    [SerializeField] BoxCollider2D deathAreaPuente;
 
     private int objetosdentro = 0;
 
@@ -18,6 +19,7 @@ public class puzzleButtonScript : MonoBehaviour
         {
             ++objetosdentro;
             objetivo.SetActive(true);
+            deathAreaPuente.enabled = false;
         }
         
     }
@@ -40,6 +42,7 @@ public class puzzleButtonScript : MonoBehaviour
             if (objetosdentro == 0)
             {
                 objetivo.SetActive(false);
+                deathAreaPuente.enabled = true;
             }
         }
     }

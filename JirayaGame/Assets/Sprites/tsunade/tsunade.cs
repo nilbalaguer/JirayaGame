@@ -91,6 +91,7 @@ public class tsunade : MonoBehaviour
             if (Time.time - ultimoDialogo >= cooldownDialogo)
             {
                 tsunadePanel2.SetActive(true);
+                anim.SetInteger("state", 1);
                 playerScript.GetComponent<movement>().puedoMoverme = false;
             }
         }else if (PlayerinRange() && playerScript.objetoSujeto != null && objetoRecompensa != null &&objetoRecompensa.esRecompensa)

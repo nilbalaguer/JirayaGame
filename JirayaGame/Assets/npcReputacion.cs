@@ -16,11 +16,11 @@ public class npcReputacion : MonoBehaviour
 
     public float reputacionMaxima = 100f;
     public float reputacionMinima = 0f;
-    public float reputacionActual = 50f;
+    public float reputacionActual = 100f;
     //private int respuestaNegativa = 0;
     
-    public float reputacionRespuestaPositiva = 10f;
-    public float reputacionRespuestaNegativa = 10f;
+    public float reputacionRespuestaPositiva = 20f;
+    public float reputacionRespuestaNegativa = 20f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -42,6 +42,10 @@ public class npcReputacion : MonoBehaviour
 
     public void RespuestaPositiva()
     {
+        if (reputacionActual >= reputacionMaxima)
+        {
+            return;
+        }
         reputacionActual += reputacionRespuestaPositiva;
         reputacionActual = Mathf.Clamp(reputacionActual, reputacionMinima, reputacionMaxima);
         ActualizarUI();

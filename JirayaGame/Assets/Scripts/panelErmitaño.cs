@@ -40,12 +40,10 @@ public class panelErmitaño : MonoBehaviour
         textoPanel.text = paginas[paginaActual];
         if (paginaActual >= paginas.Length - 1)
         {
-            //btnNext.GetComponentInChildren<TextMeshProUGUI>().text = "Cerrar";
             btnNext.image.sprite = iconoCruz;
         }
         else
         {
-            //btnNext.GetComponentInChildren<TextMeshProUGUI>().text = "Siguiente";
             btnNext.image.sprite = iconoFlecha;
         }
     }

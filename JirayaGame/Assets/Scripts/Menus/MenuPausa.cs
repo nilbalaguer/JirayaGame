@@ -31,9 +31,9 @@ public class MenuPausa : MonoBehaviour
 
         // Pausar o reanudar el juego
         Time.timeScale = isPaused ? 0 : 1;
-
-        Cursor.visible = isPaused;
-        Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = true;
+      //Cursor.visible = isPaused;
+      //Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
 
         if (isPaused)
         {

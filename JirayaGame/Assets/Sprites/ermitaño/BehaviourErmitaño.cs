@@ -68,15 +68,6 @@ public class BehaviourErmitaño : MonoBehaviour
                     currentState = State.TalkingShop;
                 }
                 
-                if (PlayerinRange() && esErmitañoTienda)
-                {
-                    CanvasTienda.SetActive(true);
-                }
-                else
-                {
-                    CanvasTienda.SetActive(false);
-                }
-                
                 break;
 
             case State.Talking:
@@ -127,6 +118,15 @@ public class BehaviourErmitaño : MonoBehaviour
                     panelTienda.SetActive(true);
                 }
                 break;
+        }
+
+        if (esErmitañoTienda && PlayerinRange())
+        {
+            CanvasTienda.SetActive(true);
+        }
+        else if (esErmitañoTienda && !PlayerinRange())
+        {
+            CanvasTienda.SetActive(false);
         }
     }
 

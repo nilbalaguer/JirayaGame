@@ -18,7 +18,7 @@ public class NpcStates : MonoBehaviour
 
     private GameObject player;
     private GameObject enemy;
-    public float rangoPlayer = 2f;
+    public float rangoPlayer = 1f;
     public float rangoEnemy = 3f;
 
     public GameObject dialogueBox;

@@ -47,7 +47,7 @@ public class ScrollPanel : MonoBehaviour
 
     public void botonSi()
     {
-        reputacion.RespuestaPositiva();
+        //reputacion.RespuestaPositiva();
         animator.SetTrigger("Close");
 
         if (npcScript != null)
@@ -55,22 +55,13 @@ public class ScrollPanel : MonoBehaviour
             npcScript.hasTalked = true;
             npcScript = null;
         }
-        /*if (Misions.Mision[1].Equals(false)){
-            misionsScript.panelMision.SetActive(true);
-            misionsScript.texto.text = misionsScript.textoMision;
-        }
-        else
-        {
-            misionsScript.panelMision.SetActive(true);
-            misionsScript.texto.text = misionsScript.textoFinalizarMision;
-        }*/
         misionsScript.MostrarMision();
         playerScript.GetComponent<movement>().puedoMoverme = true;
     }
 
     public void botonNo()
     {
-        reputacion.RespuestaNegativa();
+        //reputacion.RespuestaNegativa();
         animator.SetTrigger("Close");
 
         if (npcScript != null)

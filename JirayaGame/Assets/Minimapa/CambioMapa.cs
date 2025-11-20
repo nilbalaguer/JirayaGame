@@ -23,6 +23,7 @@ public class CambioMapa : MonoBehaviour
             minimapaPequeño.SetActive(!mapaGrandeActivo);
             minimapaGrande.SetActive(mapaGrandeActivo);
             camaraBigMap.gameObject.SetActive(mapaGrandeActivo);
+            Time.timeScale = mapaGrandeActivo ? 0 : 1;
         }
     }
 }

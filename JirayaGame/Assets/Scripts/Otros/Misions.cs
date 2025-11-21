@@ -7,7 +7,8 @@ public class Misions : MonoBehaviour
     public enum MisionTipo
     {
         RecolectarMoneda,
-        BuscarObjeto
+        BuscarObjeto,
+        HablarConNpc
     }
     public MisionTipo tipoMision;
     public TextMeshProUGUI texto;
@@ -67,6 +68,13 @@ public class Misions : MonoBehaviour
             }else if (npcScript.nameNpc == "campesino2"){
                 panelIconoNpc.sprite = npcIconos[1];
             }
+
+            switch (tipoMision)
+            {
+                case MisionTipo.HablarConNpc:
+                    //Instanciar nota
+                    break;
+            }
         }
     }
 
@@ -93,6 +101,13 @@ public class Misions : MonoBehaviour
                     panelMisionesCompletadas[1].SetActive(true); 
                     panelInfoManager info2 = panelMisionesCompletadas[1].GetComponent<panelInfoManager>();
                     info2.npcScript = npcScript;
+                    break;
+                case MisionTipo.HablarConNpc:
+                    GameManager.Instance.monedas += 15;
+                    GameManager.Instance.textoMonedas.text = GameManager.Instance.monedas.ToString();
+                    panelMisionesCompletadas[2].SetActive(true); 
+                    panelInfoManager info3 = panelMisionesCompletadas[2].GetComponent<panelInfoManager>();
+                    info3.npcScript = npcScript;
                     break;
             }
             panelCompletadoMostrado = true;

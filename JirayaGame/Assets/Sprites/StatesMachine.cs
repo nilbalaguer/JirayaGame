@@ -168,6 +168,17 @@ public class StatesMachine : MonoBehaviour
                 objetoSujeto = objetoCercano;
                 objetoSujeto.Coger(puntoSujecion);
                 CanvasInfo.SetActive(true);
+                if ((objetoCercano.nombreObjeto == "PergaminoSagrado" || objetoCercano.nombreObjeto == "CollarShizune" || objetoCercano.nombreObjeto == "Flor")
+                && objetoCercano.yaRecogido == false)
+                {
+                    CambioMapa.Instance.objetosRecogidos += 1;
+                    CambioMapa.Instance.ActualizarContadorObjetos();
+                    objetoCercano.yaRecogido = true;
+                }
+                else
+                {
+                    Debug.Log("El objeto ya ha sido recogido anteriormente.");
+                }
             }
             else
             {
@@ -212,15 +223,6 @@ public class StatesMachine : MonoBehaviour
             if (nuevoObjeto != null)
             {
                 nuevaGO.SetActive(true);
-                //Rigidbody2D rb = nuevoObjeto.GetComponent<Rigidbody2D>();
-                /*if (rb != null)
-                {
-                    rb.linearVelocity = Vector2.zero;
-                    rb.angularVelocity = 0f;
-                    rb.rotation = 0f;
-                    rb.bodyType = RigidbodyType2D.Kinematic;
-                    rb.gravityScale = 0;
-                }*/
 
                 // Equipar el nuevo objeto y decrementar la cantidad en el inventario
                 EquiparObjeto(nuevoObjeto);

@@ -389,6 +389,9 @@ public class NpcStates : MonoBehaviour
                case Misions.MisionTipo.BuscarObjeto:
                     MisionObjeto();
                     break;
+                case Misions.MisionTipo.HablarConNpc:
+                    MisionHablar();
+                    break;
             }  
 
         }
@@ -415,6 +418,11 @@ public class NpcStates : MonoBehaviour
             Destroy(objetoEntregado.gameObject);
             objeto = null;
         }
+    }
+
+    public void MisionHablar()
+    {
+        
     }
 
 

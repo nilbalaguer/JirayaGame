@@ -16,6 +16,8 @@ public class Objeto : MonoBehaviour
     public enum TipoObjeto { Flor, CollarShizune, PergaminoSagrado, Recompensa, Arma, Otro};
     public TipoObjeto tipo;
     public string nombreObjeto;
+    [HideInInspector]
+    public bool yaRecogido = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

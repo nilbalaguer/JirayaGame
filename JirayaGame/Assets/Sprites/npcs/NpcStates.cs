@@ -138,7 +138,7 @@ public class NpcStates : MonoBehaviour
                     currentState = State.Alerted;
                 }else if (EnemyinRange()){
                     currentState = State.Scared;
-                }else if (misionNpc.misionCompletada && !dialogMisionMostrado)
+                }else if (misionNpc != null && misionNpc.misionCompletada && !dialogMisionMostrado)
                 {
                     currentState = State.EndMision;
                 }
@@ -423,8 +423,18 @@ public class NpcStates : MonoBehaviour
 
     public void MisionHablar()
     {
-        if (nameNpc == misionNpc.npcDestino)
-        {
+
+            if (misionNpc == null)
+            {
+                Debug.Log("misionNpc ES NULL");
+                return;
+            }
+
+            if (nameNpc != misionNpc.npcDestino)
+            {
+                Debug.Log("Este NPC no es el destino");
+                return;
+            }
             Objeto objeto = player.GetComponent<StatesMachine>().objetoSujeto;
             if (objeto != null && objeto.nombreObjeto == "NotaMision")
             {
@@ -436,11 +446,11 @@ public class NpcStates : MonoBehaviour
                 dialogMisionMostrado = false;
                 MostrarDialogoFinal();
             }
-        }
-        else
-        {
-            Debug.Log("No es el NPC correcto para completar la misión.");
-        }
+        //}
+            else
+            {
+                Debug.Log("No llevas la nota correcta.");
+            }
     }
 
     public void MostrarDialogoFinal()
@@ -449,6 +459,7 @@ public class NpcStates : MonoBehaviour
         misionNpc.panelMisionesCompletadas[2].SetActive(true); 
         panelInfoManager info3 = misionNpc.panelMisionesCompletadas[2].GetComponent<panelInfoManager>();
         info3.npcScript = this;
+        canvasImagen.SetActive(false);
     }
 
 

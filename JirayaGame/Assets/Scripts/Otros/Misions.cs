@@ -73,20 +73,6 @@ public class Misions : MonoBehaviour
                 panelIconoNpc.sprite = npcIconos[1];
             }
 
-            /*if (tipoMision == MisionTipo.HablarConNpc)
-            {
-                GameObject npcDest = GameObject.Find(npcDestino);
-                NpcStates npcDestinoScript = npcDest.GetComponent<NpcStates>();
-                npcDestinoScript.misionNpc = this;
-                npcDestinoScript.misionActiva = true;
-                npcDestinoScript.npcIcono.sprite = npcDestinoScript.iconoIntro;
-                npcDestinoScript.canvasImagen.SetActive(true);
-                /*NpcStates npcObjetivo = GameObject.Find(npcDestino).GetComponent<NpcStates>();
-                npcObjetivo.misionNpc = this;
-                npcObjetivo.npcIcono.sprite = npcObjetivo.iconoIntro;
-                npcObjetivo.canvasImagen.SetActive(true);
-            }*/
-
             switch (tipoMision)
             {
                 case MisionTipo.HablarConNpc:
@@ -126,6 +112,8 @@ public class Misions : MonoBehaviour
                 case MisionTipo.HablarConNpc:
                     GameManager.Instance.monedas += 15;
                     GameManager.Instance.textoMonedas.text = GameManager.Instance.monedas.ToString();
+
+                    npcScript.dialogMisionMostrado = true;
                     break;
             }
             panelCompletadoMostrado = true;

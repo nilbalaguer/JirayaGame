@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8730068182615225330}
   - component: {fileID: 4915280860485382143}
   - component: {fileID: 4472865886770764800}
+  - component: {fileID: 8740123406917690113}
   m_Layer: 8
   m_Name: shuriken
   m_TagString: intObject
@@ -112,6 +113,7 @@ MonoBehaviour:
   cantidad: 1
   tipo: 4
   nombreObjeto: Shuriken
+  yaRecogido: 0
 --- !u!58 &8730068182615225330
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -211,6 +213,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &8740123406917690113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2617785827019593988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acea2415c7d39ca4e8ce7f96d160c790, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tiempoVida: 5
 --- !u!1 &5743349435266379697
 GameObject:
   m_ObjectHideFlags: 0

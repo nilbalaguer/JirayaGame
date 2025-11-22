@@ -8,7 +8,8 @@ public class Misions : MonoBehaviour
     {
         RecolectarMoneda,
         BuscarObjeto,
-        HablarConNpc
+        HablarConNpc,
+        Ninguna
     }
     public MisionTipo tipoMision;
     public TextMeshProUGUI texto;
@@ -28,6 +29,8 @@ public class Misions : MonoBehaviour
     private Objeto objetoRecompensa;
     public StatesMachine playerScript;
     public GameObject[] panelMisionesCompletadas;
+    public string npcDestino;
+    public GameObject notaPrefab;
     [HideInInspector]
     public bool panelCompletadoMostrado = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -63,16 +66,34 @@ public class Misions : MonoBehaviour
             texto.text = textoMision;
             npcScript.npcIcono.sprite = npcScript.iconoIntro;
             npcScript.canvasImagen.SetActive(true);
+
             if (npcScript.nameNpc == "campesino1"){
                 panelIconoNpc.sprite = npcIconos[0];
             }else if (npcScript.nameNpc == "campesino2"){
                 panelIconoNpc.sprite = npcIconos[1];
             }
 
+            /*if (tipoMision == MisionTipo.HablarConNpc)
+            {
+                GameObject npcDest = GameObject.Find(npcDestino);
+                NpcStates npcDestinoScript = npcDest.GetComponent<NpcStates>();
+                npcDestinoScript.misionNpc = this;
+                npcDestinoScript.misionActiva = true;
+                npcDestinoScript.npcIcono.sprite = npcDestinoScript.iconoIntro;
+                npcDestinoScript.canvasImagen.SetActive(true);
+                /*NpcStates npcObjetivo = GameObject.Find(npcDestino).GetComponent<NpcStates>();
+                npcObjetivo.misionNpc = this;
+                npcObjetivo.npcIcono.sprite = npcObjetivo.iconoIntro;
+                npcObjetivo.canvasImagen.SetActive(true);
+            }*/
+
             switch (tipoMision)
             {
                 case MisionTipo.HablarConNpc:
-                    //Instanciar nota
+                    GameObject nota = Instantiate(notaPrefab, playerScript.puntoSujecion.position, Quaternion.identity);
+                    Objeto objetoNota = nota.GetComponent<Objeto>();
+                    playerScript.objetoSujeto = objetoNota;
+                    objetoNota.Coger(playerScript.puntoSujecion);
                     break;
             }
         }
@@ -105,9 +126,6 @@ public class Misions : MonoBehaviour
                 case MisionTipo.HablarConNpc:
                     GameManager.Instance.monedas += 15;
                     GameManager.Instance.textoMonedas.text = GameManager.Instance.monedas.ToString();
-                    panelMisionesCompletadas[2].SetActive(true); 
-                    panelInfoManager info3 = panelMisionesCompletadas[2].GetComponent<panelInfoManager>();
-                    info3.npcScript = npcScript;
                     break;
             }
             panelCompletadoMostrado = true;

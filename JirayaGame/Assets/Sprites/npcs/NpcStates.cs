@@ -43,6 +43,7 @@ public class NpcStates : MonoBehaviour
     public bool dialogMisionMostrado = false;
     public GameManager gameManager;
     public string nameNpc;
+    //public GameObject dialogFinalMision;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -381,7 +382,7 @@ public class NpcStates : MonoBehaviour
             if (!misionNpc.misionActiva) return;
             if (misionNpc.misionCompletada) return;
 
-            switch (scrollPanel.misionsScript.tipoMision)
+            switch (misionNpc.tipoMision)
             {
                 case Misions.MisionTipo.RecolectarMoneda:
                     MisionMonedas();
@@ -422,7 +423,32 @@ public class NpcStates : MonoBehaviour
 
     public void MisionHablar()
     {
-        
+        if (nameNpc == misionNpc.npcDestino)
+        {
+            Objeto objeto = player.GetComponent<StatesMachine>().objetoSujeto;
+            if (objeto != null && objeto.nombreObjeto == "NotaMision")
+            {
+                objeto.Soltar();
+                Destroy(objeto.gameObject);
+                objeto = null;
+
+                misionNpc.CompletarMision();
+                dialogMisionMostrado = false;
+                MostrarDialogoFinal();
+            }
+        }
+        else
+        {
+            Debug.Log("No es el NPC correcto para completar la misión.");
+        }
+    }
+
+    public void MostrarDialogoFinal()
+    {
+        //dialogFinalMision.SetActive(true);
+        misionNpc.panelMisionesCompletadas[2].SetActive(true); 
+        panelInfoManager info3 = misionNpc.panelMisionesCompletadas[2].GetComponent<panelInfoManager>();
+        info3.npcScript = this;
     }
 
 

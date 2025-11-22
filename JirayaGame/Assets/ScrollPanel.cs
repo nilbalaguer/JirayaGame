@@ -57,6 +57,23 @@ public class ScrollPanel : MonoBehaviour
         }
         misionsScript.MostrarMision();
         playerScript.GetComponent<movement>().puedoMoverme = true;
+        if (misionsScript.tipoMision == Misions.MisionTipo.HablarConNpc)
+        {
+            GameObject npcDest = GameObject.Find(misionsScript.npcDestino);
+            if (npcDest != null)
+            {
+                NpcStates npcDestinoScript = npcDest.GetComponent<NpcStates>();
+
+                npcDestinoScript.misionNpc = misionsScript;
+                npcDestinoScript.misionNpc.misionActiva = true;       
+                npcDestinoScript.npcIcono.sprite = npcDestinoScript.iconoIntro;
+                npcDestinoScript.canvasImagen.SetActive(true);
+            }
+            else
+            {
+                Debug.Log("No se encontró el NPC destino");
+            }
+        }
     }
 
     public void botonNo()

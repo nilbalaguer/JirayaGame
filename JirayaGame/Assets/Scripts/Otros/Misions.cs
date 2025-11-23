@@ -33,6 +33,7 @@ public class Misions : MonoBehaviour
     public GameObject notaPrefab;
     [HideInInspector]
     public bool panelCompletadoMostrado = false;
+    public Sprite iconoMisionKama;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -64,8 +65,7 @@ public class Misions : MonoBehaviour
         {
             misionActiva = true;
             texto.text = textoMision;
-            npcScript.npcIcono.sprite = npcScript.iconoIntro;
-            npcScript.canvasImagen.SetActive(true);
+            //npcScript.npcIcono.sprite = npcScript.iconoIntro;
 
             if (npcScript.nameNpc == "campesino1"){
                 panelIconoNpc.sprite = npcIconos[0];
@@ -76,12 +76,20 @@ public class Misions : MonoBehaviour
             switch (tipoMision)
             {
                 case MisionTipo.HablarConNpc:
+                    npcScript.npcIcono.sprite = npcScript.iconoIntro;
                     GameObject nota = Instantiate(notaPrefab, playerScript.puntoSujecion.position, Quaternion.identity);
                     Objeto objetoNota = nota.GetComponent<Objeto>();
                     playerScript.objetoSujeto = objetoNota;
                     objetoNota.Coger(playerScript.puntoSujecion);
                     break;
+                case MisionTipo.BuscarObjeto:
+                    npcScript.npcIcono.sprite = iconoMisionKama;
+                    break;
+                case MisionTipo.RecolectarMoneda:
+                    npcScript.npcIcono.sprite = npcScript.iconoIntro;
+                    break;
             }
+            npcScript.canvasImagen.SetActive(true);
         }
     }
 

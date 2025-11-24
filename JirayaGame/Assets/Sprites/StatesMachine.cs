@@ -18,8 +18,10 @@ public class StatesMachine : MonoBehaviour
     public GameObject tsunadePanel2;
     public bool tsunadeCerca = false;
 
-    public ScrollPanel scrollPanel;
+    //public ScrollPanel scrollPanel;
+    private GameObject tsunade;
     public panelErmitaño panelScript;
+    public GameObject mensajePocion;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -30,6 +32,7 @@ public class StatesMachine : MonoBehaviour
         inventario = GetComponent<Inventario>();
         CanvasInfo.SetActive(false);
         tsunadePanel.SetActive(false);
+        tsunade = GameObject.FindWithTag("Tsunade");
         //tsunadePanel2.SetActive(false);
     }
 
@@ -148,13 +151,42 @@ public class StatesMachine : MonoBehaviour
         }
 
         //Mostrar paneles tsunade al acercarme a ella
-        if (tsunadeCerca && objetoSujeto != null && !objetoSujeto.esRecompensa)
+        if (tsunadeInRange() && objetoSujeto != null && !objetoSujeto.esRecompensa)
         {
             tsunadePanel.SetActive(true);
             gameObject.GetComponent<movement>().puedoMoverme = false;
         }
+        
+        //Beber pocion si la tiene equipada y mostrar mensaje HUD
+        MostrarMensajePocion();
+
+        if (objetoSujeto != null && objetoSujeto.nombreObjeto == "Pocion" && Input.GetKeyDown(KeyCode.X))
+        {
+            BeberPocion();
+        }
     }
 
+    private void MostrarMensajePocion()
+    {
+        if (objetoSujeto != null && objetoSujeto.nombreObjeto == "Pocion")
+        {
+            mensajePocion.SetActive(true);
+        }
+        else
+        {
+            mensajePocion.SetActive(false);
+        }
+    }
+
+    private void BeberPocion()
+    {
+        Debug.Log("Has bebido la poción");
+
+        //Mostrar animacion beber pocion
+        Destroy(objetoSujeto.gameObject);
+        objetoSujeto = null;
+        mensajePocion.SetActive(false);
+    }
 
     //Coger objeto cercano
     public void CogerObjeto()
@@ -317,6 +349,12 @@ public class StatesMachine : MonoBehaviour
             Debug.Log("Saliste del rango de Tsunade");
             tsunadeCerca = false;
         }
+    }
+
+    bool tsunadeInRange()
+    {
+        float distancia = Vector2.Distance(transform.position, tsunade.transform.position);
+        return distancia <= 1.5f;
     }
 
     public void AceptarEntrega()

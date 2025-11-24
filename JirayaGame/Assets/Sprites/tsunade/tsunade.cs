@@ -8,7 +8,7 @@ public class tsunade : MonoBehaviour
     public enum State {Idle, Talking};
     private State currentState;
     private GameObject player;
-    public float rangoPlayer = 1f;
+    public float rangoPlayer = 1.5f;
     public ScrollPanel scrollPanel;
     public GameObject panelDialogo;
     public GameObject tsunadePanel2;

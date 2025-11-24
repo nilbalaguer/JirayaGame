@@ -18,6 +18,8 @@ public class BombardaScript : MonoBehaviour
     public float retrocesoMultiplicar = 1;
 
     private Vector3 startPosition;
+    public bool municion = false;
+    public bool polvora = false;
 
     void Start()
     {
@@ -30,7 +32,7 @@ public class BombardaScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Fire1") && playerTouching)
+        if (Input.GetButtonDown("Fire1") && playerTouching && polvora && municion)
         {
             shoting = true;
             shotingCounter = 0.1f;
@@ -47,6 +49,9 @@ public class BombardaScript : MonoBehaviour
             shotingCounter += Time.deltaTime;
             luzDisparo.intensity = shotingCounter * 50f;
             transform.Translate(-transform.up * retrocesoMultiplicar * Time.deltaTime, Space.World);
+
+            municion = false;
+            polvora = false;
 
             if (shotingCounter >= 0.5f)
             {
@@ -71,6 +76,18 @@ public class BombardaScript : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerTouching = true;
+        }
+
+        if (other.gameObject.name == "bolaDeCanyonObject" && !municion)
+        {
+            municion = true;
+            Destroy(other.gameObject);
+        }
+
+        if (other.gameObject.name == "barrilPolvora" && !polvora)
+        {
+            polvora = true;
+            Destroy(other.gameObject);
         }
     }
 

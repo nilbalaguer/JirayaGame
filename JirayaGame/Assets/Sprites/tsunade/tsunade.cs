@@ -82,6 +82,7 @@ public class tsunade : MonoBehaviour
                 anim.SetInteger("state", 1);
                 panelDialogo.SetActive(true);
                 panelDialogo.GetComponent<panelTsunade>().DialogoSetup(objetoRecibido.nombreObjeto);
+                //Si se han entregado los 3 objetos mostrar dialofo final
                 playerScript.GetComponent<movement>().puedoMoverme = false;
                 break;
         }
@@ -97,6 +98,12 @@ public class tsunade : MonoBehaviour
         }else if (PlayerinRange() && playerScript.objetoSujeto != null && objetoRecompensa != null &&objetoRecompensa.esRecompensa)
         {
             tsunadePanel2.SetActive(false);
+        }
+
+        if (PlayerinRange() && CambioMapa.Instance.objetosRecogidos.Count >= 3)
+        {
+            panelDialogo.SetActive(true);
+            panelDialogo.GetComponent<panelTsunade>().DialogoFinal();
         }
     }
 

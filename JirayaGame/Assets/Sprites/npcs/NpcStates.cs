@@ -446,7 +446,6 @@ public class NpcStates : MonoBehaviour
                 dialogMisionMostrado = false;
                 MostrarDialogoFinal();
             }
-        //}
             else
             {
                 Debug.Log("No llevas la nota correcta.");

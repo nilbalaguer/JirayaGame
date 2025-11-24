@@ -1,10 +1,16 @@
 fileFormatVersion: 2
-guid: f24f15236d4366e48817a01e909ce538
+guid: f9caa7b51ec872b48bdeb2ae1f1b4520
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5593516509926857283
-    second: hokora1_0
+      213: 5578552524314158746
+    second: farol (1)_0
+  - first:
+      213: 1789487678264842024
+    second: farol (1)_1
+  - first:
+      213: 394647058143670077
+    second: farol (1)_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +52,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -100,13 +106,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: hokora1_0
+      name: farol (1)_0
       rect:
         serializedVersion: 2
-        x: 5
-        y: 8
-        width: 28
-        height: 32
+        x: 8
+        y: 4
+        width: 11
+        height: 22
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +121,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 34a197b41a920ad40800000000000000
-      internalID: 5593516509926857283
+      spriteID: a96aa94e6fffa6d40800000000000000
+      internalID: 5578552524314158746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: farol (1)_1
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 4
+        width: 11
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8271ae0ff8985d810800000000000000
+      internalID: 1789487678264842024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: farol (1)_2
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 4
+        width: 11
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d3f6e4098611a7500800000000000000
+      internalID: 394647058143670077
       vertices: []
       indices: 
       edges: []
@@ -125,7 +175,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 2ff64c231b79d4843865adc610fa3d84
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +185,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      hokora1_0: 5593516509926857283
+      farol (1)_0: 5578552524314158746
+      farol (1)_1: 1789487678264842024
+      farol (1)_2: 394647058143670077
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

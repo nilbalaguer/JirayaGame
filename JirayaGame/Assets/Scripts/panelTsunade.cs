@@ -9,6 +9,7 @@ public class panelTsunade : MonoBehaviour
     public string[] paginasFlor;
     public string[] paginasCollar;
     public string[] paginasPergamino;
+    public string[] paginasFinal;
 
     public TextMeshProUGUI textoPanel;
     public Button btnNext;
@@ -53,6 +54,13 @@ public class panelTsunade : MonoBehaviour
                 break;
         }
 
+        paginaActual = 0;
+        ShowPage();
+    }
+
+    public void DialogoFinal()
+    {
+        paginas = paginasFinal;
         paginaActual = 0;
         ShowPage();
     }

@@ -5,6 +5,9 @@ using System.Collections.Generic;
 public class ShamisenScriptMelodia : MonoBehaviour
 {
     [SerializeField] AudioSource shamisenAudioSource;
+    [SerializeField] GameObject puertaDestruir;
+    [SerializeField] AudioClip sonidoCristal;
+    [SerializeField] ParticleSystem particleSystem;
 
     // Diccionario de notas semitonos desde La4
     private Dictionary<string, int> noteOffsets = new Dictionary<string, int>()
@@ -75,7 +78,11 @@ public class ShamisenScriptMelodia : MonoBehaviour
         {
             if (gameManager.partiturasNumero == 2)
             {
+                Destroy(puertaDestruir, 2f);
+                particleSystem.Play();
+                shamisenAudioSource.PlayOneShot(sonidoCristal);
                 StartCoroutine(TocarMelodia());
+                Destroy(gameObject, 5f);
             } else
             {
                 Debug.Log("Te faltan las partituras! Poner un mensaje en pantalla de esto");

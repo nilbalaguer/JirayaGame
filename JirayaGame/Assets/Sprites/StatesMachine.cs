@@ -305,7 +305,7 @@ public class StatesMachine : MonoBehaviour
         }
         objetoSujeto.transform.position = puntoSujecion.position;
         objetoSujeto.transform.rotation = puntoSujecion.rotation;
-        
+
         objetoSujeto.Coger(puntoSujecion);
         objetoSujeto.transform.localScale = Vector3.one;
     }

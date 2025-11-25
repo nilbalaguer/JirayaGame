@@ -2,11 +2,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    public enum Estado {Normal, Intro};
+    public enum Estado { Normal, Intro };
     public Estado estadoActual = Estado.Normal;
     public Inventario inventario;
     public StatesMachine player;
@@ -16,6 +17,31 @@ public class GameManager : MonoBehaviour
     private NpcStates npcIntroActual;
     public TextMeshProUGUI textoMonedas;
     public int monedas = 0;
+
+
+    private string ubicacion = "overworld";
+
+    //HUD
+
+    //Sonidos
+    [Header("Sonidos")]
+    [SerializeField] AudioClip deathSound;
+    [SerializeField] AudioClip enemyDeathSound;
+    private AudioSource audioSource;
+    //Vida
+    public float vidaPlayer;
+
+    //Player
+    private GameObject playerGameObject;
+
+    //Estadisticas
+    public float tiempoDeJuego = 0f;
+
+    [Header("Sprites")]
+    [SerializeField] GameObject sangrePrefab;
+
+    //Partituras obtendias
+    public int partiturasNumero = 0;
 
     public GameObject tiendaAlerta;
 
@@ -43,6 +69,29 @@ public class GameManager : MonoBehaviour
 
     //Partituras obtendias
     public int partiturasNumero = 0;
+    private Vector2 posicionInicioSiguienteEscena;
+    private Image indicadorVida;
+
+    //Controlar Que Puertas estan activadas
+    public Dictionary<string, bool> estadosTP = new Dictionary<string, bool>();
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
+
+            estadosTP["mazzmorraEspjeos"] = true;
+            estadosTP["mazzmorraBotones"] = true;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -53,8 +102,10 @@ public class GameManager : MonoBehaviour
 
         IniciarIntro();
         monedas = 0;
-        textoMonedas.text = monedas.ToString();
-        tiendaAlerta.SetActive(false);
+        //textoMonedas.text = monedas.ToString();
+        //tiendaAlerta.SetActive(false);
+
+        playerGameObject = GameObject.Find("Player");
     }
 
     // Update is called once per frame
@@ -69,19 +120,8 @@ public class GameManager : MonoBehaviour
                 npcIntroActual = null;
             }
         }
-    }
 
-    void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        tiempoDeJuego += Time.deltaTime;
     }
 
     public void IniciarIntro()
@@ -143,6 +183,7 @@ public class GameManager : MonoBehaviour
     public void ObtenerPartitura()
     {
         partiturasNumero += 1;
+
     }
 
 
@@ -174,9 +215,101 @@ public class GameManager : MonoBehaviour
             Invoke("DesactivartiendaAlerta", 1f);
         }
     }
-    
+
     private void DesactivartiendaAlerta()
     {
         tiendaAlerta.SetActive(false);
+    }
+
+    public void PantallaDerrota()
+    {
+        //Si la vida del player es 0 se muestra esta pantalla
+    }
+
+    public void ReducirVida(int reduccion)
+    {
+        vidaPlayer -= reduccion;
+
+        indicadorVida.fillAmount = vidaPlayer / 10;
+
+        if (vidaPlayer <= 0)
+        {
+            PlayerDie();
+        }
+    }
+
+    public void AumentarVida(int incrementacion)
+    {
+        vidaPlayer += incrementacion;
+
+    }
+
+    public void PlayerDie()
+    {
+        audioSource.PlayOneShot(deathSound);
+        Transform playerTransform = playerGameObject.transform;
+        Instantiate(sangrePrefab, playerTransform.position, Quaternion.identity);
+
+        Time.timeScale = 0f;
+    }
+
+    public void ChangeUbication(string ubi)
+    {
+        ubicacion = ubi;
+    }
+
+    public void PlayDeathSound()
+    {
+        audioSource.PlayOneShot(enemyDeathSound);
+    }
+
+    public void ObtenerPartitura()
+    {
+        partiturasNumero += 1;
+    }
+
+    public void CambiarEscena(string escenaObjetivo, Vector2 posicionObjetivo)
+    {
+        posicionInicioSiguienteEscena = posicionObjetivo;
+        SceneManager.LoadScene(escenaObjetivo);
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        playerGameObject = GameObject.FindGameObjectWithTag("Player");
+
+        if (playerGameObject != null)
+        {
+            playerGameObject.transform.position = posicionInicioSiguienteEscena;
+
+            audioSource = gameObject.GetComponent<AudioSource>();
+
+            GameObject parryObj = GameObject.Find("vidaIndicator");
+            indicadorVida = parryObj.GetComponent<Image>();
+            indicadorVida.fillAmount = vidaPlayer / 10;
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró el jugador en la nueva escena.");
+        }
+    }
+
+    public bool EstaTpHabilitado(string claveTP)
+    {
+        if (string.IsNullOrEmpty(claveTP)) return true; // si no se asigna una clave, dejar pasar
+        if (estadosTP.TryGetValue(claveTP, out bool estado))
+        {
+            return estado;
+        }
+        else
+        {
+            Debug.LogWarning($"No se encontró la clave '{claveTP}' en el diccionario de TPs.");
+            return false;
+        }
+    }
+
+    public void DesabilitarTP(string claveTP)
+    {
+        estadosTP[claveTP] = false;
     }
 }

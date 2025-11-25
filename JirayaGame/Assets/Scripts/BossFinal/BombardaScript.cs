@@ -22,6 +22,8 @@ public class BombardaScript : MonoBehaviour
     public bool municion = false;
     public bool polvora = false;
     [SerializeField] GameObject prefabProyectil;
+    [SerializeField] Transform camera;
+    [SerializeField] Transform posicionCamara;
 
     void Start()
     {
@@ -45,6 +47,7 @@ public class BombardaScript : MonoBehaviour
             GameObject tempProyectil = Instantiate(prefabProyectil, puntoDisparo.position, Quaternion.identity);
             Rigidbody2D tempProyectilrb = tempProyectil.GetComponent<Rigidbody2D>();
             tempProyectilrb.AddForce(Vector2.up * 200f, ForceMode2D.Impulse);
+            Destroy(tempProyectil, 30f);
         }
 
         if (shotingCounter >= 0.1f)
@@ -78,6 +81,13 @@ public class BombardaScript : MonoBehaviour
         if (!shoting && transform.position != startPosition)
         {
             transform.position = Vector3.MoveTowards(transform.position, startPosition, 0.5f * Time.deltaTime);
+        }
+    }
+
+    void LateUpdate() {
+        if ((playerTouching && polvora && municion) || (transform.position != startPosition))
+        {
+            camera.position = posicionCamara.position;
         }
     }
 

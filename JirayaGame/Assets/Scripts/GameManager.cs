@@ -45,30 +45,21 @@ public class GameManager : MonoBehaviour
 
     public GameObject tiendaAlerta;
 
-    private string ubicacion = "overworld";
-
     //HUD
     //private TextMeshProUGUI textoVida;
 
     //Sonidos
     [Header("Sonidos")]
-    [SerializeField] AudioClip deathSound;
-    [SerializeField] AudioClip enemyDeathSound;
-    private AudioSource audioSource;
     //Vida
-    public float vidaPlayer;
 
     //Player
-    private GameObject playerGameObject;
 
     //Estadisticas
     private int enemiesKilled = 0;
 
     [Header("Sprites")]
-    [SerializeField] GameObject sangrePrefab;
 
     //Partituras obtendias
-    public int partiturasNumero = 0;
     private Vector2 posicionInicioSiguienteEscena;
     private Image indicadorVida;
 
@@ -141,25 +132,6 @@ public class GameManager : MonoBehaviour
             npcIntroActual.introTerminada = true;
         }
     }
-
-    public void ReducirVida(int reduccion)
-    {
-        vidaPlayer -= reduccion;
-
-        //textoVida.text = "Vida: " + vidaPlayer;
-
-        if (vidaPlayer <= 0)
-        {
-            PlayerDie();
-        }
-    }
-
-    public void AumentarVida(int incrementacion)
-    {
-        vidaPlayer += incrementacion;
-
-        //textoVida.text = "Vida: " + vidaPlayer;
-    }
     
      public void PlayerDie()
     {
@@ -168,16 +140,6 @@ public class GameManager : MonoBehaviour
         Instantiate(sangrePrefab, playerTransform.position, Quaternion.identity);
 
         Time.timeScale = 0f;
-    }
-
-    public void ChangeUbication(string ubi)
-    {
-        ubicacion = ubi;
-    }
-
-    public void PlayDeathSound()
-    {
-        audioSource.PlayOneShot(enemyDeathSound);
     }
 
     public void ObtenerPartitura()
@@ -244,15 +206,6 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void PlayerDie()
-    {
-        audioSource.PlayOneShot(deathSound);
-        Transform playerTransform = playerGameObject.transform;
-        Instantiate(sangrePrefab, playerTransform.position, Quaternion.identity);
-
-        Time.timeScale = 0f;
-    }
-
     public void ChangeUbication(string ubi)
     {
         ubicacion = ubi;
@@ -261,11 +214,6 @@ public class GameManager : MonoBehaviour
     public void PlayDeathSound()
     {
         audioSource.PlayOneShot(enemyDeathSound);
-    }
-
-    public void ObtenerPartitura()
-    {
-        partiturasNumero += 1;
     }
 
     public void CambiarEscena(string escenaObjetivo, Vector2 posicionObjetivo)

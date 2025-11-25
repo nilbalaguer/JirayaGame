@@ -31,6 +31,7 @@ public class Objeto : MonoBehaviour
     }
 
     //Funciones para la mecanica de coger y lanzar objetos  
+    
 
     public void Coger(Transform puntoSujecion)
     {
@@ -112,6 +113,8 @@ public class Objeto : MonoBehaviour
             Canvas.SetActive(false);
         }
     }
+
+    
     
     /*void OnTriggerEnter2D(Collider2D collision)
     {

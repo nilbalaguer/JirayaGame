@@ -3,6 +3,7 @@ using UnityEngine.Rendering.Universal;
 
 public class BombardaScript : MonoBehaviour
 {
+    public BossController bossController;
     private Transform puntoDisparo;
 
     [SerializeField] Animator animatorExplosion;
@@ -20,6 +21,7 @@ public class BombardaScript : MonoBehaviour
     private Vector3 startPosition;
     public bool municion = false;
     public bool polvora = false;
+    [SerializeField] GameObject prefabProyectil;
 
     void Start()
     {
@@ -36,6 +38,13 @@ public class BombardaScript : MonoBehaviour
         {
             shoting = true;
             shotingCounter = 0.1f;
+
+            //Le dice al bossController que se a disparado la bombarda
+            bossController.DispararBombarda();
+
+            GameObject tempProyectil = Instantiate(prefabProyectil, puntoDisparo.position, Quaternion.identity);
+            Rigidbody2D tempProyectilrb = tempProyectil.GetComponent<Rigidbody2D>();
+            tempProyectilrb.AddForce(Vector2.up * 200f, ForceMode2D.Impulse);
         }
 
         if (shotingCounter >= 0.1f)
@@ -78,13 +87,13 @@ public class BombardaScript : MonoBehaviour
             playerTouching = true;
         }
 
-        if (other.gameObject.name == "bolaDeCanyonObject" && !municion)
+        if (other.gameObject.name == "bolaDeCanyonObject(Clone)" && !municion)
         {
             municion = true;
             Destroy(other.gameObject);
         }
 
-        if (other.gameObject.name == "barrilPolvora" && !polvora)
+        if (other.gameObject.name == "barrilPolvora(Clone)" && !polvora)
         {
             polvora = true;
             Destroy(other.gameObject);

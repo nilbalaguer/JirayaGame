@@ -65,6 +65,21 @@ public class PlayerController : MonoBehaviour
 
     [Header("Sprites Bloqueo")]
     [SerializeField] Sprite[] spritesBloqueo;
+    public Transform puntoSujecion;
+    private Objeto objetoCercano;
+    public Objeto objetoSujeto;
+    public float fuerzaLanzamiento = 10f;
+    private Inventario inventario;
+
+    public GameObject CanvasInfo;
+    public GameObject tsunadePanel;
+    public GameObject tsunadePanel2;
+    public bool tsunadeCerca = false;
+
+    //public ScrollPanel scrollPanel;
+    private GameObject tsunade;
+    public panelErmitaño panelScript;
+    public GameObject mensajePocion;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -90,6 +105,11 @@ public class PlayerController : MonoBehaviour
 
         //Obtener sprite renderer
         spriteRendererPlayer = gameObject.GetComponentInChildren<SpriteRenderer>();
+
+        inventario = GetComponent<Inventario>();
+        CanvasInfo.SetActive(false);
+        tsunadePanel.SetActive(false);
+        tsunade = GameObject.FindWithTag("Tsunade");
     }
 
     // Update is called once per frame
@@ -200,6 +220,41 @@ public class PlayerController : MonoBehaviour
                 if (rigidBody.linearVelocity.x == 0 && rigidBody.linearVelocity.y == 0 && state != "Attack")
                 {
                     state = "idle";
+                }
+
+                /*if (Input.GetKeyDown(KeyCode.E))
+                {
+                    state = "Coger";
+                }*/
+
+                        //si el objeto esta cogido puedo lanzarlo o guardarlo en el inventario
+                if (Input.GetKeyDown(KeyCode.Space) && objetoSujeto != null)
+                {
+                    LanzarObjeto();
+                }
+                else if (Input.GetKeyDown(KeyCode.G) && objetoSujeto != null)
+                {
+                    GuardarObjeto();
+                }
+                //Soltar el objeto en caso de no necesitarlo
+                else if (Input.GetKeyDown(KeyCode.Z) && objetoSujeto != null)
+                {
+                    SoltarObjeto();
+                }
+
+                //Mostrar paneles tsunade al acercarme a ella
+                if (tsunadeInRange() && objetoSujeto != null && !objetoSujeto.esRecompensa)
+                {
+                    tsunadePanel.SetActive(true);
+                    gameObject.GetComponent<movement>().puedoMoverme = false;
+                }
+                
+                //Beber pocion si la tiene equipada y mostrar mensaje HUD
+                MostrarMensajePocion();
+
+                if (objetoSujeto != null && objetoSujeto.nombreObjeto == "Pocion" && Input.GetKeyDown(KeyCode.X))
+                {
+                    BeberPocion();
                 }
 
                 if (Input.GetButtonDown("Fire1") && cooldownMele <= 0)
@@ -410,6 +465,158 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void MostrarMensajePocion()
+    {
+        if (objetoSujeto != null && objetoSujeto.nombreObjeto == "Pocion")
+        {
+            mensajePocion.SetActive(true);
+        }
+        else
+        {
+            mensajePocion.SetActive(false);
+        }
+    }
+
+    private void BeberPocion()
+    {
+        Debug.Log("Has bebido la poción");
+
+        //Mostrar animacion beber pocion
+        Destroy(objetoSujeto.gameObject);
+        objetoSujeto = null;
+        mensajePocion.SetActive(false);
+    }
+
+    //Coger objeto cercano
+    public void CogerObjeto()
+    {
+        if (objetoSujeto == null && objetoCercano != null)
+        {
+            float distancia = Vector2.Distance(transform.position, objetoCercano.transform.position);
+            float rangoDeteccion = 2f;
+            if (distancia <= rangoDeteccion)
+            {
+                objetoSujeto = objetoCercano;
+                objetoSujeto.Coger(puntoSujecion);
+                CanvasInfo.SetActive(true);
+                if ((objetoCercano.nombreObjeto == "PergaminoSagrado" || objetoCercano.nombreObjeto == "CollarShizune" || objetoCercano.nombreObjeto == "Flor")
+                && objetoCercano.yaRecogido == false)
+                {
+                    CambioMapa.Instance.objetosRecogidos += 1;
+                    CambioMapa.Instance.ActualizarContadorObjetos();
+                    objetoCercano.yaRecogido = true;
+                }
+                else
+                {
+                    Debug.Log("El objeto ya ha sido recogido anteriormente.");
+                }
+            }
+            else
+            {
+                objetoCercano = null;
+                Debug.Log("El objeto está fuera de rango para ser cogido.");
+            }
+        }
+    }
+
+    //Lanzar objeto sujeto
+    public void LanzarObjeto()
+    {
+        if (objetoSujeto == null)
+        {
+            return;
+        }
+
+    Vector2 direccion = puntoSujecion.position - transform.position;
+    if (direccion.sqrMagnitude < 0.01)
+    {
+        if (rigidBody != null && rigidBody.linearVelocity.magnitude > 0.01f)
+            direccion = rigidBody.linearVelocity.normalized;
+        else
+            direccion = Vector2.right; 
+    }
+
+    
+    Objeto objetoLanzado = objetoSujeto;
+    objetoLanzado.Lanzar(direccion, fuerzaLanzamiento);
+    
+    objetoSujeto = null;
+
+        
+        string nombre = objetoLanzado != null ? objetoLanzado.nombreObjeto : null;
+
+        Inventario.InventoryEntry entrada = inventario.objetos.Find(e => e.nombre == nombre);
+    if (entrada != null && entrada.cantidad > 0)
+        {
+
+            GameObject nuevaGO = Instantiate(entrada.prefab, puntoSujecion.position, puntoSujecion.rotation);
+            Objeto nuevoObjeto = nuevaGO.GetComponent<Objeto>();
+            if (nuevoObjeto != null)
+            {
+                nuevaGO.SetActive(true);
+
+                // Equipar el nuevo objeto y decrementar la cantidad en el inventario
+                EquiparObjeto(nuevoObjeto);
+                inventario.EliminarObjeto(entrada);
+            }
+            else
+            {
+                Debug.Log("El objeto instanciado no tiene componente Objeto.");
+                objetoSujeto = null;
+            }
+        }
+        else
+        {
+            objetoSujeto = null;
+            //objetoLanzado.gameObject.SetActive(false);
+        }
+    }
+
+    //Guardar objeto en inventario
+    public void GuardarObjeto()
+    {
+        inventario.AñadirObjeto(objetoSujeto);
+        objetoSujeto.CogerObjeto();
+        objetoSujeto = null;
+        Debug.Log("Objeto guardado en inventario.");
+    }
+
+    //Equipar objeto desde inventario
+    public void EquiparObjeto(Objeto objetoCercano)
+    {
+        if (objetoSujeto != null)
+        {
+            objetoSujeto.transform.SetParent(null);
+            objetoSujeto.gameObject.SetActive(false);
+        }
+        objetoSujeto = objetoCercano;
+        Debug.Log($"[StatesMachine] Equipando objeto '{objetoCercano?.nombreObjeto}'");
+        objetoSujeto.gameObject.SetActive(true);
+        //Resetar valores del rididbody cada vez que se equipe un objeto
+        Rigidbody2D rb = objetoSujeto.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.angularVelocity = 0f;
+            rb.rotation = 0f;
+            rb.bodyType = RigidbodyType2D.Kinematic;
+            rb.gravityScale = 0;
+        }
+        objetoSujeto.transform.position = puntoSujecion.position;
+        objetoSujeto.transform.rotation = puntoSujecion.rotation;
+
+        objetoSujeto.Coger(puntoSujecion);
+        objetoSujeto.transform.localScale = Vector3.one;
+    }
+    public void SoltarObjeto()
+    {
+        if (objetoSujeto != null)
+        {
+            objetoSujeto.Soltar();
+            objetoSujeto = null;
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("intObject") && toatTongeTonge.enabled)
@@ -448,12 +655,39 @@ public class PlayerController : MonoBehaviour
             gameManager.PlayerDie();
         }
 
+        if (other.CompareTag("intObject"))
+        {
+            objetoCercano = other.GetComponent<Objeto>();
+        }
+        if (other.CompareTag("Tsunade"))
+        {
+            Debug.Log("Entraste en el rango de Tsunade");
+            tsunadeCerca = true;
+        }
+        if (other.CompareTag("Moneda"))
+        {
+            GameManager.Instance.RecolectarMonedas();
+        }
+
     }
 
     private void OnTriggerExit2D(Collider2D other) {
         if (other.CompareTag("nenufar"))
         {
             other.gameObject.layer = 3;
+        }
+
+        if (other.CompareTag("intObject"))
+        {
+            if (objetoCercano != null && other.gameObject == objetoCercano.gameObject)
+            {
+                objetoCercano = null;
+            }
+        }
+        if (other.CompareTag("Tsunade"))
+        {
+            Debug.Log("Saliste del rango de Tsunade");
+            tsunadeCerca = false;
         }
     }
 
@@ -535,6 +769,36 @@ public class PlayerController : MonoBehaviour
         rigidBody.simulated = true;
 
         estaSaltando = false;
+    }
+
+    bool tsunadeInRange()
+    {
+        float distancia = Vector2.Distance(transform.position, tsunade.transform.position);
+        return distancia <= 1.5f;
+    }
+
+    public void AceptarEntrega()
+    {
+        /*objetoSujeto.Soltar();
+        objetoSujeto = null;
+        tsunadePanel.SetActive(false);
+        Invoke ("DesactivarObjetoCercano", 0.5f);*/
+        Objeto objetoEntregado = objetoSujeto;
+        tsunade tsunadeScript = GameObject.FindWithTag("Tsunade").GetComponent<tsunade>();
+        tsunadeScript.objetoRecibido = objetoEntregado;
+
+        objetoSujeto.Soltar();
+        objetoSujeto = null;
+
+        objetoEntregado.gameObject.SetActive(false);
+        inventario.EliminarObjeto(objetoEntregado);
+
+        //Invoke ("DesactivarObjetoCercano", 0.5f);
+    }
+
+    public void RecibirRecompensa(Objeto recompensa)
+    {
+        inventario.AñadirObjeto(recompensa);
     }
 
 }

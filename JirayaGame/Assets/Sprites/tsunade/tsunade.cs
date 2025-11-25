@@ -100,11 +100,11 @@ public class tsunade : MonoBehaviour
             tsunadePanel2.SetActive(false);
         }
 
-        if (PlayerinRange() && CambioMapa.Instance.objetosRecogidos.Count >= 3)
+        /*if (PlayerinRange() && CambioMapa.Instance.objetosRecogidos.Count >= 3)
         {
             panelDialogo.SetActive(true);
             panelDialogo.GetComponent<panelTsunade>().DialogoFinal();
-        }
+        }*/
     }
 
     bool PlayerinRange()

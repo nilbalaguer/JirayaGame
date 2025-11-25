@@ -119,6 +119,57 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &29840793
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 29840795}
+  - component: {fileID: 29840794}
+  m_Layer: 0
+  m_Name: Timeline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!320 &29840794
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 29840793}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: 2dc3fef3992cb1749ada6604947732c4, type: 2}
+  m_InitialState: 1
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: 5744497764221917129, guid: 2dc3fef3992cb1749ada6604947732c4, type: 2}
+    value: {fileID: 685008306}
+  m_ExposedReferences:
+    m_References: []
+--- !u!4 &29840795
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 29840793}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 21.416208, y: -2.7010345, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &51435819
 GameObject:
   m_ObjectHideFlags: 0
@@ -1199,7 +1250,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &211665412
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1799,6 +1850,7 @@ MonoBehaviour:
   - Llevaba mucho tiempo buscando mi collar, gracias por encontrarlo
   paginasPergamino:
   - Este pergamino tiene mucho valor, toma esto
+  paginasFinal: []
   textoPanel: {fileID: 1965500462}
   btnNext: {fileID: 1490677696}
   iconoFlecha: {fileID: 21300000, guid: 120ac3627854a984f98fc55a7d8f8de4, type: 3}
@@ -3769,6 +3821,7 @@ GameObject:
   - component: {fileID: 685008301}
   - component: {fileID: 685008304}
   - component: {fileID: 685008305}
+  - component: {fileID: 685008306}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3819,7 +3872,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 1.62
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -3844,7 +3897,7 @@ Transform:
   m_GameObject: {fileID: 685008300}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 21.84, y: -2.14, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3908,6 +3961,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b85410354b30194e9a05ddb8cae1a92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &685008306
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685008300}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &686392973
 GameObject:
   m_ObjectHideFlags: 0
@@ -10888,7 +10963,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1646467521
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14987,3 +15062,4 @@ SceneRoots:
   - {fileID: 182648303}
   - {fileID: 761471052}
   - {fileID: 1782143265}
+  - {fileID: 29840795}

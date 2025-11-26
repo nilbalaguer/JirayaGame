@@ -10,7 +10,8 @@ public class GameManager : MonoBehaviour
     public enum Estado { Normal, Intro };
     public Estado estadoActual = Estado.Normal;
     public Inventario inventario;
-    public StatesMachine player;
+    //public StatesMachine player;
+    public PlayerController player;
     private Objeto objetoCompradoNuevo;
 
     public NpcStates npcIntro;
@@ -107,7 +108,7 @@ public class GameManager : MonoBehaviour
             if (npcIntroActual.introTerminada)
             {
                 estadoActual = Estado.Normal;
-                player.GetComponent<movement>().puedoMoverme = true;
+                player.puedoMoverme = true;
                 npcIntroActual = null;
             }
         }
@@ -118,7 +119,7 @@ public class GameManager : MonoBehaviour
     public void IniciarIntro()
     {
         estadoActual = Estado.Intro;
-        player.GetComponent<movement>().puedoMoverme = false;
+        player.puedoMoverme = false;
 
         npcIntro.NpcIntro = true;
         npcIntro.currentState = NpcStates.State.Intro;

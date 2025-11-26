@@ -106,7 +106,7 @@ public class BehaviourErmitaño : MonoBehaviour
                 if (!panelScript.hasTalked)
                 {
                     panelDialogo.SetActive(true);
-                    player.GetComponent<movement>().puedoMoverme = false;
+                    player.GetComponent<PlayerController>().puedoMoverme = false;
                 }
                 break;
             case State.Patrol:
@@ -164,7 +164,7 @@ public class BehaviourErmitaño : MonoBehaviour
 
         if (absX > absY)
         {
-            transform.localScale = new Vector3(dir.x < 0 ? -5 : 5, 5, 5);
+            transform.localScale = new Vector3(dir.x < 0 ? -3 : 3, 3, 3);
         }
     }
     

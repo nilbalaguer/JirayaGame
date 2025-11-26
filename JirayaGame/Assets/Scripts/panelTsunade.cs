@@ -18,7 +18,8 @@ public class panelTsunade : MonoBehaviour
     public Sprite iconoCruz;
     public ScrollPanel scrollPanel;
     public tsunade tsunadeScript;
-    public StatesMachine playerScript;
+    //public StatesMachine playerScript;
+    public PlayerController playerScript;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -92,7 +93,7 @@ public class panelTsunade : MonoBehaviour
             animator.SetTrigger("Close");
             scrollPanel.entregarObjeto = false;
             tsunadeScript.EntregarRecompensa();
-            playerScript.GetComponent<movement>().puedoMoverme = true;
+            playerScript.puedoMoverme = true;
         }
     }
 

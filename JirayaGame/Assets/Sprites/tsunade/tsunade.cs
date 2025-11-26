@@ -14,7 +14,8 @@ public class tsunade : MonoBehaviour
     public GameObject tsunadePanel2;
 
     public GameObject[] recompensas;
-    public StatesMachine playerScript;
+    //public StatesMachine playerScript;
+    public PlayerController playerScript;
     //private Objeto objetoSujeto;
     private Objeto objetoRecompensa;
     public Objeto objetoRecibido;
@@ -62,7 +63,7 @@ public class tsunade : MonoBehaviour
                 Vector2 directionToPlayer = player.transform.position - transform.position;
                 if (Mathf.Abs(directionToPlayer.x) > Mathf.Abs(directionToPlayer.y))
                 {
-                    transform.localScale = new Vector3(directionToPlayer.x < 0 ? -5 : 5, 5, 5);
+                    transform.localScale = new Vector3(directionToPlayer.x < 0 ? -3 : 3, 3, 3);
                     anim.SetInteger("state", 0);
                 }
                 else
@@ -83,7 +84,7 @@ public class tsunade : MonoBehaviour
                 panelDialogo.SetActive(true);
                 panelDialogo.GetComponent<panelTsunade>().DialogoSetup(objetoRecibido.nombreObjeto);
                 //Si se han entregado los 3 objetos mostrar dialofo final
-                playerScript.GetComponent<movement>().puedoMoverme = false;
+                playerScript.puedoMoverme = false;
                 break;
         }
         
@@ -93,7 +94,7 @@ public class tsunade : MonoBehaviour
             {
                 tsunadePanel2.SetActive(true);
                 anim.SetInteger("state", 1);
-                playerScript.GetComponent<movement>().puedoMoverme = false;
+                playerScript.puedoMoverme = false;
             }
         }else if (PlayerinRange() && playerScript.objetoSujeto != null && objetoRecompensa != null &&objetoRecompensa.esRecompensa)
         {

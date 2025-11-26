@@ -204,7 +204,7 @@ public class NpcStates : MonoBehaviour
                 Vector2 directionToPlayer = (player.transform.position - transform.position).normalized;
                 if (Mathf.Abs(directionToPlayer.x) > Mathf.Abs(directionToPlayer.y))
                 {
-                    transform.localScale = new Vector3(directionToPlayer.x < 0 ? -5 : 5, 5, 5);
+                    transform.localScale = new Vector3(directionToPlayer.x < 0 ? -3 : 3, 3, 3);
                     anim.SetInteger("state", 7);
                 }
                 else
@@ -222,7 +222,7 @@ public class NpcStates : MonoBehaviour
                 {
                     dialogueBox.SetActive(true);
                     scrollPanel.npcScript = this;
-                    player.GetComponent<movement>().puedoMoverme = false;
+                    player.GetComponent<PlayerController>().puedoMoverme = false;
 
                     scrollPanel.misionsScript = misionNpc;
                 }
@@ -252,7 +252,7 @@ public class NpcStates : MonoBehaviour
                 directionToPlayer = (player.transform.position - transform.position).normalized;
                 if (Mathf.Abs(directionToPlayer.x) > Mathf.Abs(directionToPlayer.y))
                 {
-                    transform.localScale = new Vector3(directionToPlayer.x < 0 ? -5 : 5, 5, 5);
+                    transform.localScale = new Vector3(directionToPlayer.x < 0 ? -3 : 3, 3, 3);
                     anim.SetInteger("state", 7);
                 }
                 else
@@ -303,7 +303,7 @@ public class NpcStates : MonoBehaviour
             //anim.SetInteger("state", 0);
             if (Mathf.Abs(directionToPlayer.x) > Mathf.Abs(directionToPlayer.y))
                 {
-                    transform.localScale = new Vector3(directionToPlayer.x < 0 ? -5 : 5, 5, 5);
+                    transform.localScale = new Vector3(directionToPlayer.x < 0 ? -3 : 3, 3, 3);
                     anim.SetInteger("state", 7);
                 }
                 else
@@ -344,7 +344,7 @@ public class NpcStates : MonoBehaviour
         if (absX > absY)
         {
             anim.SetInteger("state", 1);
-            transform.localScale = new Vector3(dir.x < 0 ? -5 : 5, 5, 5);
+            transform.localScale = new Vector3(dir.x < 0 ? -3 : 3, 3, 3);
         }
         else
         {
@@ -368,6 +368,10 @@ public class NpcStates : MonoBehaviour
     
     bool EnemyinRange()
     {
+        if (enemy == null)
+        {
+            return false;
+        }
         float distancia = Vector2.Distance(transform.position, enemy.transform.position);
         return distancia <= rangoEnemy;
     }
@@ -410,7 +414,7 @@ public class NpcStates : MonoBehaviour
 
     public void MisionObjeto()
     {
-        Objeto objeto = player.GetComponent<StatesMachine>().objetoSujeto;
+        Objeto objeto = player.GetComponent<PlayerController>().objetoSujeto;
         if (objeto != null && objeto.nombreObjeto == "ObjetoCampesino")
         {
             misionNpc.CompletarMision();
@@ -435,7 +439,7 @@ public class NpcStates : MonoBehaviour
                 Debug.Log("Este NPC no es el destino");
                 return;
             }
-            Objeto objeto = player.GetComponent<StatesMachine>().objetoSujeto;
+            Objeto objeto = player.GetComponent<PlayerController>().objetoSujeto;
             if (objeto != null && objeto.nombreObjeto == "NotaMision")
             {
                 objeto.Soltar();

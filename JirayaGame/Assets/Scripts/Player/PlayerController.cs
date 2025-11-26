@@ -203,12 +203,6 @@ public class PlayerController : MonoBehaviour
         if (direccion != Vector2.zero)
             ultimaDireccion = direccion.normalized;
 
-        // Flip horizontal
-        if (forceX < 0)
-            transform.localScale = new Vector3(-5, 5, 5);
-        else if (forceX > 0)
-            transform.localScale = new Vector3(5, 5, 5);
-
         // Punto de sujeción
         Vector2 offset = ultimaDireccion * distanciaSujecion;
 
@@ -251,12 +245,13 @@ public class PlayerController : MonoBehaviour
                     state = "idle";
                 }
 
-                /*if (Input.GetKeyDown(KeyCode.E))
+                if (Input.GetKeyDown(KeyCode.X))
                 {
-                    state = "Coger";
-                }*/
+                    Debug.Log("x pulsada");
+                    CogerObjeto();
+                }
 
-                        //si el objeto esta cogido puedo lanzarlo o guardarlo en el inventario
+                //si el objeto esta cogido puedo lanzarlo o guardarlo en el inventario
                 if (Input.GetKeyDown(KeyCode.Space) && objetoSujeto != null)
                 {
                     LanzarObjeto();
@@ -275,7 +270,7 @@ public class PlayerController : MonoBehaviour
                 if (tsunadeInRange() && objetoSujeto != null && !objetoSujeto.esRecompensa)
                 {
                     tsunadePanel.SetActive(true);
-                    gameObject.GetComponent<movement>().puedoMoverme = false;
+                    puedoMoverme = false;
                 }
                 
                 //Beber pocion si la tiene equipada y mostrar mensaje HUD
@@ -283,7 +278,8 @@ public class PlayerController : MonoBehaviour
 
                 if (objetoSujeto != null && objetoSujeto.nombreObjeto == "Pocion" && Input.GetKeyDown(KeyCode.X))
                 {
-                    BeberPocion();
+                    //BeberPocion();
+                    state = "BeberPocion";
                 }
 
                 if (Input.GetButtonDown("Fire1") && cooldownMele <= 0)
@@ -448,6 +444,10 @@ public class PlayerController : MonoBehaviour
                 indicadorParry.fillAmount = staminaParry / staminaDuration;
 
                 break;
+            case "BeberPocion":
+                BeberPocion();
+                //Animacion beber pocion 
+                break;
 
         }
 
@@ -509,8 +509,6 @@ public class PlayerController : MonoBehaviour
     private void BeberPocion()
     {
         Debug.Log("Has bebido la poción");
-
-        //Mostrar animacion beber pocion
         Destroy(objetoSujeto.gameObject);
         objetoSujeto = null;
         mensajePocion.SetActive(false);

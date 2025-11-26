@@ -9,7 +9,8 @@ public class ScrollPanel : MonoBehaviour
     public npcReputacion reputacion;
     public bool hasTalked = false;
     public bool entregarObjeto = false;
-    public StatesMachine playerScript;
+    //public StatesMachine playerScript;
+    public PlayerController playerScript;
     public NpcStates npcScript;
     public Misions misionsScript;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -56,7 +57,7 @@ public class ScrollPanel : MonoBehaviour
             npcScript = null;
         }
         misionsScript.MostrarMision();
-        playerScript.GetComponent<movement>().puedoMoverme = true;
+        playerScript.puedoMoverme = true;
         if (misionsScript.tipoMision == Misions.MisionTipo.HablarConNpc)
         {
             GameObject npcDest = GameObject.Find(misionsScript.npcDestino);
@@ -86,7 +87,7 @@ public class ScrollPanel : MonoBehaviour
             npcScript.hasTalked = true;
             npcScript = null;
         }
-        playerScript.GetComponent<movement>().puedoMoverme = true;
+        playerScript.puedoMoverme = true;
     }
 
     //Botones panel tsunade

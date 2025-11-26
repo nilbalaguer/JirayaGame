@@ -27,7 +27,8 @@ public class Misions : MonoBehaviour
     private GameObject prefabRecompensa;
     public GameObject[] recompensas;
     private Objeto objetoRecompensa;
-    public StatesMachine playerScript;
+    //public StatesMachine playerScript;
+    public PlayerController playerScript;
     public GameObject[] panelMisionesCompletadas;
     public string npcDestino;
     public GameObject notaPrefab;
@@ -40,7 +41,8 @@ public class Misions : MonoBehaviour
         //Mision[MisionActual] = false;
         //texto.gameObject.SetActive(false);
         panelMision.SetActive(false);
-        playerScript = GameObject.Find("player").GetComponent<StatesMachine>();
+        //playerScript = GameObject.Find("player").GetComponent<StatesMachine>();
+        playerScript = GameObject.Find("Player").GetComponent<PlayerController>();
         foreach (GameObject panel in panelMisionesCompletadas)
         {
             if (panel != null)

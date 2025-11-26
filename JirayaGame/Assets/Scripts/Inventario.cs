@@ -24,7 +24,8 @@ public class Inventario : MonoBehaviour
     public GameObject inventarioUI;
     public GameObject btnPrefab;
     public Transform btnContenedorBotones;
-    public StatesMachine player;
+    //public StatesMachine player;
+    public PlayerController player;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

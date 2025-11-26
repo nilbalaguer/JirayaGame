@@ -21,6 +21,7 @@ public class CabezaSerpiente : MonoBehaviour
 
     //Obtener luz para laser
     [SerializeField] Light2D laserLuz;
+    [SerializeField] SpriteRenderer spriteLuzRespaldo;
     [SerializeField] AudioSource audioSource;
     [SerializeField] AudioClip cargandoLaserSonido;
     [SerializeField] AudioClip disparoSonido;
@@ -33,6 +34,7 @@ public class CabezaSerpiente : MonoBehaviour
         player = GameObject.Find("Player");
 
         laserLuz.enabled = false;
+        spriteLuzRespaldo.enabled = false;
 
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
@@ -99,6 +101,7 @@ public class CabezaSerpiente : MonoBehaviour
         float timerAdicion = 1f;
 
         laserLuz.enabled = true;
+        spriteLuzRespaldo.enabled = true;
 
         audioSource.Play();
 
@@ -113,6 +116,7 @@ public class CabezaSerpiente : MonoBehaviour
         }
 
         laserLuz.enabled = false;
+        spriteLuzRespaldo.enabled = false;
 
         timerAdicion = 1f;
 

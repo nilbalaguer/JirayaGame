@@ -24,6 +24,7 @@ public class BombardaScript : MonoBehaviour
     [SerializeField] GameObject prefabProyectil;
     [SerializeField] Transform camera;
     [SerializeField] Transform posicionCamara;
+    [SerializeField] CabezaSerpiente cabezaSerpiente;
 
     void Start()
     {
@@ -38,6 +39,7 @@ public class BombardaScript : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire1") && playerTouching && polvora && municion)
         {
+
             shoting = true;
             shotingCounter = 0.1f;
 
@@ -46,7 +48,7 @@ public class BombardaScript : MonoBehaviour
 
             GameObject tempProyectil = Instantiate(prefabProyectil, puntoDisparo.position, Quaternion.identity);
             Rigidbody2D tempProyectilrb = tempProyectil.GetComponent<Rigidbody2D>();
-            tempProyectilrb.AddForce(Vector2.up * 200f, ForceMode2D.Impulse);
+            tempProyectilrb.AddForce(Vector2.up * 800f, ForceMode2D.Impulse);
             Destroy(tempProyectil, 30f);
         }
 
@@ -80,14 +82,17 @@ public class BombardaScript : MonoBehaviour
 
         if (!shoting && transform.position != startPosition)
         {
-            transform.position = Vector3.MoveTowards(transform.position, startPosition, 0.5f * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, startPosition, 1.5f * Time.deltaTime);
         }
     }
 
     void LateUpdate() {
+
         if ((playerTouching && polvora && municion) || (transform.position != startPosition))
         {
             camera.position = posicionCamara.position;
+
+            cabezaSerpiente.disparando = true;
         }
     }
 
@@ -114,6 +119,7 @@ public class BombardaScript : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerTouching = false;
+            cabezaSerpiente.disparando = false;
         }
     }
 }

@@ -12,10 +12,15 @@ public class BossController : MonoBehaviour
     [SerializeField] Transform punto1;
     [SerializeField] Transform punto2;
 
+    [SerializeField] AudioClip bossMusic;
+    private AudioSource audioSource;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         RandomizarSaltos();
+
+        audioSource = gameObject.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -50,6 +55,14 @@ public class BossController : MonoBehaviour
             nenufarSalto2.SetActive(true);
             Instantiate(prefabBola, punto2.position, Quaternion.identity);
             Instantiate(prefabPolvora, punto1.position, Quaternion.identity);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        if (other.CompareTag("Player"))
+        {
+            audioSource.clip = bossMusic;
+            audioSource.Play();
         }
     }
 }

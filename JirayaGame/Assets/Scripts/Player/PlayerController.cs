@@ -78,8 +78,11 @@ public class PlayerController : MonoBehaviour
 
     //public ScrollPanel scrollPanel;
     private GameObject tsunade;
-    public panelErmitaño panelScript;
+    //public panelErmitaño panelScript;
     public GameObject mensajePocion;
+    private Vector2 ultimaDireccion = Vector2.right;
+    public float distanciaSujecion = 0.1f;
+    public bool puedoMoverme = true;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -164,6 +167,12 @@ public class PlayerController : MonoBehaviour
         }
 
         //Sistema movimiento
+        if (!puedoMoverme)
+        {
+            rigidBody.linearVelocity = Vector2.zero;
+            return;
+        }
+
         float forceX = Input.GetAxis("Horizontal");
         float forceY = Input.GetAxis("Vertical");
 
@@ -186,8 +195,28 @@ public class PlayerController : MonoBehaviour
 
         Vector2 movimiento = new Vector2(forceX, forceY) * maxSpeed;
 
-
         rigidBody.linearVelocity = movimiento;
+
+        //Mover punto de sujeción junto al jugador
+        Vector2 direccion = new Vector2(forceX, forceY);
+
+        if (direccion != Vector2.zero)
+            ultimaDireccion = direccion.normalized;
+
+        // Flip horizontal
+        if (forceX < 0)
+            transform.localScale = new Vector3(-5, 5, 5);
+        else if (forceX > 0)
+            transform.localScale = new Vector3(5, 5, 5);
+
+        // Punto de sujeción
+        Vector2 offset = ultimaDireccion * distanciaSujecion;
+
+        // Si está flippeado horizontalmente, invierte el offset
+        if (transform.localScale.x < 0)
+            offset.x *= -1;
+
+        puntoSujecion.localPosition = offset;
 
 
         //Maquina de estados

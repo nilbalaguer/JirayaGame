@@ -15,6 +15,6 @@ public class MainMenuController : MonoBehaviour
     void StartGame()
     {
         // Carga la escena del juego (asegúrate de agregarla en Build Settings)
-        SceneManager.LoadScene("SceneRaul");
+        SceneManager.LoadScene("SceneNil");
     }
 }

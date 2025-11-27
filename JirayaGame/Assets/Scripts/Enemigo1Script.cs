@@ -197,12 +197,6 @@ public class Enemigo1Script : MonoBehaviour
                 audioSource.PlayOneShot(sonidoDamage);
             }
         }
-
-        if (other.CompareTag("deathArea"))
-        {
-            gameManager.PlayDeathSound();
-            Destroy(gameObject);
-        }
     }
 
     void OnTriggerExit2D(Collider2D other)

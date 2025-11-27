@@ -362,18 +362,6 @@ public class PlayerController : MonoBehaviour
         //Sincronizar variables animator
         animator.SetFloat("LastDirection", lastMove);
         animator.SetBool("Human", human);
-<<<<<<< HEAD
-=======
-
-        if (state == "Parry")
-        {
-            animator.enabled = false;
-            spriteRendererPlayer.sprite = spritesBloqueo[lastMove - 1];
-        } else
-        {
-            animator.enabled = true;
-        }
->>>>>>> nil
     }
     
     void FixedUpdate()

@@ -170,6 +170,7 @@ public class PlayerController : MonoBehaviour
         if (!puedoMoverme)
         {
             rigidBody.linearVelocity = Vector2.zero;
+            state = "idle";
             return;
         }
 

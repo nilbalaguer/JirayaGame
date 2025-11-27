@@ -21,6 +21,8 @@ public class BehaviourErmitaño : MonoBehaviour
     public panelErmitaño panelScript;
     public bool esErmitañoTienda = false;
     public GameObject CanvasTienda;
+    [HideInInspector]
+    public bool puedeMoverse = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -50,7 +52,7 @@ public class BehaviourErmitaño : MonoBehaviour
                     waiting = true;
                     waitCounter = waitTime;
                 }
-                else if (!PlayerinRange())
+                else if (!PlayerinRange() && puedeMoverse)
                 {
                     waitCounter -= Time.deltaTime;
                     if (waitCounter <= 0f && !esErmitañoTienda)
@@ -78,7 +80,7 @@ public class BehaviourErmitaño : MonoBehaviour
                 }
                 break;
             case State.Patrol:
-                if (esErmitañoTienda)
+                if (esErmitañoTienda || !puedeMoverse)
                 {
                     currentState = State.Idle;
                     break;

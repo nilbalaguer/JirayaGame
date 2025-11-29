@@ -223,6 +223,7 @@ public class PlayerController : MonoBehaviour
             case "MoveLeft":
             case "MoveUp":
             case "MoveDown":
+
                 if (rigidBody.linearVelocity.x > 0)
                 {
                     state = "MoveRight";
@@ -244,6 +245,12 @@ public class PlayerController : MonoBehaviour
                 if (rigidBody.linearVelocity.x == 0 && rigidBody.linearVelocity.y == 0 && state != "Attack")
                 {
                     state = "idle";
+                }
+
+                if (objetoSujeto != null && objetoSujeto.nombreObjeto == "Pocion" && Input.GetKeyDown(KeyCode.X))
+                {
+                    //BeberPocion();
+                    state = "BeberPocion";
                 }
 
                 if (Input.GetKeyDown(KeyCode.X))
@@ -276,12 +283,6 @@ public class PlayerController : MonoBehaviour
                 
                 //Beber pocion si la tiene equipada y mostrar mensaje HUD
                 MostrarMensajePocion();
-
-                if (objetoSujeto != null && objetoSujeto.nombreObjeto == "Pocion" && Input.GetKeyDown(KeyCode.X))
-                {
-                    //BeberPocion();
-                    state = "BeberPocion";
-                }
 
                 if (Input.GetButtonDown("Fire1") && cooldownMele <= 0)
                 {
@@ -446,7 +447,9 @@ public class PlayerController : MonoBehaviour
 
                 break;
             case "BeberPocion":
-                BeberPocion();
+                //animator.SetInteger("State-int", 7);
+                animator.SetTrigger("Beber");
+                //BeberPocion();
                 //Animacion beber pocion 
                 break;
 

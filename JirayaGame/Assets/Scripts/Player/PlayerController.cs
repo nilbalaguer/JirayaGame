@@ -83,6 +83,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 ultimaDireccion = Vector2.right;
     public float distanciaSujecion = 0.1f;
     public bool puedoMoverme = true;
+    [HideInInspector]
+    public bool timelineMostrado = false;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -536,6 +538,11 @@ public class PlayerController : MonoBehaviour
                     CambioMapa.Instance.objetosRecogidos += 1;
                     CambioMapa.Instance.ActualizarContadorObjetos();
                     objetoCercano.yaRecogido = true;
+                    if (!timelineMostrado)
+                    {
+                        Timeline.Instance.ReproducirTimelineTsunade();
+                        timelineMostrado = true;
+                    }
                 }
                 else
                 {

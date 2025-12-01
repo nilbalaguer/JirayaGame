@@ -26,6 +26,9 @@ public class CabezaSerpiente : MonoBehaviour
     [SerializeField] AudioClip cargandoLaserSonido;
     [SerializeField] AudioClip disparoSonido;
 
+    [Header("Animaciones")]
+    [SerializeField] Animator animator;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -88,16 +91,21 @@ public class CabezaSerpiente : MonoBehaviour
             vida -= 1;
 
             Destroy(other.gameObject);
+            animator.Play("serpiente_damage_Clip", 0, 0f);
 
             if (vida <= 0)
             {
-                Destroy(gameObject);
+                animator.Play("serpiente_muerte_Clip", 0, 0f);
+                moviendo = false;
+                Destroy(gameObject, 1f);
             }
         }
     }
 
     IEnumerator disparar()
     {
+        animator.Play("serpiente_angry_Clip", 0, 0f);
+
         float timerAdicion = 1f;
 
         laserLuz.enabled = true;

@@ -404,10 +404,10 @@ public class NpcStates : MonoBehaviour
 
     public void MisionMonedas()
     {
-        if (gameManager.monedas >= 1)
+        if (gameManager.monedas >= misionNpc.objetivoMonedas)
         {
             misionNpc.CompletarMision();
-            gameManager.monedas -= 1; 
+            gameManager.monedas -= misionNpc.objetivoMonedas; 
             gameManager.textoMonedas.text = gameManager.monedas.ToString();
         }
     }

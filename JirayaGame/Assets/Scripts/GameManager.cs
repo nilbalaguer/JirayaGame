@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using UnityEngine.Playables;
 
 public class GameManager : MonoBehaviour
 {
@@ -66,6 +67,9 @@ public class GameManager : MonoBehaviour
 
     //Controlar Que Puertas estan activadas
     public Dictionary<string, bool> estadosTP = new Dictionary<string, bool>();
+
+    //Cinematica de tsunade al coger primer objeto entregable
+    public PlayableDirector timelineTsunade;
 
     void Awake()
     {
@@ -260,5 +264,10 @@ public class GameManager : MonoBehaviour
     public void DesabilitarTP(string claveTP)
     {
         estadosTP[claveTP] = false;
+    }
+
+    public void ReproducirTimelineTsunade()
+    {
+        timelineTsunade.Play();
     }
 }

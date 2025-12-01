@@ -4,7 +4,6 @@ using UnityEngine.Playables;
 public class Timeline : MonoBehaviour
 {
     public PlayableDirector timeline;
-    public PlayableDirector timelineTsunade;
     private bool played = false;
     public BehaviourErmitaño ermitañoScript;
     public static Timeline Instance;
@@ -30,10 +29,5 @@ public class Timeline : MonoBehaviour
             played = true;
             timeline.Play();
         }
-    }
-
-    public void ReproducirTimelineTsunade()
-    {
-        timelineTsunade.Play();
     }
 }

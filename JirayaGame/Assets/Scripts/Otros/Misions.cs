@@ -35,6 +35,11 @@ public class Misions : MonoBehaviour
     [HideInInspector]
     public bool panelCompletadoMostrado = false;
     public Sprite iconoMisionKama;
+    public int objetivoMonedas;
+    [HideInInspector]
+    public int monedasMin = 5;
+    [HideInInspector]
+    public int monedasMax = 15;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -89,6 +94,8 @@ public class Misions : MonoBehaviour
                     break;
                 case MisionTipo.RecolectarMoneda:
                     npcScript.npcIcono.sprite = npcScript.iconoIntro;
+                    objetivoMonedas = Random.Range(monedasMin, monedasMax);
+                    texto.text = "Necesito que me traigas " + objetivoMonedas + " monedas.";
                     break;
             }
             npcScript.canvasImagen.SetActive(true);

@@ -512,7 +512,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void BeberPocion()
+    public void BeberPocion()
     {
         Debug.Log("Has bebido la poción");
         Destroy(objetoSujeto.gameObject);
@@ -532,6 +532,11 @@ public class PlayerController : MonoBehaviour
                 objetoSujeto = objetoCercano;
                 objetoSujeto.Coger(puntoSujecion);
                 CanvasInfo.SetActive(true);
+                Transform light = objetoSujeto.transform.Find("Light");
+                if (light != null)
+                {
+                    light.gameObject.SetActive(false);
+                }
                 if ((objetoCercano.nombreObjeto == "PergaminoSagrado" || objetoCercano.nombreObjeto == "CollarShizune" || objetoCercano.nombreObjeto == "Flor")
                 && objetoCercano.yaRecogido == false)
                 {
@@ -540,7 +545,7 @@ public class PlayerController : MonoBehaviour
                     objetoCercano.yaRecogido = true;
                     if (!timelineMostrado)
                     {
-                        Timeline.Instance.ReproducirTimelineTsunade();
+                        GameManager.Instance.ReproducirTimelineTsunade();
                         timelineMostrado = true;
                     }
                 }
@@ -650,8 +655,14 @@ public class PlayerController : MonoBehaviour
     {
         if (objetoSujeto != null)
         {
+            Objeto objetoDejado = objetoSujeto;
             objetoSujeto.Soltar();
             objetoSujeto = null;
+            Transform light = objetoDejado.transform.Find("Light");
+            if (light != null)
+            {
+                light.gameObject.SetActive(true);
+            }
         }
     }
 

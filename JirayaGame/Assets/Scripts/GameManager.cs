@@ -71,6 +71,9 @@ public class GameManager : MonoBehaviour
     //Cinematica de tsunade al coger primer objeto entregable
     public PlayableDirector timelineTsunade;
 
+    //Cinematica ermitaño para introducir tienda
+    public PlayableDirector timelineErmitañoTienda;
+
     void Awake()
     {
         if (Instance == null)
@@ -173,7 +176,6 @@ public class GameManager : MonoBehaviour
             GameObject ObjInstanciado = Instantiate(objetoComprado.gameObject);
             objetoCompradoNuevo = ObjInstanciado.GetComponent<Objeto>();
             inventario.AñadirObjeto(objetoCompradoNuevo);
-            //Equipar objeto y cada vez que se use restar cantidad en el inventario
         }
         else
         {
@@ -269,5 +271,10 @@ public class GameManager : MonoBehaviour
     public void ReproducirTimelineTsunade()
     {
         timelineTsunade.Play();
+    }
+
+    public void ReproducirTimelineErmitañoTienda()
+    {
+        timelineErmitañoTienda.Play();
     }
 }

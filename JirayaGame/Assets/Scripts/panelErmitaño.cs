@@ -62,7 +62,9 @@ public class panelErmitaño : MonoBehaviour
             animator.SetTrigger("Close");
             hasTalked = true;
             playerScript.puedoMoverme = true;
-            ermitañoScript.esErmitañoTienda = true;
+            //ermitañoScript.esErmitañoTienda = true;
+            //Mostrar cinematica ermitaño tienda
+            GameManager.Instance.ReproducirTimelineErmitañoTienda();
         }
     }
 

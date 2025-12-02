@@ -37,8 +37,8 @@ public class Enemigo1Script : MonoBehaviour
     public Transform target;
 
     [Header("Patrulla")]
-    [SerializeField] Transform puntoA;
-    [SerializeField] Transform puntoB;
+    public Transform puntoA;
+    public Transform puntoB;
     private Transform destinoActual;
 
     [Header("Sonidos")]

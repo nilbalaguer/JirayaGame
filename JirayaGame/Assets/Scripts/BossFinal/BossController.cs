@@ -12,6 +12,10 @@ public class BossController : MonoBehaviour
     [SerializeField] Transform punto1;
     [SerializeField] Transform punto2;
 
+    [SerializeField] Transform spawnEnemigo1;
+    [SerializeField] Transform spawnEnemigo2;
+    [SerializeField] GameObject enemigo;
+
     [SerializeField] AudioClip bossMusic;
     private AudioSource audioSource;
 
@@ -56,6 +60,18 @@ public class BossController : MonoBehaviour
             Instantiate(prefabBola, punto2.position, Quaternion.identity);
             Instantiate(prefabPolvora, punto1.position, Quaternion.identity);
         }
+
+        GameObject tempEnemigo1 = Instantiate(enemigo, spawnEnemigo1.position, Quaternion.identity);
+        Enemigo1Script enemigo1Script = tempEnemigo1.GetComponent<Enemigo1Script>();
+
+        enemigo1Script.puntoA = punto1;
+        enemigo1Script.puntoB = spawnEnemigo1;
+
+        GameObject tempEnemigo2 = Instantiate(enemigo, spawnEnemigo2.position, Quaternion.identity);
+        Enemigo1Script enemigo2Script = tempEnemigo2.GetComponent<Enemigo1Script>();
+
+        enemigo2Script.puntoA = punto2;
+        enemigo2Script.puntoB = spawnEnemigo2;
     }
 
     private void OnTriggerEnter2D(Collider2D other) {

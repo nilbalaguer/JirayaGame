@@ -127,7 +127,7 @@ public class NpcStates : MonoBehaviour
                 else if (EnemyinRange())
                 {
                     currentState = State.Scared;
-                }else if (misionNpc.misionCompletada && !dialogMisionMostrado)
+                }else if (misionNpc != null && misionNpc.misionCompletada && !dialogMisionMostrado)
                 {
                     currentState = State.EndMision;
                 }
@@ -383,8 +383,17 @@ public class NpcStates : MonoBehaviour
             /*misionNpc.CompletarMision();
             gameManager.monedas -= 1; 
             gameManager.textoMonedas.text = gameManager.monedas.ToString();*/
-            if (!misionNpc.misionActiva) return;
-            if (misionNpc.misionCompletada) return;
+            if (misionNpc != null && !misionNpc.misionActiva)
+            {
+                return;
+            }
+            if(misionNpc != null && misionNpc.misionCompletada){
+                return;
+            }
+            if (misionNpc == null)
+            {
+                return;
+            }
 
             switch (misionNpc.tipoMision)
             {
@@ -422,6 +431,7 @@ public class NpcStates : MonoBehaviour
             objeto.Soltar();
             Destroy(objetoEntregado.gameObject);
             objeto = null;
+            player.GetComponent<PlayerController>().CanvasInfo.SetActive(false);
         }
     }
 

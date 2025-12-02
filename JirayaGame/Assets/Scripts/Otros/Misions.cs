@@ -40,6 +40,7 @@ public class Misions : MonoBehaviour
     public int monedasMin = 5;
     [HideInInspector]
     public int monedasMax = 15;
+    public GameObject objetoKana;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -53,6 +54,7 @@ public class Misions : MonoBehaviour
             if (panel != null)
                 panel.SetActive(false);
         }
+        objetoKana.SetActive(false);
     }
 
     // Update is called once per frame
@@ -91,6 +93,7 @@ public class Misions : MonoBehaviour
                     break;
                 case MisionTipo.BuscarObjeto:
                     npcScript.npcIcono.sprite = iconoMisionKama;
+                    objetoKana.SetActive(true);
                     break;
                 case MisionTipo.RecolectarMoneda:
                     npcScript.npcIcono.sprite = npcScript.iconoIntro;

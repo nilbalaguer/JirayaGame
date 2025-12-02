@@ -110,8 +110,22 @@ public class tsunade : MonoBehaviour
 
     bool PlayerinRange()
     {
-        float distancia = Vector2.Distance(transform.position, player.transform.position);
-        return distancia <= rangoPlayer;
+        //float distancia = Vector2.Distance(transform.position, player.transform.position);
+        //return distancia <= rangoPlayer;
+        Vector2 direccion = Vector2.right;
+        float distancia = 1.5f;
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direccion, distancia, LayerMask.GetMask("Player"));
+        Debug.DrawRay(transform.position, direccion * distancia, Color.red);
+
+        if (hit.collider != null && hit.collider.CompareTag("Player"))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public void EntregarRecompensa()

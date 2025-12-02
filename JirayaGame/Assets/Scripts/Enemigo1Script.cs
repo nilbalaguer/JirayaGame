@@ -191,6 +191,9 @@ public class Enemigo1Script : MonoBehaviour
                 gameManager.PlayDeathSound();
                 Instantiate(sangre, transform.position, Quaternion.identity);
                 Instantiate(sangre, transform.position, Quaternion.identity);
+                //instanciar moneda
+                //Instantiate(gameManager.monedaPrefab, transform.position, Quaternion.identity);
+                gameManager.RecolectarMonedas();
                 Destroy(gameObject);
             } else
             {

@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     private NpcStates npcIntroActual;
     public TextMeshProUGUI textoMonedas;
     public int monedas = 0;
-
+    public GameObject monedaPrefab;
 
     private string ubicacion = "overworld";
 

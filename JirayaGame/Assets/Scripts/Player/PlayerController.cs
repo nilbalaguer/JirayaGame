@@ -592,11 +592,11 @@ public class PlayerController : MonoBehaviour
     if (entrada != null && entrada.cantidad > 0)
         {
 
-            GameObject nuevaGO = Instantiate(entrada.prefab, puntoSujecion.position, puntoSujecion.rotation);
-            Objeto nuevoObjeto = nuevaGO.GetComponent<Objeto>();
+            GameObject nueva = Instantiate(entrada.prefab, puntoSujecion.position, puntoSujecion.rotation);
+            Objeto nuevoObjeto = nueva.GetComponent<Objeto>();
             if (nuevoObjeto != null)
             {
-                nuevaGO.SetActive(true);
+                nueva.SetActive(true);
 
                 // Equipar el nuevo objeto y decrementar la cantidad en el inventario
                 EquiparObjeto(nuevoObjeto);
@@ -622,6 +622,7 @@ public class PlayerController : MonoBehaviour
         objetoSujeto.CogerObjeto();
         objetoSujeto = null;
         Debug.Log("Objeto guardado en inventario.");
+        CanvasInfo.SetActive(false);
     }
 
     //Equipar objeto desde inventario
@@ -663,6 +664,7 @@ public class PlayerController : MonoBehaviour
             {
                 light.gameObject.SetActive(true);
             }
+            CanvasInfo.SetActive(false);
         }
     }
 
@@ -822,8 +824,21 @@ public class PlayerController : MonoBehaviour
 
     bool tsunadeInRange()
     {
-        float distancia = Vector2.Distance(transform.position, tsunade.transform.position);
-        return distancia <= 1.5f;
+        //float distancia = Vector2.Distance(transform.position, tsunade.transform.position);
+        //return distancia <= 1.5f;
+        Vector2 direccion = ultimaDireccion;
+        float distancia = 1.5f;
+
+        int layerMask = LayerMask.GetMask("tsunade");
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direccion, distancia);
+        if (hit.collider != null && hit.collider.CompareTag("Tsunade"))
+        {
+            return true;
+        }else
+        {
+            return false;
+        }
     }
 
     public void AceptarEntrega()

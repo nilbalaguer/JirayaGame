@@ -28,6 +28,7 @@ public class CabezaSerpiente : MonoBehaviour
 
     [Header("Animaciones")]
     [SerializeField] Animator animator;
+    [SerializeField] GameObject explosion;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -45,33 +46,6 @@ public class CabezaSerpiente : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (moviendo)
-        {
-            if (!intercanvio)
-            {
-                rb.MovePosition(Vector2.MoveTowards(
-                    transform.position,
-                    punto1.position,
-                    speed * Time.deltaTime));
-
-                if (Vector2.Distance(punto1.position, transform.position) < 0.1f)
-                {
-                    intercanvio = true;
-                }
-            }
-            else
-            {
-                rb.MovePosition(Vector2.MoveTowards(
-                    transform.position,
-                    punto2.position,
-                    speed * Time.deltaTime));
-
-                if (Vector2.Distance(punto2.position, transform.position) < 0.1f)
-                {
-                    intercanvio = false;
-                }
-            }
-        }
 
         if (transform.position.x +0.5f >= player.transform.position.x && transform.position.x -0.5f <= player.transform.position.x && !disparando)
         {
@@ -85,6 +59,37 @@ public class CabezaSerpiente : MonoBehaviour
         
     }
 
+    void FixedUpdate()
+    {
+        if (moviendo)
+        {
+            if (!intercanvio)
+            {
+                rb.MovePosition(Vector2.MoveTowards(
+                    transform.position,
+                    punto1.position,
+                    speed * Time.fixedDeltaTime));
+
+                if (Vector2.Distance(punto1.position, transform.position) < 0.1f)
+                {
+                    intercanvio = true;
+                }
+            }
+            else
+            {
+                rb.MovePosition(Vector2.MoveTowards(
+                    transform.position,
+                    punto2.position,
+                    speed * Time.fixedDeltaTime));
+
+                if (Vector2.Distance(punto2.position, transform.position) < 0.1f)
+                {
+                    intercanvio = false;
+                }
+            }
+        }
+    }
+
     void OnTriggerEnter2D(Collider2D other) {
         if (other.CompareTag("nenufar"))
         {
@@ -92,6 +97,9 @@ public class CabezaSerpiente : MonoBehaviour
 
             Destroy(other.gameObject);
             animator.Play("serpiente_damage_Clip", 0, 0f);
+
+            GameObject tempGameObject = Instantiate(explosion, transform.position, Quaternion.identity);
+            Destroy(tempGameObject, 0.6428572f);
 
             if (vida <= 0)
             {

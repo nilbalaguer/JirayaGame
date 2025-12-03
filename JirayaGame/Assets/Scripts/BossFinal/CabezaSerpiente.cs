@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 public class CabezaSerpiente : MonoBehaviour
 {
@@ -106,6 +107,7 @@ public class CabezaSerpiente : MonoBehaviour
                 animator.Play("serpiente_muerte_Clip", 0, 0f);
                 moviendo = false;
                 Destroy(gameObject, 1f);
+                SceneManager.LoadScene("SalidaDelJuego");
             }
         }
     }

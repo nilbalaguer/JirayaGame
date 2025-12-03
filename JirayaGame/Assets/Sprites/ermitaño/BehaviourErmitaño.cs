@@ -4,7 +4,7 @@ public class BehaviourErmitaño : MonoBehaviour
 {
     private Animator anim;
 
-    public enum State { Idle, Patrol, Talking, TalkingShop };
+    public enum State { Idle, Patrol, Talking, TalkingShop, Chasing};
     public State currentState;
 
     public Transform[] puntosPatrulla;
@@ -23,6 +23,8 @@ public class BehaviourErmitaño : MonoBehaviour
     public GameObject CanvasTienda;
     [HideInInspector]
     public bool puedeMoverse = false;
+    public float rangoEnemy = 5f;
+    private GameObject enemy;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -39,6 +41,7 @@ public class BehaviourErmitaño : MonoBehaviour
             transform.position = puntosPatrulla[0].position;
         }*/
         CanvasTienda.SetActive(false);
+        enemy = GameObject.FindWithTag("Enemy");
     }
 
     // Update is called once per frame
@@ -94,7 +97,23 @@ public class BehaviourErmitaño : MonoBehaviour
                     NextPoint();
                 }
                 break;
-            
+            case State.Chasing:
+                if (!PlayerinRange()){
+                    currentState = State.Idle;
+                    break;
+                }
+
+                if (Vector2.Distance(transform.position, player.transform.position) < 1f)
+                {
+                    currentState = State.Talking;
+                }
+                else
+                {
+                    Vector2 direction = (player.transform.position - transform.position).normalized;
+                    transform.position = Vector2.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
+                    UpdateSpriteAnimation(direction);
+                }
+                break;
         }
 
         switch (currentState)
@@ -120,6 +139,9 @@ public class BehaviourErmitaño : MonoBehaviour
                     panelTienda.SetActive(true);
                 }
                 break;
+            case State.Chasing:
+                anim.SetInteger("state", 1);
+                break;
         }
 
         if (esErmitañoTienda && PlayerinRange())
@@ -134,8 +156,27 @@ public class BehaviourErmitaño : MonoBehaviour
 
     bool PlayerinRange()
     {
-        float distancia = Vector2.Distance(transform.position, player.transform.position);
-        return distancia <= rangoPlayer;
+        float distancia = 1.5f;
+        Vector2 direccion = Vector2.down;
+        /*Vector2[] direcciones = 
+        {
+            Vector2.up,
+            Vector2.down,
+            Vector2.left,
+            Vector2.right
+        };*/
+        //foreach (Vector2 direccion in direcciones)
+        //{
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, direccion, distancia, LayerMask.GetMask("Player"));
+            Debug.DrawRay(transform.position, direccion * distancia, Color.red);
+
+            if (hit.collider != null && hit.collider.CompareTag("Player"))
+            {
+                return true;
+            }else{
+                return false;
+            }
+        //}
     }
 
     void NextPoint()
@@ -174,5 +215,15 @@ public class BehaviourErmitaño : MonoBehaviour
     {
         panelTienda.SetActive(false);
         currentState = State.Idle;
+    }
+
+    bool EnemyinRange()
+    {
+        if (enemy == null)
+        {
+            return false;
+        }
+        float distancia = Vector2.Distance(transform.position, enemy.transform.position);
+        return distancia <= rangoEnemy;
     }
 }

@@ -509,6 +509,7 @@ public class PlayerController : MonoBehaviour
         if (objetoSujeto != null && objetoSujeto.nombreObjeto == "Pocion")
         {
             mensajePocion.SetActive(true);
+            CanvasInfo.SetActive(false);
         }
         else
         {
@@ -535,10 +536,7 @@ public class PlayerController : MonoBehaviour
             {
                 objetoSujeto = objetoCercano;
                 objetoSujeto.Coger(puntoSujecion);
-                if(objetoSujeto.nombreObjeto == "Pocion")
-                {
-                    CanvasInfo.SetActive(false);
-                }
+    
                 CanvasInfo.SetActive(true);
                 Transform light = objetoSujeto.transform.Find("Light");
                 if (light != null)

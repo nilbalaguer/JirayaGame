@@ -81,7 +81,24 @@ public class tsunade : MonoBehaviour
                 break;
 
             case State.Talking:
-                anim.SetInteger("state", 1);
+                Vector2 dirToPlayer = player.transform.position - transform.position;
+                if (Mathf.Abs(dirToPlayer.x) > Mathf.Abs(dirToPlayer.y))    
+                {
+                    transform.localScale = new Vector3(dirToPlayer.x < 0 ? -3 : 3, 3, 3);
+                    anim.SetInteger("state", 1);
+                }
+                else
+                {
+                    if (dirToPlayer.y > 0)
+                    {
+                        anim.SetInteger("state", 3);
+                    }else
+                    {
+                        anim.SetInteger("state", 2);
+                        //añadir state 3 animacion back talk
+                    }
+                }
+                //anim.SetInteger("state", 1);
                 panelDialogo.SetActive(true);
                 panelDialogo.GetComponent<panelTsunade>().DialogoSetup(objetoRecibido.nombreObjeto);
                 //Si se han entregado los 3 objetos mostrar dialofo final
@@ -94,7 +111,24 @@ public class tsunade : MonoBehaviour
             if (Time.time - ultimoDialogo >= cooldownDialogo)
             {
                 tsunadePanel2.SetActive(true);
-                anim.SetInteger("state", 1);
+                Vector2 dirToPlayer = player.transform.position - transform.position;
+                if (Mathf.Abs(dirToPlayer.x) > Mathf.Abs(dirToPlayer.y))    
+                {
+                    transform.localScale = new Vector3(dirToPlayer.x < 0 ? -3 : 3, 3, 3);
+                    anim.SetInteger("state", 1);
+                }
+                else
+                {
+                    if (dirToPlayer.y > 0)
+                    {
+                        anim.SetInteger("state", 3);
+                    }else
+                    {
+                        anim.SetInteger("state", 2);
+                        //añadir state 3 animacion back talk
+                    }
+                }
+                
                 playerScript.puedoMoverme = false;
             }
         }else if (PlayerinRange() && playerScript.objetoSujeto != null && objetoRecompensa != null &&objetoRecompensa.esRecompensa)

@@ -23,8 +23,10 @@ public class NpcStates : MonoBehaviour
 
     public GameObject dialogueBox;
     public GameObject introDialog;
+    public PanelNpc panelNpcScript;
     public ScrollPanel scrollPanel;
     public GameObject canvasImagen;
+    public GameObject dialogueShamuzen;
 
     public Image npcIcono;
     public Sprite iconoNormal;
@@ -43,7 +45,8 @@ public class NpcStates : MonoBehaviour
     public bool dialogMisionMostrado = false;
     public GameManager gameManager;
     public string nameNpc;
-    //public GameObject dialogFinalMision;
+    
+    public bool esNpcShamizen;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -72,6 +75,15 @@ public class NpcStates : MonoBehaviour
         {
             hasTalked = true;
             canvasImagen.SetActive(false);
+        }
+
+        if (dialogueShamuzen == null && panelNpcScript == null && !esNpcShamizen)
+        {
+            return;
+        }
+        else
+        {
+            dialogueShamuzen.SetActive(false);
         }
     }
 
@@ -220,15 +232,22 @@ public class NpcStates : MonoBehaviour
                 }
                 if (!hasTalked)
                 {
-                    dialogueBox.SetActive(true);
-                    scrollPanel.npcScript = this;
-                    player.GetComponent<PlayerController>().puedoMoverme = false;
+                    if (!esNpcShamizen){
+                        dialogueBox.SetActive(true);
+                        scrollPanel.npcScript = this;
+                        player.GetComponent<PlayerController>().puedoMoverme = false;
 
-                    scrollPanel.misionsScript = misionNpc;
+                        scrollPanel.misionsScript = misionNpc;
+                    }
+                    else{
+                        dialogueShamuzen.SetActive(true);
+                        panelNpcScript.npcScript = this;
+                        player.GetComponent<PlayerController>().puedoMoverme = false;
+                    }
                 }
                 else
                 {
-                    if (!misionNpc.misionActiva)
+                    if (misionNpc == null || !misionNpc.misionActiva)
                     {
                         canvasImagen.SetActive(false);
                     }
@@ -372,8 +391,27 @@ public class NpcStates : MonoBehaviour
         {
             return false;
         }
-        float distancia = Vector2.Distance(transform.position, enemy.transform.position);
-        return distancia <= rangoEnemy;
+        Vector2[] direcciones = 
+        {
+            Vector2.up,
+            Vector2.down,
+            Vector2.left,
+            Vector2.right
+        };
+        foreach (Vector2 direccion in direcciones)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, direccion, rangoEnemy, LayerMask.GetMask("Enemy"));
+
+            if (hit.collider != null && hit.collider.CompareTag("Enemy"))
+            {
+                return true;
+            }
+        }
+        return false;
+        //float distancia = Vector2.Distance(transform.position, enemy.transform.position);
+        //return distancia <= rangoEnemy;
+
+        //usar raycast
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

@@ -85,6 +85,8 @@ public class PlayerController : MonoBehaviour
     public bool puedoMoverme = true;
     [HideInInspector]
     public bool timelineMostrado = false;
+    public float ultimoDialogo = 0f;
+    public float cooldownDialogo = 2f;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -277,12 +279,14 @@ public class PlayerController : MonoBehaviour
                 }
 
                 //Mostrar paneles tsunade al acercarme a ella
-                if (tsunadeInRange() && objetoSujeto != null && !objetoSujeto.esRecompensa)
+                if (!tsunadePanel.activeSelf && tsunadeInRange() && objetoSujeto != null && !objetoSujeto.esRecompensa)
                 {
-                    tsunadePanel.SetActive(true);
-                    puedoMoverme = false;
+                    if (Time.time - ultimoDialogo >= cooldownDialogo)
+                    {
+                        tsunadePanel.SetActive(true);
+                        //puedoMoverme = false;
+                    }
                 }
-                
                 //Beber pocion si la tiene equipada y mostrar mensaje HUD
                 MostrarMensajePocion();
 
@@ -531,6 +535,10 @@ public class PlayerController : MonoBehaviour
             {
                 objetoSujeto = objetoCercano;
                 objetoSujeto.Coger(puntoSujecion);
+                if(objetoSujeto.nombreObjeto == "Pocion")
+                {
+                    CanvasInfo.SetActive(false);
+                }
                 CanvasInfo.SetActive(true);
                 Transform light = objetoSujeto.transform.Find("Light");
                 if (light != null)
@@ -827,18 +835,27 @@ public class PlayerController : MonoBehaviour
         //float distancia = Vector2.Distance(transform.position, tsunade.transform.position);
         //return distancia <= 1.5f;
         Vector2 direccion = ultimaDireccion;
-        float distancia = 1.5f;
+        float distancia = 1f;
+        Vector2[] direcciones = 
+        {
+            Vector2.up,
+            Vector2.down,
+            Vector2.left,
+            Vector2.right
+        };
 
         int layerMask = LayerMask.GetMask("tsunade");
 
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direccion, distancia);
-        if (hit.collider != null && hit.collider.CompareTag("Tsunade"))
+        foreach (Vector2 dir in direcciones)
         {
-            return true;
-        }else
-        {
-            return false;
-        }
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, distancia, layerMask);
+            Debug.DrawRay(transform.position, dir * distancia, Color.yellow);
+            if (hit.collider != null && hit.collider.CompareTag("Tsunade"))
+            {
+                return true;
+            }
+
+        }return false;
     }
 
     public void AceptarEntrega()

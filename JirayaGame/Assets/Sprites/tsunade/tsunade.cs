@@ -6,7 +6,7 @@ public class tsunade : MonoBehaviour
 {
     private Animator anim;
     public enum State {Idle, Talking};
-    private State currentState;
+    public State currentState;
     private GameObject player;
     public float rangoPlayer = 1.5f;
     public ScrollPanel scrollPanel;
@@ -24,6 +24,7 @@ public class tsunade : MonoBehaviour
     [HideInInspector]
     public float ultimoDialogo = 0f;
     public float cooldownDialogo = 2f;
+    public bool entregado = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -41,7 +42,7 @@ public class tsunade : MonoBehaviour
         switch (currentState)
         {
             case State.Idle:
-                if (PlayerinRange() && scrollPanel.entregarObjeto)
+                if (PlayerinRange() && entregado)
                 {
                     currentState = State.Talking;
 
@@ -49,7 +50,7 @@ public class tsunade : MonoBehaviour
                 break;
 
             case State.Talking:
-                if (!scrollPanel.entregarObjeto)
+                if (!entregado)
                 {
                     currentState = State.Idle;
 
@@ -110,7 +111,7 @@ public class tsunade : MonoBehaviour
 
     bool PlayerinRange()
     {
-        float distancia = 1.5f;
+        float distancia = 1f;
         Vector2[] direcciones = 
         {
             Vector2.up,
@@ -146,13 +147,13 @@ public class tsunade : MonoBehaviour
                 prefabRecompensa = recompensas[2];
                 break;
         }
-        objetoRecibido = null;
         GameObject recompensaInstanciada = Instantiate(prefabRecompensa, playerScript.puntoSujecion.position, Quaternion.identity);
         objetoRecompensa = recompensaInstanciada.GetComponent<Objeto>();
         objetoRecompensa.esRecompensa = true;
 
         playerScript.objetoSujeto = objetoRecompensa;
         objetoRecompensa.Coger(playerScript.puntoSujecion);
+        objetoRecibido = null;
 
         //playerScript.RecibirRecompensa(objetoRecompensa);
         

@@ -92,6 +92,7 @@ public class panelTsunade : MonoBehaviour
         {
             animator.SetTrigger("Close");
             scrollPanel.entregarObjeto = false;
+            tsunadeScript.entregado = false;
             tsunadeScript.EntregarRecompensa();
             playerScript.puedoMoverme = true;
         }

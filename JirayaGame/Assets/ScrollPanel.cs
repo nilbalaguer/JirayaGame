@@ -13,7 +13,13 @@ public class ScrollPanel : MonoBehaviour
     public PlayerController playerScript;
     public NpcStates npcScript;
     public Misions misionsScript;
+    private tsunade tsunadeScript;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    void Start()
+    {
+        tsunadeScript = GameObject.FindWithTag("Tsunade").GetComponent<tsunade>();   
+    }
 
     void Awake()
     {
@@ -97,11 +103,15 @@ public class ScrollPanel : MonoBehaviour
         playerScript.AceptarEntrega();
         entregarObjeto = true;
         animator.SetTrigger("Close");
+        tsunadeScript.entregado = true;
     }
     
     public void btnRechazar()
     {
         entregarObjeto = false;
         animator.SetTrigger("Close");
+        playerScript.ultimoDialogo = Time.time;
+        playerScript.puedoMoverme = true;
+        tsunadeScript.entregado = false;
     }
 }

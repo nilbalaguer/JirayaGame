@@ -16,6 +16,10 @@ public class BossController : MonoBehaviour
     [SerializeField] Transform spawnEnemigo2;
     [SerializeField] GameObject enemigo;
 
+    [SerializeField] CabezaSerpiente serpienteScript;
+
+    [SerializeField] int dificultad = 0;
+
     [SerializeField] AudioClip bossMusic;
     private AudioSource audioSource;
 
@@ -25,17 +29,25 @@ public class BossController : MonoBehaviour
         RandomizarSaltos();
 
         audioSource = gameObject.GetComponent<AudioSource>();
+
+        serpienteScript.vida = 10;
+        serpienteScript.speed = 2;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (serpienteScript.vida < 4)
+        {
+            dificultad = 1;
+        }
     }
 
     public void DispararBombarda()
     {
         RandomizarSaltos();
+
+        serpienteScript.speed += 1.5f;
     }
 
     private void RandomizarSaltos()
@@ -61,17 +73,20 @@ public class BossController : MonoBehaviour
             Instantiate(prefabPolvora, punto1.position, Quaternion.identity);
         }
 
-        GameObject tempEnemigo1 = Instantiate(enemigo, spawnEnemigo1.position, Quaternion.identity);
-        Enemigo1Script enemigo1Script = tempEnemigo1.GetComponent<Enemigo1Script>();
+        if (dificultad > 0)
+        {
+            GameObject tempEnemigo1 = Instantiate(enemigo, spawnEnemigo1.position, Quaternion.identity);
+            Enemigo1Script enemigo1Script = tempEnemigo1.GetComponent<Enemigo1Script>();
 
-        enemigo1Script.puntoA = punto1;
-        enemigo1Script.puntoB = spawnEnemigo1;
+            enemigo1Script.puntoA = punto1;
+            enemigo1Script.puntoB = spawnEnemigo1;
 
-        GameObject tempEnemigo2 = Instantiate(enemigo, spawnEnemigo2.position, Quaternion.identity);
-        Enemigo1Script enemigo2Script = tempEnemigo2.GetComponent<Enemigo1Script>();
+            GameObject tempEnemigo2 = Instantiate(enemigo, spawnEnemigo2.position, Quaternion.identity);
+            Enemigo1Script enemigo2Script = tempEnemigo2.GetComponent<Enemigo1Script>();
 
-        enemigo2Script.puntoA = punto2;
-        enemigo2Script.puntoB = spawnEnemigo2;
+            enemigo2Script.puntoA = punto2;
+            enemigo2Script.puntoB = spawnEnemigo2;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other) {

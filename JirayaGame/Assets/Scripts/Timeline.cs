@@ -16,9 +16,13 @@ public class Timeline : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (played)
+        if (played && ermitañoScript != null)
         {
             ermitañoScript.puedeMoverse = true;
+        }
+        else
+        {
+            return;
         }
     }
 

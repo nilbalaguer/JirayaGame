@@ -123,7 +123,24 @@ public class BehaviourErmitaño : MonoBehaviour
                 break;
 
             case State.Talking:
-                anim.SetInteger("state", 2);
+                //anim.SetInteger("state", 2);
+                Vector2 dirToPlayer = player.transform.position - transform.position;
+                if (Mathf.Abs(dirToPlayer.x) > Mathf.Abs(dirToPlayer.y))    
+                {
+                    transform.localScale = new Vector3(dirToPlayer.x < 0 ? -3 : 3, 3, 3);
+                    anim.SetInteger("state", 3);
+                }
+                else
+                {
+                    if (dirToPlayer.y > 0)
+                    {
+                        anim.SetInteger("state", 4);
+                    }else
+                    {
+                        anim.SetInteger("state", 2);
+                        //añadir state 3 animacion back talk
+                    }
+                }
                 if (!panelScript.hasTalked)
                 {
                     panelDialogo.SetActive(true);
@@ -156,27 +173,25 @@ public class BehaviourErmitaño : MonoBehaviour
 
     bool PlayerinRange()
     {
-        float distancia = 1.5f;
-        Vector2 direccion = Vector2.down;
-        /*Vector2[] direcciones = 
+        float distancia = 1f;
+        Vector2[] direcciones = 
         {
             Vector2.up,
             Vector2.down,
             Vector2.left,
             Vector2.right
-        };*/
-        //foreach (Vector2 direccion in direcciones)
-        //{
+        };
+        foreach (Vector2 direccion in direcciones)
+        {
             RaycastHit2D hit = Physics2D.Raycast(transform.position, direccion, distancia, LayerMask.GetMask("Player"));
             Debug.DrawRay(transform.position, direccion * distancia, Color.red);
 
             if (hit.collider != null && hit.collider.CompareTag("Player"))
             {
                 return true;
-            }else{
-                return false;
             }
-        //}
+        }
+        return false;
     }
 
     void NextPoint()

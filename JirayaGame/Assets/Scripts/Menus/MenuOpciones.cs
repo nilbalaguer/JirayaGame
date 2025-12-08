@@ -16,7 +16,7 @@ public class MenuOpciones : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        audioManager = FindObjectOfType<AudioManager>();
+        audioManager = FindFirstObjectByType<AudioManager>();
         if (audioManager != null)
         {
             musicSlider.onValueChanged.AddListener(audioManager.SetMusicVolume);
@@ -46,24 +46,27 @@ public class MenuOpciones : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        float dpadX = Input.GetAxisRaw("DPadX");
+        float dpadY = Input.GetAxisRaw("DPadY");
+
         if (musicSlider.gameObject.activeSelf)
         {
             float input = Input.GetAxis("Horizontal");
             musicSlider.value += input * Time.deltaTime;
         }
 
-        /*if (resolutionDropdown.gameObject.activeSelf && EventSystem.current.currentSelectedGameObject == resolutionDropdown.gameObject)
+        if (resolutionDropdown.gameObject.activeSelf && EventSystem.current.currentSelectedGameObject == resolutionDropdown.gameObject)
         {
-            if (Input.GetButtonDown("D-Pad Up") || Input.GetAxis("Vertical") > 0.5f)
+            if ((dpadY > 0.5f) || Input.GetAxis("Vertical") > 0.5f)
             {
                 resolutionDropdown.value = Mathf.Max(resolutionDropdown.value - 1, 0);
             }
 
-            if (Input.GetButtonDown("D-Pad Down") || Input.GetAxis("Vertical") < -0.5f)
+            if ((dpadY < -0.5f) || Input.GetAxis("Vertical") < -0.5f)
             {
                 resolutionDropdown.value = Mathf.Min(resolutionDropdown.value + 1, resolutionDropdown.options.Count - 1);
             }
-        }*/
+        }
         
             if (muteToggle.gameObject.activeSelf && EventSystem.current.currentSelectedGameObject == muteToggle.gameObject)
         {

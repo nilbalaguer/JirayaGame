@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI textoMonedas;
     public int monedas = 0;
 
+    public bool swapHabilidad = false;
+
 
     private string ubicacion = "overworld";
 

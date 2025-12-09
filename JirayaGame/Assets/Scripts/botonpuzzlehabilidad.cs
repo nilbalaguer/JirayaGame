@@ -8,6 +8,9 @@ public class botonpuzzlehabilidad : MonoBehaviour
     public TilemapCollider2D colliderPuertaFinal;
     public TilemapRenderer puertaPrincipal;
     public TilemapCollider2D colliderPuertaPrincipal;
+    public GameObject nenufar;
+
+    private bool reproducirSonido = false;
 
     public AudioClip sonidoError;
     public AudioClip sonidoCorrecto;
@@ -62,13 +65,19 @@ public class botonpuzzlehabilidad : MonoBehaviour
             puertaFinal.enabled = false;
             colliderPuertaPrincipal.enabled = true;
             puertaPrincipal.enabled = true;
-            audioSource.PlayOneShot(sonidoCorrecto);
+            nenufar.SetActive(true);
+            if (reproducirSonido == false)
+            {
+                audioSource.PlayOneShot(sonidoCorrecto);
+                reproducirSonido = true;
+            }
+                
         }
     }
 
-    IEnumerator cooldownsounderror()
+   /* IEnumerator cooldownsounderror()
     {
         sonidoError = false;
         yield return new WaitForSeconds(1f);
-    }
+    }*/
 }

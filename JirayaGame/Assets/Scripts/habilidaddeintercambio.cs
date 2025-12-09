@@ -4,7 +4,7 @@ using System.Collections;
 
 public class habilidaddeintercambio : MonoBehaviour
 {
-
+    private GameManager gameManager;
     public GameObject player;
     public GameObject selectedObject;
     public Collider2D prefabHitboxRadius;
@@ -15,8 +15,8 @@ public class habilidaddeintercambio : MonoBehaviour
     public bool isOnCooldown = false;
     void Start()
     {
-
-       focusAnimator.enabled = false;
+        gameManager = GameObject.FindObjectOfType<GameManager>();
+        focusAnimator.enabled = false;
         
         prefabHitboxRadius.enabled = false;
         abilityUI.enabled = false;
@@ -25,7 +25,7 @@ public class habilidaddeintercambio : MonoBehaviour
 
     void Update()
     { 
-        if (Input.GetKey(KeyCode.E))
+        if (Input.GetKey(KeyCode.E) && gameManager.swapHabilidad == true)
         {
             prefabHitboxRadius.enabled = true;
 
@@ -37,7 +37,7 @@ public class habilidaddeintercambio : MonoBehaviour
         }
 
     
-        if (Input.GetKeyUp(KeyCode.E) && selectedObject != null)
+        if (Input.GetKeyUp(KeyCode.E) && selectedObject != null && gameManager.swapHabilidad == true)
         {
             SwapPositionsWithSelected();
             prefabHitboxRadius.enabled = false;

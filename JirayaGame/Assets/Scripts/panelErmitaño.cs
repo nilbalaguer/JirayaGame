@@ -64,6 +64,9 @@ public class panelErmitaño : MonoBehaviour
             playerScript.puedoMoverme = true;
             //ermitañoScript.esErmitañoTienda = true;
             //Mostrar cinematica ermitaño tienda
+            //forzar mirar a la derecha
+            ermitañoScript.enabled = false;
+            ermitañoScript.transform.localScale = new Vector3(3, 3, 3);
             GameManager.Instance.ReproducirTimelineErmitañoTienda();
         }
     }

@@ -31,8 +31,8 @@ public class Timeline2 : MonoBehaviour
         {
             played = true;
             playerScript.puedoMoverme = false;
-            //ermitañoScript.enabled = false;
-            //ermitañoScript.transform.localScale = new Vector3(3, 3, 3);
+            ermitañoScript.enabled = false;
+            ermitañoScript.transform.localScale = new Vector3(3, 3, 3);
             timeline.Play();
 
             timeline.stopped += OnTimelineFinished;

@@ -49,7 +49,8 @@ public class Inventario : MonoBehaviour
         float dpadX = Input.GetAxisRaw("DPadX");
         float dpadY = Input.GetAxisRaw("DPadY");
         //Manejar inventario xbox controller
-        if (Input.GetButtonDown("Fire2"))
+        //if (Input.GetButtonDown("Fire2"))
+        if (Input.GetButtonDown("RB"))
         {
             navegacionActiva = true;
             indiceSeleccionActual = 0;

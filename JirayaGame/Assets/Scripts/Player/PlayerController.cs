@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Animator animator;
 
     [SerializeField] Rigidbody2D rigidBody;
-    [SerializeField] float maxSpeed = 5;
+    public float maxSpeed = 5;
 
     [SerializeField] string state = "idle";
     public bool human = true;
@@ -251,7 +251,9 @@ public class PlayerController : MonoBehaviour
                     state = "idle";
                 }
 
-                if (objetoSujeto != null && objetoSujeto.nombreObjeto == "Pocion" && Input.GetKeyDown(KeyCode.X))
+                if (objetoSujeto != null && (objetoSujeto.nombreObjeto == "Pocion1" || objetoSujeto.nombreObjeto == "Pocion2" || 
+                objetoSujeto.nombreObjeto == "Pocion3")  
+                && Input.GetKeyDown(KeyCode.X))
                 {
                     //BeberPocion();
                     state = "BeberPocion";
@@ -506,7 +508,7 @@ public class PlayerController : MonoBehaviour
 
     private void MostrarMensajePocion()
     {
-        if (objetoSujeto != null && objetoSujeto.nombreObjeto == "Pocion")
+        if (objetoSujeto != null && (objetoSujeto.nombreObjeto == "Pocion1" || objetoSujeto.nombreObjeto == "Pocion2" || objetoSujeto.nombreObjeto == "Pocion3"))
         {
             mensajePocion.SetActive(true);
             CanvasInfo.SetActive(false);
@@ -520,6 +522,28 @@ public class PlayerController : MonoBehaviour
     public void BeberPocion()
     {
         Debug.Log("Has bebido la poción");
+        if (objetoSujeto.nombreObjeto == "Pocion1")
+        {
+            if (gameManager.vidaPlayer >= 10)
+            {
+                Debug.Log("Vida al máximo, no puedes beber esta poción");
+                return;
+            }
+            gameManager.RecuperarVida(2f);
+        }
+        else if (objetoSujeto.nombreObjeto == "Pocion2")
+        {
+            gameManager.AumentarVelocidad(3f);
+        }
+        else if (objetoSujeto.nombreObjeto == "Pocion3")
+        {
+            if (gameManager.vidaPlayer > 6)
+            {
+                Debug.Log("Vida demasiado alta, no puedes beber esta poción");
+                return;
+            }
+            gameManager.RecuperarVida(4f);
+        }
         Destroy(objetoSujeto.gameObject);
         objetoSujeto = null;
         mensajePocion.SetActive(false);

@@ -277,4 +277,26 @@ public class GameManager : MonoBehaviour
     {
         timelineErmitañoTienda.Play();
     }
+
+    public void RecuperarVida(float cantidad)
+    {
+        vidaPlayer += cantidad;
+        if (vidaPlayer > 10f)
+        {
+            vidaPlayer = 10f;
+        }
+        indicadorVida.fillAmount = vidaPlayer / 10;
+    }
+
+    public void AumentarVelocidad(float cantidad)
+    {
+        player.maxSpeed += cantidad;
+        //temporalmnente aumentar la velocidad del player usando timedeltaTime
+        Invoke("RestablecerVelocidad", 5f);
+    }
+
+    private void RestablecerVelocidad()
+    {
+        player.maxSpeed = 5f;
+    }
 }

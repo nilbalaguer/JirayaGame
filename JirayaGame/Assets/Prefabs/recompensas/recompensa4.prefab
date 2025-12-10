@@ -208,7 +208,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 900.4055, y: 215.254, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8159921782361043496}
@@ -394,5 +394,8 @@ MonoBehaviour:
   icono: {fileID: 21300000, guid: d23c94689d6e8b9459015bde80dbc46c, type: 3}
   Canvas: {fileID: 2761202073350952243}
   esRecompensa: 1
+  precioTienda: 10
+  cantidad: 1
   tipo: 3
   nombreObjeto: Pocion3
+  yaRecogido: 0

@@ -9,7 +9,7 @@ public class MenuManager : MonoBehaviour
     public void Jugar()
     {
         //GraphicsSettings.renderPipelineAsset = Resources.Load<RenderPipelineAsset>("UniversalRenderPipelineAsset");
-        SceneManager.LoadScene("pruebaEstados"); 
+        SceneManager.LoadScene("SceneRaul"); 
     }
 
     public void AbrirOpciones()

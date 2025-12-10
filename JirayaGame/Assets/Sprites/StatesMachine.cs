@@ -18,8 +18,10 @@ public class StatesMachine : MonoBehaviour
     public GameObject tsunadePanel2;
     public bool tsunadeCerca = false;
 
-    public ScrollPanel scrollPanel;
+    //public ScrollPanel scrollPanel;
+    private GameObject tsunade;
     public panelErmitaño panelScript;
+    public GameObject mensajePocion;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -30,6 +32,7 @@ public class StatesMachine : MonoBehaviour
         inventario = GetComponent<Inventario>();
         CanvasInfo.SetActive(false);
         tsunadePanel.SetActive(false);
+        tsunade = GameObject.FindWithTag("Tsunade");
         //tsunadePanel2.SetActive(false);
     }
 
@@ -148,12 +151,42 @@ public class StatesMachine : MonoBehaviour
         }
 
         //Mostrar paneles tsunade al acercarme a ella
-        if (tsunadeCerca && objetoSujeto != null && !objetoSujeto.esRecompensa)
+        if (tsunadeInRange() && objetoSujeto != null && !objetoSujeto.esRecompensa)
         {
             tsunadePanel.SetActive(true);
+            gameObject.GetComponent<movement>().puedoMoverme = false;
+        }
+        
+        //Beber pocion si la tiene equipada y mostrar mensaje HUD
+        MostrarMensajePocion();
+
+        if (objetoSujeto != null && objetoSujeto.nombreObjeto == "Pocion" && Input.GetKeyDown(KeyCode.X))
+        {
+            BeberPocion();
         }
     }
 
+    private void MostrarMensajePocion()
+    {
+        if (objetoSujeto != null && objetoSujeto.nombreObjeto == "Pocion")
+        {
+            mensajePocion.SetActive(true);
+        }
+        else
+        {
+            mensajePocion.SetActive(false);
+        }
+    }
+
+    private void BeberPocion()
+    {
+        Debug.Log("Has bebido la poción");
+
+        //Mostrar animacion beber pocion
+        Destroy(objetoSujeto.gameObject);
+        objetoSujeto = null;
+        mensajePocion.SetActive(false);
+    }
 
     //Coger objeto cercano
     public void CogerObjeto()
@@ -167,6 +200,17 @@ public class StatesMachine : MonoBehaviour
                 objetoSujeto = objetoCercano;
                 objetoSujeto.Coger(puntoSujecion);
                 CanvasInfo.SetActive(true);
+                if ((objetoCercano.nombreObjeto == "PergaminoSagrado" || objetoCercano.nombreObjeto == "CollarShizune" || objetoCercano.nombreObjeto == "Flor")
+                && objetoCercano.yaRecogido == false)
+                {
+                    CambioMapa.Instance.objetosRecogidos += 1;
+                    CambioMapa.Instance.ActualizarContadorObjetos();
+                    objetoCercano.yaRecogido = true;
+                }
+                else
+                {
+                    Debug.Log("El objeto ya ha sido recogido anteriormente.");
+                }
             }
             else
             {
@@ -202,7 +246,7 @@ public class StatesMachine : MonoBehaviour
         
         string nombre = objetoLanzado != null ? objetoLanzado.nombreObjeto : null;
 
-        var entrada = inventario.objetos.Find(e => e.nombre == nombre);
+        Inventario.InventoryEntry entrada = inventario.objetos.Find(e => e.nombre == nombre);
     if (entrada != null && entrada.cantidad > 0)
         {
 
@@ -211,15 +255,6 @@ public class StatesMachine : MonoBehaviour
             if (nuevoObjeto != null)
             {
                 nuevaGO.SetActive(true);
-                //Rigidbody2D rb = nuevoObjeto.GetComponent<Rigidbody2D>();
-                /*if (rb != null)
-                {
-                    rb.linearVelocity = Vector2.zero;
-                    rb.angularVelocity = 0f;
-                    rb.rotation = 0f;
-                    rb.bodyType = RigidbodyType2D.Kinematic;
-                    rb.gravityScale = 0;
-                }*/
 
                 // Equipar el nuevo objeto y decrementar la cantidad en el inventario
                 EquiparObjeto(nuevoObjeto);
@@ -227,7 +262,7 @@ public class StatesMachine : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("El objeto instanciado no tiene componente Objeto.");
+                Debug.Log("El objeto instanciado no tiene componente Objeto.");
                 objetoSujeto = null;
             }
         }
@@ -270,8 +305,9 @@ public class StatesMachine : MonoBehaviour
         }
         objetoSujeto.transform.position = puntoSujecion.position;
         objetoSujeto.transform.rotation = puntoSujecion.rotation;
-        
+
         objetoSujeto.Coger(puntoSujecion);
+        objetoSujeto.transform.localScale = Vector3.one;
     }
     public void SoltarObjeto()
     {
@@ -313,6 +349,12 @@ public class StatesMachine : MonoBehaviour
             Debug.Log("Saliste del rango de Tsunade");
             tsunadeCerca = false;
         }
+    }
+
+    bool tsunadeInRange()
+    {
+        float distancia = Vector2.Distance(transform.position, tsunade.transform.position);
+        return distancia <= 1.5f;
     }
 
     public void AceptarEntrega()

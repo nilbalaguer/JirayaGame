@@ -13,9 +13,11 @@ public class Objeto : MonoBehaviour
     public int precioTienda = 10;
     public int cantidad = 1;
 
-    public enum TipoObjeto { Flor, CollarShizune, PergaminoSagrado, Recompensa, Arma};
+    public enum TipoObjeto { Flor, CollarShizune, PergaminoSagrado, Recompensa, Arma, Otro};
     public TipoObjeto tipo;
     public string nombreObjeto;
+    [HideInInspector]
+    public bool yaRecogido = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -52,7 +54,6 @@ public class Objeto : MonoBehaviour
         Vector2 dirNormalizada = direccion.normalized;
         Vector2 asignada = dirNormalizada * fuerza;
         rb.linearVelocity = asignada;
-        Debug.Log($"[Lanzar] '{nombreObjeto}' dir={dirNormalizada} linearVel={asignada} drag={rb.linearDamping} bodyType={rb.bodyType} gravityScale={rb.gravityScale}");
         estaSujeto = false;
 
         /*if (cantidad <= 0)

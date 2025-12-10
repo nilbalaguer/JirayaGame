@@ -3,6 +3,7 @@ using UnityEngine.Rendering.Universal;
 
 public class BombardaScript : MonoBehaviour
 {
+    public BossController bossController;
     private Transform puntoDisparo;
 
     [SerializeField] Animator animatorExplosion;
@@ -20,6 +21,11 @@ public class BombardaScript : MonoBehaviour
     private Vector3 startPosition;
     public bool municion = false;
     public bool polvora = false;
+    [SerializeField] GameObject prefabProyectil;
+    [SerializeField] Transform camera;
+    [SerializeField] Transform posicionCamara;
+    [SerializeField] GameObject puntero;
+    [SerializeField] CabezaSerpiente cabezaSerpiente;
 
     void Start()
     {
@@ -34,8 +40,17 @@ public class BombardaScript : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire1") && playerTouching && polvora && municion)
         {
+
             shoting = true;
             shotingCounter = 0.1f;
+
+            //Le dice al bossController que se a disparado la bombarda
+            bossController.DispararBombarda();
+
+            GameObject tempProyectil = Instantiate(prefabProyectil, puntoDisparo.position, Quaternion.identity);
+            Rigidbody2D tempProyectilrb = tempProyectil.GetComponent<Rigidbody2D>();
+            tempProyectilrb.AddForce(Vector2.up * 800f, ForceMode2D.Impulse);
+            Destroy(tempProyectil, 30f);
         }
 
         if (shotingCounter >= 0.1f)
@@ -68,7 +83,21 @@ public class BombardaScript : MonoBehaviour
 
         if (!shoting && transform.position != startPosition)
         {
-            transform.position = Vector3.MoveTowards(transform.position, startPosition, 0.5f * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, startPosition, 1.5f * Time.deltaTime);
+        }
+    }
+
+    void LateUpdate() {
+
+        if ((playerTouching && polvora && municion) || (transform.position != startPosition))
+        {
+            camera.position = posicionCamara.position;
+            puntero.SetActive(true);
+
+            cabezaSerpiente.disparando = true;
+        } else
+        {
+            puntero.SetActive(false);
         }
     }
 
@@ -78,13 +107,13 @@ public class BombardaScript : MonoBehaviour
             playerTouching = true;
         }
 
-        if (other.gameObject.name == "bolaDeCanyonObject" && !municion)
+        if (other.gameObject.name == "bolaDeCanyonObject(Clone)" && !municion)
         {
             municion = true;
             Destroy(other.gameObject);
         }
 
-        if (other.gameObject.name == "barrilPolvora" && !polvora)
+        if (other.gameObject.name == "barrilPolvora(Clone)" && !polvora)
         {
             polvora = true;
             Destroy(other.gameObject);
@@ -95,6 +124,7 @@ public class BombardaScript : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerTouching = false;
+            cabezaSerpiente.disparando = false;
         }
     }
 }

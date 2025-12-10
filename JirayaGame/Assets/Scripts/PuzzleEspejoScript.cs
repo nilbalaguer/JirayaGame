@@ -155,7 +155,7 @@ public class PuzzleEspejoScript : MonoBehaviour
             lineRenderer.SetPosition(1, hit.point);
             reciviendoLuz = true;
 
-            if (hit.collider.CompareTag("intObject"))
+            if (hit.collider.CompareTag("espejoNormal") ||hit.collider.CompareTag("intObject"))
             {
                 PuzzleEspejoScript otroEspejo = hit.collider.GetComponent<PuzzleEspejoScript>();
                 if (otroEspejo != null)

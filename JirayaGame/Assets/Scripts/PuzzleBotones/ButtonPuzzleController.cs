@@ -23,7 +23,7 @@ public class ButtonPuzzleController : MonoBehaviour
     private void FixedUpdate() 
     {
         //El jugador tinen que acertar el numero 19
-        if (boton1.activado && !boton2.activado && !boton3.activado && boton4.activado && boton5.activado && !exploded)
+        if (boton1.activado && boton2.activado && !boton3.activado && boton4.activado && boton5.activado && !exploded)
         {
             exploded = true;
             GameObject tempPartitura = Instantiate(partituraPrefab, transform.position, Quaternion.identity);

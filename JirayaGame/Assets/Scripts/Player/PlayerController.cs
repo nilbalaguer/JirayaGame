@@ -90,6 +90,10 @@ public class PlayerController : MonoBehaviour
 
     public bool puedeTransformarse = false;
 
+    [Header("HUmo")]
+    [SerializeField] Animator focusAnimator;
+    [SerializeField] SpriteRenderer spriterendersmoke;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -312,6 +316,9 @@ public class PlayerController : MonoBehaviour
                 if (Input.GetButtonDown("Fire3") && puedeTransformarse)
                 {
                     human = !human;
+
+                    SmokeEfect();
+
                     if (objectPicked != null)
                     {
                         BoxCollider2D tempBoxCollider = objectPicked.GetComponent<BoxCollider2D>();
@@ -811,6 +818,24 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(SaltoPlano(hit.collider.transform.position));
             }
         }
+    }
+
+    void SmokeEfect()
+    {
+        StartCoroutine(SmokeEffectCorutine());
+    }
+
+    IEnumerator SmokeEffectCorutine()
+    {
+        focusAnimator.enabled = true;
+        spriterendersmoke.enabled = true;
+        focusAnimator.Play("humocambiodeposicion_Clip", 0, 0f);
+
+        yield return new WaitForSeconds(0.4f);
+
+        focusAnimator.enabled = false;
+        spriterendersmoke.enabled = false;
+        
     }
     
     //Prueva de corrutina para salto de sapo

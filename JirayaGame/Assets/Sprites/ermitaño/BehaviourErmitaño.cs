@@ -64,9 +64,10 @@ public class BehaviourErmitaño : MonoBehaviour
                         currentState = State.Patrol;
                     }
                 }
-                else if (PlayerinRange() && !panelScript.hasTalked && !esErmitañoTienda)
+                else if (PlayerinRange() && !panelScript.hasTalked && !esErmitañoTienda && !EnemyinRange())
                 {
-                    currentState = State.Talking;
+                    //currentState = State.Talking;
+                    currentState = State.Chasing;
                 }
                 else if (PlayerinRange() && esErmitañoTienda && Input.GetKeyDown(KeyCode.E))
                 {
@@ -88,9 +89,10 @@ public class BehaviourErmitaño : MonoBehaviour
                     currentState = State.Idle;
                     break;
                 }
-                if (PlayerinRange() && !panelScript.hasTalked)
+                if (PlayerinRange() && !panelScript.hasTalked && !EnemyinRange())
                 {
-                    currentState = State.Talking;
+                    //currentState = State.Talking;
+                    currentState = State.Chasing;
                 }
                 else
                 {
@@ -157,7 +159,7 @@ public class BehaviourErmitaño : MonoBehaviour
                 }
                 break;
             case State.Chasing:
-                anim.SetInteger("state", 1);
+                anim.SetInteger("state", 5);
                 break;
         }
 
@@ -173,7 +175,7 @@ public class BehaviourErmitaño : MonoBehaviour
 
     bool PlayerinRange()
     {
-        float distancia = 1f;
+        float distancia = 3f;
         Vector2[] direcciones = 
         {
             Vector2.up,

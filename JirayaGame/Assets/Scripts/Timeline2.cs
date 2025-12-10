@@ -5,13 +5,15 @@ public class Timeline2 : MonoBehaviour
     public PlayableDirector timeline;
     private bool played = false;
     public static Timeline2 Instance;
-    private PlayerController playerScript;
+    public PlayerController playerScript;
     private BehaviourErmitaño ermitañoScript;
+    private Rigidbody2D rigidBody;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        playerScript = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+        //playerScript = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
         ermitañoScript = GameObject.FindWithTag("Ermitaño").GetComponent<BehaviourErmitaño>();
+        rigidBody = playerScript.GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -35,13 +37,20 @@ public class Timeline2 : MonoBehaviour
             ermitañoScript.transform.localScale = new Vector3(3, 3, 3);
             timeline.Play();
 
-            timeline.stopped += OnTimelineFinished;
+            //timeline.stopped += OnTimelineFinished;
         }
     }
 
-    private void OnTimelineFinished(PlayableDirector director)
+    /*private void OnTimelineFinished(PlayableDirector director)
     {
         playerScript.puedoMoverme = true;
         playerScript.human = false;
+    }*/
+
+    public void OnCinematicEnd()
+    {
+        playerScript.puedoMoverme = true;
+        playerScript.human = false;
+        playerScript.puedeTransformarse = true;
     }
 }

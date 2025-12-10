@@ -88,6 +88,8 @@ public class PlayerController : MonoBehaviour
     public float ultimoDialogo = 0f;
     public float cooldownDialogo = 2f;
 
+    public bool puedeTransformarse = false;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -307,7 +309,7 @@ public class PlayerController : MonoBehaviour
 
                 }
 
-                if (Input.GetButtonDown("Fire3"))
+                if (Input.GetButtonDown("Fire3") && puedeTransformarse)
                 {
                     human = !human;
                     if (objectPicked != null)

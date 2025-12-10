@@ -160,6 +160,7 @@ public class BehaviourErmitaño : MonoBehaviour
                 break;
             case State.Chasing:
                 anim.SetInteger("state", 5);
+                player.GetComponent<PlayerController>().puedoMoverme = false;
                 break;
         }
 

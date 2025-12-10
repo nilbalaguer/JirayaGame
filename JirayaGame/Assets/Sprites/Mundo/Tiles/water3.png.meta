@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: cd4c8372abbaf5646aea43b2762e43e6
+guid: 2d3154a520911f642b065d9b7a040203
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8909911714238610898
-    second: idleFront_tsunade_0
-  - first:
-      213: 7185679815815336437
-    second: idleFront_tsunade_1
+      213: -2670581200746741910
+    second: water3_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -54,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -103,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: idleFront_tsunade_0
+      name: water3_0
       rect:
         serializedVersion: 2
-        x: 6
+        x: 0
         y: 0
-        width: 19
-        height: 30
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -118,30 +115,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2ddb8435f7d56ab70800000000000000
-      internalID: 8909911714238610898
+      spriteID: a6f77a91c8030fad0800000000000000
+      internalID: -2670581200746741910
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: idleFront_tsunade_1
+      name: water3_1
       rect:
         serializedVersion: 2
-        x: 38
+        x: 32
         y: 0
-        width: 19
-        height: 31
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 5f11e5b98b9a8b360800000000000000
-      internalID: 7185679815815336437
+      spriteID: 9ef55ccc4348ba649a75d1535b2dc9b1
+      internalID: 19220033
       vertices: []
       indices: 
       edges: []
@@ -150,7 +147,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 694c3cb87df556342b96509aa122900f
+    spriteID: 2ed3b94a40f868944aa181e06748e9f3
     internalID: 0
     vertices: []
     indices: 
@@ -160,8 +157,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      idleFront_tsunade_0: 8909911714238610898
-      idleFront_tsunade_1: 7185679815815336437
+      water3_0: -2670581200746741910
+      water3_1: 19220033
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -106,6 +106,8 @@ public class GameManager : MonoBehaviour
         //tiendaAlerta.SetActive(false);
 
         playerGameObject = GameObject.Find("Player");
+
+        player.puedoMoverme = true;
     }
 
     // Update is called once per frame
@@ -130,9 +132,12 @@ public class GameManager : MonoBehaviour
         player.puedoMoverme = false;
 
         npcIntro.NpcIntro = true;
+        npcIntro.introAsignada = false;   // << IMPORTANTE
+        npcIntro.introTerminada = false;  // << IMPORTANTE
         npcIntro.currentState = NpcStates.State.Intro;
         npcIntroActual = npcIntro;
     }
+
 
     public void FinalizarIntro(NpcStates npc)
     {

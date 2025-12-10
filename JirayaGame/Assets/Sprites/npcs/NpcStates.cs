@@ -37,7 +37,7 @@ public class NpcStates : MonoBehaviour
 
     public bool necesitaAlejarse = false;
     public bool introTerminada = false;
-    private bool introAsignada = false;
+    public bool introAsignada = false;
 
     public bool puedeInteractuar = true;
 
@@ -58,7 +58,9 @@ public class NpcStates : MonoBehaviour
         }*/
         //else
         //{
-            currentState = State.Idle;
+        if (!NpcIntro)
+        currentState = State.Idle;
+
         //}
         waitCounter = waitTime;
 
@@ -95,21 +97,31 @@ public class NpcStates : MonoBehaviour
             player = GameObject.FindWithTag("Player");
         }
 
-        if (!introAsignada && GameManager.Instance != null)
-        {
-            if (NpcIntro)
-            {
-                currentState = State.Intro;
-                introAsignada = true;
-            }
-            else
-            {
-                introAsignada = true;
-            }
-        }
+        // if (!introAsignada && GameManager.Instance != null)
+        // {
+        //     if (NpcIntro)
+        //     {
+        //         currentState = State.Intro;
+        //         introAsignada = true;
+        //     }
+        //     else
+        //     {
+        //         introAsignada = true;
+        //     }
+        // }
+        // if (!introAsignada)
+        // {
+        //     return;
+        // }
         if (!introAsignada)
         {
-            return;
+            if (GameManager.Instance == null) return;
+            if (player == null) return;
+
+            if (NpcIntro)
+                currentState = State.Intro;
+
+            introAsignada = true;
         }
         
         Vector2 pos = transform.position;

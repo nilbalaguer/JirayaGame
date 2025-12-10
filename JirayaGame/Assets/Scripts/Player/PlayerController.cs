@@ -121,8 +121,11 @@ public class PlayerController : MonoBehaviour
 
         inventario = GetComponent<Inventario>();
         CanvasInfo.SetActive(false);
-        tsunadePanel.SetActive(false);
-        tsunade = GameObject.FindWithTag("Tsunade");
+        if (tsunade != null)
+        {
+            tsunadePanel.SetActive(false);
+            tsunade = GameObject.FindWithTag("Tsunade");
+        }
     }
 
     // Update is called once per frame
@@ -287,7 +290,7 @@ public class PlayerController : MonoBehaviour
                 }
 
                 //Mostrar paneles tsunade al acercarme a ella
-                if (!tsunadePanel.activeSelf && tsunadeInRange() && objetoSujeto != null && !objetoSujeto.esRecompensa)
+                if (tsunade != null && !tsunadePanel.activeSelf && tsunadeInRange() && objetoSujeto != null && !objetoSujeto.esRecompensa)
                 {
                     if (Time.time - ultimoDialogo >= cooldownDialogo)
                     {

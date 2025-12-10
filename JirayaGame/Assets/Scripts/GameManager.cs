@@ -99,6 +99,7 @@ public class GameManager : MonoBehaviour
         audioSource = gameObject.GetComponent<AudioSource>();
         playerGameObject = GameObject.Find("Player");
 
+
         IniciarIntro();
         monedas = 0;
         //textoMonedas.text = monedas.ToString();
@@ -160,7 +161,10 @@ public class GameManager : MonoBehaviour
     public void RecolectarMonedas()
     {
         monedas += 1;
-        textoMonedas.text = monedas.ToString();
+        if (textoMonedas != null)
+        {
+            textoMonedas.text = monedas.ToString();
+        }
     }
 
     public void ComprarObjetos(Objeto objetoComprado)

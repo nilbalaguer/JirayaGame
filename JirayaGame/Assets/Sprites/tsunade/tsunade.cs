@@ -135,12 +135,6 @@ public class tsunade : MonoBehaviour
         {
             tsunadePanel2.SetActive(false);
         }
-
-        /*if (PlayerinRange() && CambioMapa.Instance.objetosRecogidos.Count >= 3)
-        {
-            panelDialogo.SetActive(true);
-            panelDialogo.GetComponent<panelTsunade>().DialogoFinal();
-        }*/
     }
 
     bool PlayerinRange()
@@ -188,10 +182,5 @@ public class tsunade : MonoBehaviour
         playerScript.objetoSujeto = objetoRecompensa;
         objetoRecompensa.Coger(playerScript.puntoSujecion);
         objetoRecibido = null;
-
-        //playerScript.RecibirRecompensa(objetoRecompensa);
-        
-        //StatesMachine playerScript = player.GetComponent<StatesMachine>();
-        //playerScript.RecibirRecompensa(recompensaInstanciada.GetComponent<Objeto>());
     }
 }

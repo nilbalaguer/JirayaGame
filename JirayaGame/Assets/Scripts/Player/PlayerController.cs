@@ -93,6 +93,8 @@ public class PlayerController : MonoBehaviour
     [Header("HUmo")]
     [SerializeField] Animator focusAnimator;
     [SerializeField] SpriteRenderer spriterendersmoke;
+    public Sprite iconoRana1;
+    public Sprite iconoRana2;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -287,7 +289,8 @@ public class PlayerController : MonoBehaviour
                 }
 
                 //Mostrar paneles tsunade al acercarme a ella
-                if (!tsunadePanel.activeSelf && tsunadeInRange() && objetoSujeto != null && !objetoSujeto.esRecompensa)
+                //if (!tsunadePanel.activeSelf && tsunadeInRange() && objetoSujeto != null && !objetoSujeto.esRecompensa)
+                if (!tsunadePanel.activeSelf && tsunadeInRange() && ObjetoTsunadeExiste())
                 {
                     if (Time.time - ultimoDialogo >= cooldownDialogo)
                     {
@@ -324,6 +327,15 @@ public class PlayerController : MonoBehaviour
                         BoxCollider2D tempBoxCollider = objectPicked.GetComponent<BoxCollider2D>();
                         tempBoxCollider.enabled = true;
                         objectPicked = null;
+                    }
+
+                    if (human)
+                    {
+                        Timeline2.Instance.habilidadRana.sprite = iconoRana2;
+                    }
+                    else
+                    {
+                        Timeline2.Instance.habilidadRana.sprite = iconoRana1;
                     }
                 }
 
@@ -673,7 +685,6 @@ public class PlayerController : MonoBehaviour
             objetoSujeto.gameObject.SetActive(false);
         }
         objetoSujeto = objetoCercano;
-        Debug.Log($"[StatesMachine] Equipando objeto '{objetoCercano?.nombreObjeto}'");
         objetoSujeto.gameObject.SetActive(true);
         //Resetar valores del rididbody cada vez que se equipe un objeto
         Rigidbody2D rb = objetoSujeto.GetComponent<Rigidbody2D>();
@@ -909,11 +920,7 @@ public class PlayerController : MonoBehaviour
 
     public void AceptarEntrega()
     {
-        /*objetoSujeto.Soltar();
-        objetoSujeto = null;
-        tsunadePanel.SetActive(false);
-        Invoke ("DesactivarObjetoCercano", 0.5f);*/
-        Objeto objetoEntregado = objetoSujeto;
+        /*Objeto objetoEntregado = objetoSujeto;
         tsunade tsunadeScript = GameObject.FindWithTag("Tsunade").GetComponent<tsunade>();
         tsunadeScript.objetoRecibido = objetoEntregado;
 
@@ -921,14 +928,38 @@ public class PlayerController : MonoBehaviour
         objetoSujeto = null;
 
         objetoEntregado.gameObject.SetActive(false);
-        inventario.EliminarObjeto(objetoEntregado);
+        inventario.EliminarObjeto(objetoEntregado);*/
 
-        //Invoke ("DesactivarObjetoCercano", 0.5f);
+        Inventario.InventoryEntry entry = inventario.objetos.Find(e =>
+        e.tipo == Objeto.TipoObjeto.PergaminoSagrado || e.tipo == Objeto.TipoObjeto.Flor || e.tipo == Objeto.TipoObjeto.CollarShizune);
+
+        if (entry == null)
+        {
+            return;
+        }
+
+        tsunade tsunadeScript = GameObject.FindWithTag("Tsunade").GetComponent<tsunade>();
+        tsunadeScript.objetoRecibido = new Objeto {tipo = entry.tipo};
+
+        inventario.EliminarObjeto(entry);
     }
 
     public void RecibirRecompensa(Objeto recompensa)
     {
         inventario.AñadirObjeto(recompensa);
+    }
+
+    public bool ObjetoTsunadeExiste()
+    {
+        foreach (var entry in inventario.objetos){
+            if (entry.tipo == Objeto.TipoObjeto.PergaminoSagrado || 
+            entry.tipo == Objeto.TipoObjeto.Flor || 
+            entry.tipo == Objeto.TipoObjeto.CollarShizune)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

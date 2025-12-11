@@ -194,6 +194,9 @@ public class PlayerController : MonoBehaviour
                 state = "idle";
             }
 
+            staminaParry -= Time.deltaTime;
+            indicadorParry.fillAmount = staminaParry / staminaDuration;
+
             rigidBody.linearVelocity = Vector2.zero;
             return;
         }

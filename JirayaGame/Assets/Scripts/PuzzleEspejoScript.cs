@@ -42,7 +42,9 @@ public class PuzzleEspejoScript : MonoBehaviour
 
         //Fase final
         audioSource = gameObject.GetComponent<AudioSource>();
-        light2D = gameObject.GetComponent<Light2D>();
+        light2D = gameObject.GetComponentInChildren<Light2D>();
+
+        light2D.enabled = false;
     }
 
     private void Update()
@@ -58,6 +60,11 @@ public class PuzzleEspejoScript : MonoBehaviour
         {
             Encendido();
             Rotar();
+
+            light2D.enabled = true;
+        } else
+        {
+            light2D.enabled = false;
         }
 
         if (final && reciviendoLuz && contdown <= 0)
@@ -65,6 +72,7 @@ public class PuzzleEspejoScript : MonoBehaviour
             contdown = 0.01f;
             reciviendoLuz = false;
             Debug.Log("Se activa el final");
+            light2D.enabled = true;
         }
 
         if (contdown > 0 && contdown < 10)
@@ -131,6 +139,7 @@ public class PuzzleEspejoScript : MonoBehaviour
 
     private void Encendido()
     {
+
         float rayDistance = 7f;
         Vector2 rayDirection = Vector2.right;
 

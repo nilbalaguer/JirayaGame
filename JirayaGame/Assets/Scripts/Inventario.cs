@@ -19,12 +19,15 @@ public class Inventario : MonoBehaviour
 
     public List<InventoryEntry> objetos = new List<InventoryEntry>();
     private List<GameObject> btnSlots = new List<GameObject>();
-    public int capacidadMaxima = 3;
+    public int capacidadMaxima = 5;
 
     public GameObject inventarioUI;
     public GameObject btnPrefab;
     public Transform btnContenedorBotones;
-    public StatesMachine player;
+    //public StatesMachine player;
+    public PlayerController player;
+    private bool navegacionActiva = false;
+    private int indiceSeleccionActual = 0;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -43,9 +46,98 @@ public class Inventario : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        float dpadX = Input.GetAxisRaw("DPadX");
+        float dpadY = Input.GetAxisRaw("DPadY");
+        //Manejar inventario xbox controller
+        //if (Input.GetButtonDown("Fire2"))
+        if (Input.GetButtonDown("RB"))
+        {
+            navegacionActiva = true;
+            indiceSeleccionActual = 0;
+            ActualizarVisual();
+        }
 
+        if (!navegacionActiva) return;
+
+        if (dpadY > 0.5f){
+            CambiarSeleccion(1);
+        }
+
+        if  (dpadY < -0.5f){
+            CambiarSeleccion(-1);
+        }
+
+        if (Input.GetButtonDown("Submit")){
+            EquiparSeleccionado();
+        }
+        
+        if (Input.GetButtonDown("Cancel"))
+        {
+            navegacionActiva = false;
+            OcultarVisual();
+        }
     }
 
+    //Funciones navegacion inventario xbox controller
+    void OcultarVisual()
+    {
+        foreach (GameObject btn in btnSlots)
+        {
+            Image img = btn.GetComponent<Image>();
+            img.color = new Color(img.color.r, img.color.g, img.color.b, 0f);
+        }
+    }
+
+    void ActualizarVisual()
+    {
+        for (int i = 0; i < btnSlots.Count; i++)
+        {
+            GameObject btn = btnSlots[i];
+            Image img = btn.GetComponent<Image>();
+            if (i == indiceSeleccionActual)
+            {
+                img.color = new Color(img.color.r, img.color.g, img.color.b, 1f);
+            }
+            else
+            {
+                img.color = new Color(img.color.r, img.color.g, img.color.b, 0.5f);
+            }
+        }
+    }
+
+    void CambiarSeleccion(int direccion)
+    {
+        indiceSeleccionActual += direccion;
+        if (indiceSeleccionActual < 0)
+        {
+            indiceSeleccionActual = objetos.Count - 1;
+        }
+        else if (indiceSeleccionActual >= objetos.Count)
+        {
+            indiceSeleccionActual = 0;
+        }
+        ActualizarVisual();
+    }
+
+    void EquiparSeleccionado()
+    {
+        if (indiceSeleccionActual >= 0 && indiceSeleccionActual < objetos.Count)
+        {
+            InventoryEntry entry = objetos[indiceSeleccionActual];
+            GameObject go = Instantiate(entry.prefab);
+            Objeto objInst = go.GetComponent<Objeto>();
+            go.transform.localScale = entry.escalaOriginal;
+            if (objInst != null)
+            {
+                player.EquiparObjeto(objInst);
+                EliminarObjeto(entry);
+            }
+            ActualizarInventario();
+            ActualizarVisual();
+        }
+    }
+
+    //Funcionamiento inventario
     public void AñadirObjeto(Objeto objeto)
     {
         InventoryEntry existe = objetos.Find(e => e.nombre == objeto.nombreObjeto);
@@ -60,7 +152,7 @@ public class Inventario : MonoBehaviour
                 entry.icono = objeto.icono;
                 entry.tipo = objeto.tipo;
                 entry.cantidad = objeto.cantidad > 0 ? objeto.cantidad : 1;
-                entry.escalaOriginal = new Vector3(1, 1, 1);
+                entry.escalaOriginal = objeto.transform.localScale;
                 objetos.Add(entry);
 
                 // Auto-equip si no tiene nada equipado
@@ -164,6 +256,8 @@ public class Inventario : MonoBehaviour
         }
     }
 
+    //Eliminar objeto del inventario
+
     public void EliminarObjeto(InventoryEntry entry)
     {
         entry.cantidad--;
@@ -184,6 +278,7 @@ public class Inventario : MonoBehaviour
         ActualizarInventario();
     }
 
+    //Eliminar objeto del inventario por referencia al objeto
     public void EliminarObjeto(Objeto objeto)
     {
         if (objeto == null) return;

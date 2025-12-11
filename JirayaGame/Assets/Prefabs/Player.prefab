@@ -103,7 +103,7 @@ PolygonCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.2, y: 0.2}
+    oldSize: {x: 0.2, y: 1}
     newSize: {x: 0.2, y: 0.2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -285,7 +285,7 @@ GameObject:
   - component: {fileID: 4776097790994526999}
   - component: {fileID: 5247034932135632301}
   - component: {fileID: 330191881777795402}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: parryIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -361,7 +361,7 @@ GameObject:
   - component: {fileID: 1202176484776961589}
   - component: {fileID: 2735914681588165557}
   - component: {fileID: 3203809992639883075}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -980,7 +980,7 @@ GameObject:
   - component: {fileID: 6142685246235309042}
   - component: {fileID: 1408923767768225460}
   - component: {fileID: 1828718724344149440}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: vidaIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}

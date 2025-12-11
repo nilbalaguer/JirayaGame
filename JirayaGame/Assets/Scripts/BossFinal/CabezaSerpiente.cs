@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 public class CabezaSerpiente : MonoBehaviour
 {
@@ -26,6 +27,10 @@ public class CabezaSerpiente : MonoBehaviour
     [SerializeField] AudioClip cargandoLaserSonido;
     [SerializeField] AudioClip disparoSonido;
 
+    [Header("Animaciones")]
+    [SerializeField] Animator animator;
+    [SerializeField] GameObject explosion;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -42,33 +47,6 @@ public class CabezaSerpiente : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (moviendo)
-        {
-            if (!intercanvio)
-            {
-                rb.MovePosition(Vector2.MoveTowards(
-                    transform.position,
-                    punto1.position,
-                    speed * Time.deltaTime));
-
-                if (Vector2.Distance(punto1.position, transform.position) < 0.1f)
-                {
-                    intercanvio = true;
-                }
-            }
-            else
-            {
-                rb.MovePosition(Vector2.MoveTowards(
-                    transform.position,
-                    punto2.position,
-                    speed * Time.deltaTime));
-
-                if (Vector2.Distance(punto2.position, transform.position) < 0.1f)
-                {
-                    intercanvio = false;
-                }
-            }
-        }
 
         if (transform.position.x +0.5f >= player.transform.position.x && transform.position.x -0.5f <= player.transform.position.x && !disparando)
         {
@@ -82,22 +60,62 @@ public class CabezaSerpiente : MonoBehaviour
         
     }
 
+    void FixedUpdate()
+    {
+        if (moviendo)
+        {
+            if (!intercanvio)
+            {
+                rb.MovePosition(Vector2.MoveTowards(
+                    transform.position,
+                    punto1.position,
+                    speed * Time.fixedDeltaTime));
+
+                if (Vector2.Distance(punto1.position, transform.position) < 0.1f)
+                {
+                    intercanvio = true;
+                }
+            }
+            else
+            {
+                rb.MovePosition(Vector2.MoveTowards(
+                    transform.position,
+                    punto2.position,
+                    speed * Time.fixedDeltaTime));
+
+                if (Vector2.Distance(punto2.position, transform.position) < 0.1f)
+                {
+                    intercanvio = false;
+                }
+            }
+        }
+    }
+
     void OnTriggerEnter2D(Collider2D other) {
         if (other.CompareTag("nenufar"))
         {
             vida -= 1;
 
             Destroy(other.gameObject);
+            animator.Play("serpiente_damage_Clip", 0, 0f);
+
+            GameObject tempGameObject = Instantiate(explosion, transform.position, Quaternion.identity);
+            Destroy(tempGameObject, 0.6428572f);
 
             if (vida <= 0)
             {
-                Destroy(gameObject);
+                animator.Play("serpiente_muerte_Clip", 0, 0f);
+                moviendo = false;
+                Destroy(gameObject, 1f);
+                SceneManager.LoadScene("SalidaDelJuego");
             }
         }
     }
 
     IEnumerator disparar()
     {
+        animator.Play("serpiente_angry_Clip", 0, 0f);
+
         float timerAdicion = 1f;
 
         laserLuz.enabled = true;

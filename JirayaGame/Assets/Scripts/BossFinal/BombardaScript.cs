@@ -24,6 +24,7 @@ public class BombardaScript : MonoBehaviour
     [SerializeField] GameObject prefabProyectil;
     [SerializeField] Transform camera;
     [SerializeField] Transform posicionCamara;
+    [SerializeField] GameObject puntero;
     [SerializeField] CabezaSerpiente cabezaSerpiente;
 
     void Start()
@@ -91,8 +92,12 @@ public class BombardaScript : MonoBehaviour
         if ((playerTouching && polvora && municion) || (transform.position != startPosition))
         {
             camera.position = posicionCamara.position;
+            puntero.SetActive(true);
 
             cabezaSerpiente.disparando = true;
+        } else
+        {
+            puntero.SetActive(false);
         }
     }
 

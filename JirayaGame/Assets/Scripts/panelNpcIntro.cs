@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-public class panelNpcIntro : MonoBehaviour
+public class PanelNpc : MonoBehaviour
 {
     public string[] paginas;
     private int paginaActual = 0;
@@ -14,6 +14,7 @@ public class panelNpcIntro : MonoBehaviour
     public Sprite iconoCruz;
 
     public NpcStates npcScript;
+    public PlayerController playerScript;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -59,6 +60,25 @@ public class panelNpcIntro : MonoBehaviour
             npcScript.introTerminada = true;
 
             GameManager.Instance.FinalizarIntro(npcScript);
+        }
+    }
+
+    public void NextNpc()
+    {
+        if (paginaActual < paginas.Length - 1)
+        {
+            paginaActual++;
+            ShowPage();
+        }
+        else
+        {
+            animator.SetTrigger("Close");
+            if (npcScript != null)
+            {
+                npcScript.hasTalked = true;
+                npcScript = null;
+            }
+            playerScript.puedoMoverme = true;
         }
     }
 

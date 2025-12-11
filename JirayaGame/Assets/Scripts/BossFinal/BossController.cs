@@ -12,6 +12,14 @@ public class BossController : MonoBehaviour
     [SerializeField] Transform punto1;
     [SerializeField] Transform punto2;
 
+    [SerializeField] Transform spawnEnemigo1;
+    [SerializeField] Transform spawnEnemigo2;
+    [SerializeField] GameObject enemigo;
+
+    [SerializeField] CabezaSerpiente serpienteScript;
+
+    [SerializeField] int dificultad = 0;
+
     [SerializeField] AudioClip bossMusic;
     private AudioSource audioSource;
 
@@ -21,17 +29,25 @@ public class BossController : MonoBehaviour
         RandomizarSaltos();
 
         audioSource = gameObject.GetComponent<AudioSource>();
+
+        serpienteScript.vida = 10;
+        serpienteScript.speed = 2;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (serpienteScript.vida < 4)
+        {
+            dificultad = 1;
+        }
     }
 
     public void DispararBombarda()
     {
         RandomizarSaltos();
+
+        serpienteScript.speed += 1.5f;
     }
 
     private void RandomizarSaltos()
@@ -55,6 +71,21 @@ public class BossController : MonoBehaviour
             nenufarSalto2.SetActive(true);
             Instantiate(prefabBola, punto2.position, Quaternion.identity);
             Instantiate(prefabPolvora, punto1.position, Quaternion.identity);
+        }
+
+        if (dificultad > 0)
+        {
+            GameObject tempEnemigo1 = Instantiate(enemigo, spawnEnemigo1.position, Quaternion.identity);
+            Enemigo1Script enemigo1Script = tempEnemigo1.GetComponent<Enemigo1Script>();
+
+            enemigo1Script.puntoA = punto1;
+            enemigo1Script.puntoB = spawnEnemigo1;
+
+            GameObject tempEnemigo2 = Instantiate(enemigo, spawnEnemigo2.position, Quaternion.identity);
+            Enemigo1Script enemigo2Script = tempEnemigo2.GetComponent<Enemigo1Script>();
+
+            enemigo2Script.puntoA = punto2;
+            enemigo2Script.puntoB = spawnEnemigo2;
         }
     }
 

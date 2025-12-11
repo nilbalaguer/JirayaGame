@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Animator animator;
 
     [SerializeField] Rigidbody2D rigidBody;
-    [SerializeField] float maxSpeed = 5;
+    public float maxSpeed = 5;
 
     [SerializeField] string state = "idle";
     public bool human = true;
@@ -65,6 +65,34 @@ public class PlayerController : MonoBehaviour
 
     [Header("Sprites Bloqueo")]
     [SerializeField] Sprite[] spritesBloqueo;
+    public Transform puntoSujecion;
+    private Objeto objetoCercano;
+    public Objeto objetoSujeto;
+    public float fuerzaLanzamiento = 10f;
+    private Inventario inventario;
+
+    public GameObject CanvasInfo;
+    public GameObject tsunadePanel;
+    public GameObject tsunadePanel2;
+    public bool tsunadeCerca = false;
+
+    //public ScrollPanel scrollPanel;
+    private GameObject tsunade;
+    //public panelErmitaño panelScript;
+    public GameObject mensajePocion;
+    private Vector2 ultimaDireccion = Vector2.right;
+    public float distanciaSujecion = 0.1f;
+    public bool puedoMoverme = true;
+    [HideInInspector]
+    public bool timelineMostrado = false;
+    public float ultimoDialogo = 0f;
+    public float cooldownDialogo = 2f;
+
+    public bool puedeTransformarse = false;
+
+    [Header("HUmo")]
+    [SerializeField] Animator focusAnimator;
+    [SerializeField] SpriteRenderer spriterendersmoke;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -90,6 +118,11 @@ public class PlayerController : MonoBehaviour
 
         //Obtener sprite renderer
         spriteRendererPlayer = gameObject.GetComponentInChildren<SpriteRenderer>();
+
+        inventario = GetComponent<Inventario>();
+        CanvasInfo.SetActive(false);
+        tsunadePanel.SetActive(false);
+        tsunade = GameObject.FindWithTag("Tsunade");
     }
 
     // Update is called once per frame
@@ -144,6 +177,13 @@ public class PlayerController : MonoBehaviour
         }
 
         //Sistema movimiento
+        if (!puedoMoverme)
+        {
+            rigidBody.linearVelocity = Vector2.zero;
+            state = "idle";
+            return;
+        }
+
         float forceX = Input.GetAxis("Horizontal");
         float forceY = Input.GetAxis("Vertical");
 
@@ -166,8 +206,22 @@ public class PlayerController : MonoBehaviour
 
         Vector2 movimiento = new Vector2(forceX, forceY) * maxSpeed;
 
-
         rigidBody.linearVelocity = movimiento;
+
+        //Mover punto de sujeción junto al jugador
+        Vector2 direccion = new Vector2(forceX, forceY);
+
+        if (direccion != Vector2.zero)
+            ultimaDireccion = direccion.normalized;
+
+        // Punto de sujeción
+        Vector2 offset = ultimaDireccion * distanciaSujecion;
+
+        // Si está flippeado horizontalmente, invierte el offset
+        if (transform.localScale.x < 0)
+            offset.x *= -1;
+
+        puntoSujecion.localPosition = offset;
 
 
         //Maquina de estados
@@ -179,6 +233,7 @@ public class PlayerController : MonoBehaviour
             case "MoveLeft":
             case "MoveUp":
             case "MoveDown":
+
                 if (rigidBody.linearVelocity.x > 0)
                 {
                     state = "MoveRight";
@@ -202,6 +257,47 @@ public class PlayerController : MonoBehaviour
                     state = "idle";
                 }
 
+                if (objetoSujeto != null && (objetoSujeto.nombreObjeto == "Pocion1" || objetoSujeto.nombreObjeto == "Pocion2" || 
+                objetoSujeto.nombreObjeto == "Pocion3")  
+                && Input.GetKeyDown(KeyCode.X))
+                {
+                    //BeberPocion();
+                    state = "BeberPocion";
+                }
+
+                if (Input.GetKeyDown(KeyCode.X))
+                {
+                    Debug.Log("x pulsada");
+                    CogerObjeto();
+                }
+
+                //si el objeto esta cogido puedo lanzarlo o guardarlo en el inventario
+                if (Input.GetKeyDown(KeyCode.Space) && objetoSujeto != null)
+                {
+                    LanzarObjeto();
+                }
+                else if (Input.GetKeyDown(KeyCode.G) && objetoSujeto != null)
+                {
+                    GuardarObjeto();
+                }
+                //Soltar el objeto en caso de no necesitarlo
+                else if (Input.GetKeyDown(KeyCode.Z) && objetoSujeto != null)
+                {
+                    SoltarObjeto();
+                }
+
+                //Mostrar paneles tsunade al acercarme a ella
+                if (!tsunadePanel.activeSelf && tsunadeInRange() && objetoSujeto != null && !objetoSujeto.esRecompensa)
+                {
+                    if (Time.time - ultimoDialogo >= cooldownDialogo)
+                    {
+                        tsunadePanel.SetActive(true);
+                        //puedoMoverme = false;
+                    }
+                }
+                //Beber pocion si la tiene equipada y mostrar mensaje HUD
+                MostrarMensajePocion();
+
                 if (Input.GetButtonDown("Fire1") && cooldownMele <= 0)
                 {
                     if (objectPicked != null)
@@ -217,9 +313,12 @@ public class PlayerController : MonoBehaviour
 
                 }
 
-                if (Input.GetButtonDown("Fire3"))
+                if (Input.GetButtonDown("Fire3") && puedeTransformarse)
                 {
                     human = !human;
+
+                    SmokeEfect();
+
                     if (objectPicked != null)
                     {
                         BoxCollider2D tempBoxCollider = objectPicked.GetComponent<BoxCollider2D>();
@@ -364,6 +463,12 @@ public class PlayerController : MonoBehaviour
                 indicadorParry.fillAmount = staminaParry / staminaDuration;
 
                 break;
+            case "BeberPocion":
+                //animator.SetInteger("State-int", 7);
+                animator.SetTrigger("Beber");
+                //BeberPocion();
+                //Animacion beber pocion 
+                break;
 
         }
 
@@ -410,6 +515,198 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void MostrarMensajePocion()
+    {
+        if (objetoSujeto != null && (objetoSujeto.nombreObjeto == "Pocion1" || objetoSujeto.nombreObjeto == "Pocion2" || objetoSujeto.nombreObjeto == "Pocion3"))
+        {
+            mensajePocion.SetActive(true);
+            CanvasInfo.SetActive(false);
+        }
+        else
+        {
+            mensajePocion.SetActive(false);
+        }
+    }
+
+    public void BeberPocion()
+    {
+        Debug.Log("Has bebido la poción");
+        if (objetoSujeto.nombreObjeto == "Pocion1")
+        {
+            if (gameManager.vidaPlayer >= 10)
+            {
+                Debug.Log("Vida al máximo, no puedes beber esta poción");
+                return;
+            }
+            gameManager.RecuperarVida(2f);
+        }
+        else if (objetoSujeto.nombreObjeto == "Pocion2")
+        {
+            gameManager.AumentarVelocidad(3f);
+        }
+        else if (objetoSujeto.nombreObjeto == "Pocion3")
+        {
+            if (gameManager.vidaPlayer > 6)
+            {
+                Debug.Log("Vida demasiado alta, no puedes beber esta poción");
+                return;
+            }
+            gameManager.RecuperarVida(4f);
+        }
+        Destroy(objetoSujeto.gameObject);
+        objetoSujeto = null;
+        mensajePocion.SetActive(false);
+    }
+
+    //Coger objeto cercano
+    public void CogerObjeto()
+    {
+        if (objetoSujeto == null && objetoCercano != null)
+        {
+            float distancia = Vector2.Distance(transform.position, objetoCercano.transform.position);
+            float rangoDeteccion = 2f;
+            if (distancia <= rangoDeteccion)
+            {
+                objetoSujeto = objetoCercano;
+                objetoSujeto.Coger(puntoSujecion);
+    
+                CanvasInfo.SetActive(true);
+                Transform light = objetoSujeto.transform.Find("Light");
+                if (light != null)
+                {
+                    light.gameObject.SetActive(false);
+                }
+                if ((objetoCercano.nombreObjeto == "PergaminoSagrado" || objetoCercano.nombreObjeto == "CollarShizune" || objetoCercano.nombreObjeto == "Flor")
+                && objetoCercano.yaRecogido == false)
+                {
+                    GameManager.Instance.objetosRecogidos += 1;
+                    GameManager.Instance.ActualizarContadorObjetos();
+                    objetoCercano.yaRecogido = true;
+                    if (!timelineMostrado)
+                    {
+                        GameManager.Instance.ReproducirTimelineTsunade();
+                        timelineMostrado = true;
+                    }
+                }
+                else
+                {
+                    Debug.Log("El objeto ya ha sido recogido anteriormente.");
+                }
+            }
+            else
+            {
+                objetoCercano = null;
+                Debug.Log("El objeto está fuera de rango para ser cogido.");
+            }
+        }
+    }
+
+    //Lanzar objeto sujeto
+    public void LanzarObjeto()
+    {
+        if (objetoSujeto == null)
+        {
+            return;
+        }
+
+    Vector2 direccion = puntoSujecion.position - transform.position;
+    if (direccion.sqrMagnitude < 0.01)
+    {
+        if (rigidBody != null && rigidBody.linearVelocity.magnitude > 0.01f)
+            direccion = rigidBody.linearVelocity.normalized;
+        else
+            direccion = Vector2.right; 
+    }
+
+    
+    Objeto objetoLanzado = objetoSujeto;
+    objetoLanzado.Lanzar(direccion, fuerzaLanzamiento);
+    
+    objetoSujeto = null;
+
+        
+        string nombre = objetoLanzado != null ? objetoLanzado.nombreObjeto : null;
+
+        Inventario.InventoryEntry entrada = inventario.objetos.Find(e => e.nombre == nombre);
+    if (entrada != null && entrada.cantidad > 0)
+        {
+
+            GameObject nueva = Instantiate(entrada.prefab, puntoSujecion.position, puntoSujecion.rotation);
+            Objeto nuevoObjeto = nueva.GetComponent<Objeto>();
+            if (nuevoObjeto != null)
+            {
+                nueva.SetActive(true);
+
+                // Equipar el nuevo objeto y decrementar la cantidad en el inventario
+                EquiparObjeto(nuevoObjeto);
+                inventario.EliminarObjeto(entrada);
+            }
+            else
+            {
+                Debug.Log("El objeto instanciado no tiene componente Objeto.");
+                objetoSujeto = null;
+            }
+        }
+        else
+        {
+            objetoSujeto = null;
+            //objetoLanzado.gameObject.SetActive(false);
+        }
+    }
+
+    //Guardar objeto en inventario
+    public void GuardarObjeto()
+    {
+        inventario.AñadirObjeto(objetoSujeto);
+        objetoSujeto.CogerObjeto();
+        objetoSujeto = null;
+        Debug.Log("Objeto guardado en inventario.");
+        CanvasInfo.SetActive(false);
+    }
+
+    //Equipar objeto desde inventario
+    public void EquiparObjeto(Objeto objetoCercano)
+    {
+        if (objetoSujeto != null)
+        {
+            objetoSujeto.transform.SetParent(null);
+            objetoSujeto.gameObject.SetActive(false);
+        }
+        objetoSujeto = objetoCercano;
+        Debug.Log($"[StatesMachine] Equipando objeto '{objetoCercano?.nombreObjeto}'");
+        objetoSujeto.gameObject.SetActive(true);
+        //Resetar valores del rididbody cada vez que se equipe un objeto
+        Rigidbody2D rb = objetoSujeto.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.angularVelocity = 0f;
+            rb.rotation = 0f;
+            rb.bodyType = RigidbodyType2D.Kinematic;
+            rb.gravityScale = 0;
+        }
+        objetoSujeto.transform.position = puntoSujecion.position;
+        objetoSujeto.transform.rotation = puntoSujecion.rotation;
+
+        objetoSujeto.Coger(puntoSujecion);
+        objetoSujeto.transform.localScale = Vector3.one;
+    }
+    public void SoltarObjeto()
+    {
+        if (objetoSujeto != null)
+        {
+            Objeto objetoDejado = objetoSujeto;
+            objetoSujeto.Soltar();
+            objetoSujeto = null;
+            Transform light = objetoDejado.transform.Find("Light");
+            if (light != null)
+            {
+                light.gameObject.SetActive(true);
+            }
+            CanvasInfo.SetActive(false);
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("intObject") && toatTongeTonge.enabled)
@@ -448,12 +745,39 @@ public class PlayerController : MonoBehaviour
             gameManager.PlayerDie();
         }
 
+        if (other.CompareTag("intObject"))
+        {
+            objetoCercano = other.GetComponent<Objeto>();
+        }
+        if (other.CompareTag("Tsunade"))
+        {
+            Debug.Log("Entraste en el rango de Tsunade");
+            tsunadeCerca = true;
+        }
+        if (other.CompareTag("Moneda"))
+        {
+            GameManager.Instance.RecolectarMonedas();
+        }
+
     }
 
     private void OnTriggerExit2D(Collider2D other) {
         if (other.CompareTag("nenufar"))
         {
             other.gameObject.layer = 3;
+        }
+
+        if (other.CompareTag("intObject"))
+        {
+            if (objetoCercano != null && other.gameObject == objetoCercano.gameObject)
+            {
+                objetoCercano = null;
+            }
+        }
+        if (other.CompareTag("Tsunade"))
+        {
+            Debug.Log("Saliste del rango de Tsunade");
+            tsunadeCerca = false;
         }
     }
 
@@ -495,6 +819,24 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    void SmokeEfect()
+    {
+        StartCoroutine(SmokeEffectCorutine());
+    }
+
+    IEnumerator SmokeEffectCorutine()
+    {
+        focusAnimator.enabled = true;
+        spriterendersmoke.enabled = true;
+        focusAnimator.Play("humocambiodeposicion_Clip", 0, 0f);
+
+        yield return new WaitForSeconds(0.4f);
+
+        focusAnimator.enabled = false;
+        spriterendersmoke.enabled = false;
+        
+    }
     
     //Prueva de corrutina para salto de sapo
     private IEnumerator SaltoPlano(Vector3 destino)
@@ -535,6 +877,58 @@ public class PlayerController : MonoBehaviour
         rigidBody.simulated = true;
 
         estaSaltando = false;
+    }
+
+    bool tsunadeInRange()
+    {
+        //float distancia = Vector2.Distance(transform.position, tsunade.transform.position);
+        //return distancia <= 1.5f;
+        Vector2 direccion = ultimaDireccion;
+        float distancia = 1f;
+        Vector2[] direcciones = 
+        {
+            Vector2.up,
+            Vector2.down,
+            Vector2.left,
+            Vector2.right
+        };
+
+        int layerMask = LayerMask.GetMask("tsunade");
+
+        foreach (Vector2 dir in direcciones)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, distancia, layerMask);
+            Debug.DrawRay(transform.position, dir * distancia, Color.yellow);
+            if (hit.collider != null && hit.collider.CompareTag("Tsunade"))
+            {
+                return true;
+            }
+
+        }return false;
+    }
+
+    public void AceptarEntrega()
+    {
+        /*objetoSujeto.Soltar();
+        objetoSujeto = null;
+        tsunadePanel.SetActive(false);
+        Invoke ("DesactivarObjetoCercano", 0.5f);*/
+        Objeto objetoEntregado = objetoSujeto;
+        tsunade tsunadeScript = GameObject.FindWithTag("Tsunade").GetComponent<tsunade>();
+        tsunadeScript.objetoRecibido = objetoEntregado;
+
+        objetoSujeto.Soltar();
+        objetoSujeto = null;
+
+        objetoEntregado.gameObject.SetActive(false);
+        inventario.EliminarObjeto(objetoEntregado);
+
+        //Invoke ("DesactivarObjetoCercano", 0.5f);
+    }
+
+    public void RecibirRecompensa(Objeto recompensa)
+    {
+        inventario.AñadirObjeto(recompensa);
     }
 
 }

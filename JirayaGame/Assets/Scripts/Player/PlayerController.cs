@@ -187,6 +187,17 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        if (state == "Parry")
+        {
+            if (Input.GetButtonUp("Fire2"))
+            {
+                state = "idle";
+            }
+
+            rigidBody.linearVelocity = Vector2.zero;
+            return;
+        }
+
         float forceX = Input.GetAxis("Horizontal");
         float forceY = Input.GetAxis("Vertical");
 

@@ -14,6 +14,7 @@ public class botonpuzzlehabilidad : MonoBehaviour
 
     public AudioClip sonidoError;
     public AudioClip sonidoCorrecto;
+    public AudioClip sonidoBoton;
     public AudioSource audioSource;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -32,6 +33,7 @@ public class botonpuzzlehabilidad : MonoBehaviour
                 contador++;
                 spriteRenderer.enabled = true;
                 botones[i].light2D.color = Color.green;
+                audioSource.PlayOneShot(sonidoBoton);
 
             }
             else if (botones[i].botonActivado == true && contador < i)

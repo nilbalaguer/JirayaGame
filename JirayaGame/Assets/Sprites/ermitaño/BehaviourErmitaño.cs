@@ -25,6 +25,8 @@ public class BehaviourErmitaño : MonoBehaviour
     public bool puedeMoverse = false;
     public float rangoEnemy = 5f;
     private GameObject enemy;
+
+    public GameObject[] enemies;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -64,7 +66,7 @@ public class BehaviourErmitaño : MonoBehaviour
                         currentState = State.Patrol;
                     }
                 }
-                else if (PlayerinRange() && !panelScript.hasTalked && !esErmitañoTienda && !EnemyinRange())
+                else if (PlayerinRange() && !panelScript.hasTalked && !esErmitañoTienda && EnemigosMuertos())
                 {
                     //currentState = State.Talking;
                     currentState = State.Chasing;
@@ -89,7 +91,7 @@ public class BehaviourErmitaño : MonoBehaviour
                     currentState = State.Idle;
                     break;
                 }
-                if (PlayerinRange() && !panelScript.hasTalked && !EnemyinRange())
+                if (PlayerinRange() && !panelScript.hasTalked && EnemigosMuertos())
                 {
                     //currentState = State.Talking;
                     currentState = State.Chasing;
@@ -243,5 +245,17 @@ public class BehaviourErmitaño : MonoBehaviour
         }
         float distancia = Vector2.Distance(transform.position, enemy.transform.position);
         return distancia <= rangoEnemy;
+    }
+
+    bool EnemigosMuertos()
+    {
+        foreach (GameObject enemigo in enemies)
+        {
+            if (enemigo != null)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }

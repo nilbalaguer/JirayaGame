@@ -579,8 +579,8 @@ public class PlayerController : MonoBehaviour
                 if ((objetoCercano.nombreObjeto == "PergaminoSagrado" || objetoCercano.nombreObjeto == "CollarShizune" || objetoCercano.nombreObjeto == "Flor")
                 && objetoCercano.yaRecogido == false)
                 {
-                    CambioMapa.Instance.objetosRecogidos += 1;
-                    CambioMapa.Instance.ActualizarContadorObjetos();
+                    GameManager.Instance.objetosRecogidos += 1;
+                    GameManager.Instance.ActualizarContadorObjetos();
                     objetoCercano.yaRecogido = true;
                     if (!timelineMostrado)
                     {

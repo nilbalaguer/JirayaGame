@@ -73,6 +73,9 @@ public class GameManager : MonoBehaviour
 
     //Cinematica ermitaño para introducir tienda
     public PlayableDirector timelineErmitañoTienda;
+    public int objetosTotales = 6;
+    public int objetosRecogidos = 0;
+    public TextMeshProUGUI textoObjetos;
 
     void Awake()
     {
@@ -298,5 +301,10 @@ public class GameManager : MonoBehaviour
     private void RestablecerVelocidad()
     {
         player.maxSpeed = 5f;
+    }
+
+    public void ActualizarContadorObjetos()
+    {
+        textoObjetos.text = "Objetos encontrados: " + objetosRecogidos + "/" + objetosTotales;
     }
 }

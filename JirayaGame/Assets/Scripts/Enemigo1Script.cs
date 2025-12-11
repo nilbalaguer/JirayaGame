@@ -49,6 +49,7 @@ public class Enemigo1Script : MonoBehaviour
 
     [Header("GameManager")]
     private GameManager gameManager;
+    public bool estaMuerto = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -194,6 +195,7 @@ public class Enemigo1Script : MonoBehaviour
                 //instanciar moneda
                 //Instantiate(gameManager.monedaPrefab, transform.position, Quaternion.identity);
                 gameManager.RecolectarMonedas();
+                estaMuerto = true;
                 Destroy(gameObject);
             } else
             {

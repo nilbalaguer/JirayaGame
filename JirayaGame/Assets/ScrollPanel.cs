@@ -9,9 +9,17 @@ public class ScrollPanel : MonoBehaviour
     public npcReputacion reputacion;
     public bool hasTalked = false;
     public bool entregarObjeto = false;
-    public StatesMachine playerScript;
+    //public StatesMachine playerScript;
+    public PlayerController playerScript;
     public NpcStates npcScript;
+    public Misions misionsScript;
+    private tsunade tsunadeScript;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    void Start()
+    {
+        tsunadeScript = GameObject.FindWithTag("Tsunade").GetComponent<tsunade>();   
+    }
 
     void Awake()
     {
@@ -46,7 +54,7 @@ public class ScrollPanel : MonoBehaviour
 
     public void botonSi()
     {
-        reputacion.RespuestaPositiva();
+        //reputacion.RespuestaPositiva();
         animator.SetTrigger("Close");
 
         if (npcScript != null)
@@ -54,12 +62,30 @@ public class ScrollPanel : MonoBehaviour
             npcScript.hasTalked = true;
             npcScript = null;
         }
-        playerScript.GetComponent<movement>().puedoMoverme = true;
+        misionsScript.MostrarMision();
+        playerScript.puedoMoverme = true;
+        if (misionsScript.tipoMision == Misions.MisionTipo.HablarConNpc)
+        {
+            GameObject npcDest = GameObject.Find(misionsScript.npcDestino);
+            if (npcDest != null)
+            {
+                NpcStates npcDestinoScript = npcDest.GetComponent<NpcStates>();
+
+                npcDestinoScript.misionNpc = misionsScript;
+                npcDestinoScript.misionNpc.misionActiva = true;       
+                npcDestinoScript.npcIcono.sprite = npcDestinoScript.iconoIntro;
+                npcDestinoScript.canvasImagen.SetActive(true);
+            }
+            else
+            {
+                Debug.Log("No se encontró el NPC destino");
+            }
+        }
     }
 
     public void botonNo()
     {
-        reputacion.RespuestaNegativa();
+        //reputacion.RespuestaNegativa();
         animator.SetTrigger("Close");
 
         if (npcScript != null)
@@ -67,7 +93,7 @@ public class ScrollPanel : MonoBehaviour
             npcScript.hasTalked = true;
             npcScript = null;
         }
-        playerScript.GetComponent<movement>().puedoMoverme = true;
+        playerScript.puedoMoverme = true;
     }
 
     //Botones panel tsunade
@@ -77,11 +103,15 @@ public class ScrollPanel : MonoBehaviour
         playerScript.AceptarEntrega();
         entregarObjeto = true;
         animator.SetTrigger("Close");
+        tsunadeScript.entregado = true;
     }
     
     public void btnRechazar()
     {
         entregarObjeto = false;
         animator.SetTrigger("Close");
+        playerScript.ultimoDialogo = Time.time;
+        playerScript.puedoMoverme = true;
+        tsunadeScript.entregado = false;
     }
 }

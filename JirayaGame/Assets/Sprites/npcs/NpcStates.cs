@@ -6,7 +6,7 @@ public class NpcStates : MonoBehaviour
     public Rigidbody2D rb;
     private Animator anim;
 
-    public enum State { Idle, Patrol, Alerted, Scared, Intro };
+    public enum State { Idle, Patrol, Alerted, Scared, Intro, EndMision };
     public State currentState;
 
     public Transform[] patrolPoints; 
@@ -18,13 +18,15 @@ public class NpcStates : MonoBehaviour
 
     private GameObject player;
     private GameObject enemy;
-    public float rangoPlayer = 2f;
+    public float rangoPlayer = 1f;
     public float rangoEnemy = 3f;
 
     public GameObject dialogueBox;
     public GameObject introDialog;
+    public PanelNpc panelNpcScript;
     public ScrollPanel scrollPanel;
     public GameObject canvasImagen;
+    public GameObject dialogueShamuzen;
 
     public Image npcIcono;
     public Sprite iconoNormal;
@@ -35,7 +37,16 @@ public class NpcStates : MonoBehaviour
 
     public bool necesitaAlejarse = false;
     public bool introTerminada = false;
-    private bool introAsignada = false;
+    public bool introAsignada = false;
+
+    public bool puedeInteractuar = true;
+
+    public Misions misionNpc;
+    public bool dialogMisionMostrado = false;
+    public GameManager gameManager;
+    public string nameNpc;
+    
+    public bool esNpcShamizen;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -47,7 +58,9 @@ public class NpcStates : MonoBehaviour
         }*/
         //else
         //{
-            currentState = State.Idle;
+        if (!NpcIntro)
+        currentState = State.Idle;
+
         //}
         waitCounter = waitTime;
 
@@ -59,7 +72,21 @@ public class NpcStates : MonoBehaviour
         enemy = GameObject.FindWithTag("Enemy");
         dialogueBox.SetActive(false);
         introDialog.SetActive(false);
-        //scrollPanel = dialogueBox.GetComponent<ScrollPanel>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        if (puedeInteractuar == false)
+        {
+            hasTalked = true;
+            canvasImagen.SetActive(false);
+        }
+
+        if (dialogueShamuzen == null && panelNpcScript == null && !esNpcShamizen)
+        {
+            return;
+        }
+        else
+        {
+            dialogueShamuzen.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -70,21 +97,31 @@ public class NpcStates : MonoBehaviour
             player = GameObject.FindWithTag("Player");
         }
 
-        if (!introAsignada && GameManager.Instance != null)
-        {
-            if (NpcIntro)
-            {
-                currentState = State.Intro;
-                introAsignada = true;
-            }
-            else
-            {
-                introAsignada = true;
-            }
-        }
+        // if (!introAsignada && GameManager.Instance != null)
+        // {
+        //     if (NpcIntro)
+        //     {
+        //         currentState = State.Intro;
+        //         introAsignada = true;
+        //     }
+        //     else
+        //     {
+        //         introAsignada = true;
+        //     }
+        // }
+        // if (!introAsignada)
+        // {
+        //     return;
+        // }
         if (!introAsignada)
         {
-            return;
+            if (GameManager.Instance == null) return;
+            if (player == null) return;
+
+            if (NpcIntro)
+                currentState = State.Intro;
+
+            introAsignada = true;
         }
         
         Vector2 pos = transform.position;
@@ -107,21 +144,27 @@ public class NpcStates : MonoBehaviour
                         currentState = State.Patrol;
                     }
                 }
-                else if (PlayerinRange() && !hasTalked)
+                else if (puedeInteractuar && PlayerinRange() && !hasTalked)
                 {
                     currentState = State.Alerted;
                 }
                 else if (EnemyinRange())
                 {
                     currentState = State.Scared;
+                }else if (misionNpc != null && misionNpc.misionCompletada && !dialogMisionMostrado)
+                {
+                    currentState = State.EndMision;
                 }
                 break;
 
             case State.Patrol:
-                if (PlayerinRange() && !hasTalked){
+                if (puedeInteractuar && PlayerinRange() && !hasTalked){
                     currentState = State.Alerted;
                 }else if (EnemyinRange()){
                     currentState = State.Scared;
+                }else if (misionNpc != null && misionNpc.misionCompletada && !dialogMisionMostrado)
+                {
+                    currentState = State.EndMision;
                 }
                 else
                 {
@@ -154,6 +197,13 @@ public class NpcStates : MonoBehaviour
                     waitCounter = waitTime;
                 }
                 break;
+            case State.EndMision:
+                if (dialogMisionMostrado)
+                {
+                    currentState = State.Idle;
+                    waitCounter = waitTime;
+                }
+                break;
         }
 
         switch (currentState)
@@ -178,7 +228,7 @@ public class NpcStates : MonoBehaviour
                 Vector2 directionToPlayer = (player.transform.position - transform.position).normalized;
                 if (Mathf.Abs(directionToPlayer.x) > Mathf.Abs(directionToPlayer.y))
                 {
-                    transform.localScale = new Vector3(directionToPlayer.x < 0 ? -5 : 5, 5, 5);
+                    transform.localScale = new Vector3(directionToPlayer.x < 0 ? -3 : 3, 3, 3);
                     anim.SetInteger("state", 7);
                 }
                 else
@@ -194,13 +244,29 @@ public class NpcStates : MonoBehaviour
                 }
                 if (!hasTalked)
                 {
-                    dialogueBox.SetActive(true);
-                    scrollPanel.npcScript = this;
-                    player.GetComponent<movement>().puedoMoverme = false;
+                    if (!esNpcShamizen){
+                        dialogueBox.SetActive(true);
+                        scrollPanel.npcScript = this;
+                        player.GetComponent<PlayerController>().puedoMoverme = false;
+
+                        scrollPanel.misionsScript = misionNpc;
+                    }
+                    else{
+                        dialogueShamuzen.SetActive(true);
+                        panelNpcScript.npcScript = this;
+                        player.GetComponent<PlayerController>().puedoMoverme = false;
+                    }
                 }
                 else
                 {
-                    canvasImagen.SetActive(false);
+                    if (misionNpc == null || !misionNpc.misionActiva)
+                    {
+                        canvasImagen.SetActive(false);
+                    }
+                    else
+                    {
+                        canvasImagen.SetActive(true);
+                    }
                 }
                 break;
             case State.Scared:
@@ -212,6 +278,29 @@ public class NpcStates : MonoBehaviour
                 npcIcono.sprite = iconoIntro;
                 MoveTowardsPlayer();
                 break;
+            case State.EndMision:
+                rb.linearVelocity = Vector2.zero;
+                directionToPlayer = (player.transform.position - transform.position).normalized;
+                if (Mathf.Abs(directionToPlayer.x) > Mathf.Abs(directionToPlayer.y))
+                {
+                    transform.localScale = new Vector3(directionToPlayer.x < 0 ? -3 : 3, 3, 3);
+                    anim.SetInteger("state", 7);
+                }
+                else
+                {
+                    if (directionToPlayer.y > 0)
+                    {
+                        anim.SetInteger("state", 5);
+                    }
+                    else
+                    {
+                        anim.SetInteger("state", 4);
+                    }
+                }
+                 //Añadir logica para mostrar dialogo de mision completada
+                break;
+
+
         }
 
     }
@@ -227,7 +316,7 @@ public class NpcStates : MonoBehaviour
         Vector2 npcPos = transform.position;
         Vector2 directionToPlayer = (playerPos - npcPos).normalized;
 
-        float distanciaParada = 1.5f;
+        float distanciaParada = 0.7f;
         float distance = Vector2.Distance(npcPos, playerPos);
         Vector2 targetPos = playerPos - directionToPlayer * distanciaParada;
         UpdateSpriteDirection(directionToPlayer);
@@ -245,7 +334,7 @@ public class NpcStates : MonoBehaviour
             //anim.SetInteger("state", 0);
             if (Mathf.Abs(directionToPlayer.x) > Mathf.Abs(directionToPlayer.y))
                 {
-                    transform.localScale = new Vector3(directionToPlayer.x < 0 ? -5 : 5, 5, 5);
+                    transform.localScale = new Vector3(directionToPlayer.x < 0 ? -3 : 3, 3, 3);
                     anim.SetInteger("state", 7);
                 }
                 else
@@ -286,7 +375,7 @@ public class NpcStates : MonoBehaviour
         if (absX > absY)
         {
             anim.SetInteger("state", 1);
-            transform.localScale = new Vector3(dir.x < 0 ? -5 : 5, 5, 5);
+            transform.localScale = new Vector3(dir.x < 0 ? -3 : 3, 3, 3);
         }
         else
         {
@@ -310,7 +399,131 @@ public class NpcStates : MonoBehaviour
     
     bool EnemyinRange()
     {
-        float distancia = Vector2.Distance(transform.position, enemy.transform.position);
-        return distancia <= rangoEnemy;
+        if (enemy == null)
+        {
+            return false;
+        }
+        Vector2[] direcciones = 
+        {
+            Vector2.up,
+            Vector2.down,
+            Vector2.left,
+            Vector2.right
+        };
+        foreach (Vector2 direccion in direcciones)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, direccion, rangoEnemy, LayerMask.GetMask("Enemy"));
+
+            if (hit.collider != null && hit.collider.CompareTag("Enemy"))
+            {
+                return true;
+            }
+        }
+        return false;
+        //float distancia = Vector2.Distance(transform.position, enemy.transform.position);
+        //return distancia <= rangoEnemy;
+
+        //usar raycast
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            /*misionNpc.CompletarMision();
+            gameManager.monedas -= 1; 
+            gameManager.textoMonedas.text = gameManager.monedas.ToString();*/
+            if (misionNpc != null && !misionNpc.misionActiva)
+            {
+                return;
+            }
+            if(misionNpc != null && misionNpc.misionCompletada){
+                return;
+            }
+            if (misionNpc == null)
+            {
+                return;
+            }
+
+            switch (misionNpc.tipoMision)
+            {
+                case Misions.MisionTipo.RecolectarMoneda:
+                    MisionMonedas();
+                    break;
+               case Misions.MisionTipo.BuscarObjeto:
+                    MisionObjeto();
+                    break;
+                case Misions.MisionTipo.HablarConNpc:
+                    MisionHablar();
+                    break;
+            }  
+
+        }
+    }
+
+    public void MisionMonedas()
+    {
+        if (gameManager.monedas >= misionNpc.objetivoMonedas)
+        {
+            misionNpc.CompletarMision();
+            gameManager.monedas -= misionNpc.objetivoMonedas; 
+            gameManager.textoMonedas.text = gameManager.monedas.ToString();
+        }
+    }
+
+    public void MisionObjeto()
+    {
+        Objeto objeto = player.GetComponent<PlayerController>().objetoSujeto;
+        if (objeto != null && objeto.nombreObjeto == "ObjetoCampesino")
+        {
+            misionNpc.CompletarMision();
+            Objeto objetoEntregado = objeto;
+            objeto.Soltar();
+            Destroy(objetoEntregado.gameObject);
+            objeto = null;
+            player.GetComponent<PlayerController>().CanvasInfo.SetActive(false);
+        }
+    }
+
+    public void MisionHablar()
+    {
+
+            if (misionNpc == null)
+            {
+                Debug.Log("misionNpc ES NULL");
+                return;
+            }
+
+            if (nameNpc != misionNpc.npcDestino)
+            {
+                Debug.Log("Este NPC no es el destino");
+                return;
+            }
+            Objeto objeto = player.GetComponent<PlayerController>().objetoSujeto;
+            if (objeto != null && objeto.nombreObjeto == "NotaMision")
+            {
+                objeto.Soltar();
+                Destroy(objeto.gameObject);
+                objeto = null;
+
+                misionNpc.CompletarMision();
+                dialogMisionMostrado = false;
+                MostrarDialogoFinal();
+            }
+            else
+            {
+                Debug.Log("No llevas la nota correcta.");
+            }
+    }
+
+    public void MostrarDialogoFinal()
+    {
+        //dialogFinalMision.SetActive(true);
+        misionNpc.panelMisionesCompletadas[2].SetActive(true); 
+        panelInfoManager info3 = misionNpc.panelMisionesCompletadas[2].GetComponent<panelInfoManager>();
+        info3.npcScript = this;
+        canvasImagen.SetActive(false);
+    }
+
+
 }

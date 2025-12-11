@@ -6,15 +6,16 @@ public class tsunade : MonoBehaviour
 {
     private Animator anim;
     public enum State {Idle, Talking};
-    private State currentState;
+    public State currentState;
     private GameObject player;
-    public float rangoPlayer = 1f;
+    public float rangoPlayer = 1.5f;
     public ScrollPanel scrollPanel;
     public GameObject panelDialogo;
     public GameObject tsunadePanel2;
 
     public GameObject[] recompensas;
-    public StatesMachine playerScript;
+    //public StatesMachine playerScript;
+    public PlayerController playerScript;
     //private Objeto objetoSujeto;
     private Objeto objetoRecompensa;
     public Objeto objetoRecibido;
@@ -23,6 +24,7 @@ public class tsunade : MonoBehaviour
     [HideInInspector]
     public float ultimoDialogo = 0f;
     public float cooldownDialogo = 2f;
+    public bool entregado = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -40,7 +42,7 @@ public class tsunade : MonoBehaviour
         switch (currentState)
         {
             case State.Idle:
-                if (PlayerinRange() && scrollPanel.entregarObjeto)
+                if (PlayerinRange() && entregado)
                 {
                     currentState = State.Talking;
 
@@ -48,7 +50,7 @@ public class tsunade : MonoBehaviour
                 break;
 
             case State.Talking:
-                if (!scrollPanel.entregarObjeto)
+                if (!entregado)
                 {
                     currentState = State.Idle;
 
@@ -62,7 +64,7 @@ public class tsunade : MonoBehaviour
                 Vector2 directionToPlayer = player.transform.position - transform.position;
                 if (Mathf.Abs(directionToPlayer.x) > Mathf.Abs(directionToPlayer.y))
                 {
-                    transform.localScale = new Vector3(directionToPlayer.x < 0 ? -5 : 5, 5, 5);
+                    transform.localScale = new Vector3(directionToPlayer.x < 0 ? -3 : 3, 3, 3);
                     anim.SetInteger("state", 0);
                 }
                 else
@@ -79,9 +81,28 @@ public class tsunade : MonoBehaviour
                 break;
 
             case State.Talking:
-                anim.SetInteger("state", 1);
+                Vector2 dirToPlayer = player.transform.position - transform.position;
+                if (Mathf.Abs(dirToPlayer.x) > Mathf.Abs(dirToPlayer.y))    
+                {
+                    transform.localScale = new Vector3(dirToPlayer.x < 0 ? -3 : 3, 3, 3);
+                    anim.SetInteger("state", 1);
+                }
+                else
+                {
+                    if (dirToPlayer.y > 0)
+                    {
+                        anim.SetInteger("state", 3);
+                    }else
+                    {
+                        anim.SetInteger("state", 2);
+                        //añadir state 3 animacion back talk
+                    }
+                }
+                //anim.SetInteger("state", 1);
                 panelDialogo.SetActive(true);
                 panelDialogo.GetComponent<panelTsunade>().DialogoSetup(objetoRecibido.nombreObjeto);
+                //Si se han entregado los 3 objetos mostrar dialofo final
+                playerScript.puedoMoverme = false;
                 break;
         }
         
@@ -90,17 +111,59 @@ public class tsunade : MonoBehaviour
             if (Time.time - ultimoDialogo >= cooldownDialogo)
             {
                 tsunadePanel2.SetActive(true);
+                Vector2 dirToPlayer = player.transform.position - transform.position;
+                if (Mathf.Abs(dirToPlayer.x) > Mathf.Abs(dirToPlayer.y))    
+                {
+                    transform.localScale = new Vector3(dirToPlayer.x < 0 ? -3 : 3, 3, 3);
+                    anim.SetInteger("state", 1);
+                }
+                else
+                {
+                    if (dirToPlayer.y > 0)
+                    {
+                        anim.SetInteger("state", 3);
+                    }else
+                    {
+                        anim.SetInteger("state", 2);
+                        //añadir state 3 animacion back talk
+                    }
+                }
+                
+                playerScript.puedoMoverme = false;
             }
-        }else if (PlayerinRange() && playerScript.objetoSujeto != null && objetoRecompensa.esRecompensa)
+        }else if (PlayerinRange() && playerScript.objetoSujeto != null && objetoRecompensa != null &&objetoRecompensa.esRecompensa)
         {
             tsunadePanel2.SetActive(false);
         }
+
+        /*if (PlayerinRange() && CambioMapa.Instance.objetosRecogidos.Count >= 3)
+        {
+            panelDialogo.SetActive(true);
+            panelDialogo.GetComponent<panelTsunade>().DialogoFinal();
+        }*/
     }
 
     bool PlayerinRange()
     {
-        float distancia = Vector2.Distance(transform.position, player.transform.position);
-        return distancia <= rangoPlayer;
+        float distancia = 1f;
+        Vector2[] direcciones = 
+        {
+            Vector2.up,
+            Vector2.down,
+            Vector2.left,
+            Vector2.right
+        };
+        foreach (Vector2 direccion in direcciones)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, direccion, distancia, LayerMask.GetMask("Player"));
+            Debug.DrawRay(transform.position, direccion * distancia, Color.red);
+
+            if (hit.collider != null && hit.collider.CompareTag("Player"))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void EntregarRecompensa()
@@ -118,15 +181,15 @@ public class tsunade : MonoBehaviour
                 prefabRecompensa = recompensas[2];
                 break;
         }
-        objetoRecibido = null;
         GameObject recompensaInstanciada = Instantiate(prefabRecompensa, playerScript.puntoSujecion.position, Quaternion.identity);
         objetoRecompensa = recompensaInstanciada.GetComponent<Objeto>();
         objetoRecompensa.esRecompensa = true;
 
         playerScript.objetoSujeto = objetoRecompensa;
         objetoRecompensa.Coger(playerScript.puntoSujecion);
+        objetoRecibido = null;
 
-        playerScript.RecibirRecompensa(objetoRecompensa);
+        //playerScript.RecibirRecompensa(objetoRecompensa);
         
         //StatesMachine playerScript = player.GetComponent<StatesMachine>();
         //playerScript.RecibirRecompensa(recompensaInstanciada.GetComponent<Objeto>());

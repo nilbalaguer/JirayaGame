@@ -15,7 +15,9 @@ public class panelErmitaño : MonoBehaviour
     public Sprite iconoCruz;
     public ScrollPanel scrollPanel;
     public tsunade tsunadeScript;
-    public StatesMachine playerScript;
+    public BehaviourErmitaño ermitañoScript;
+    //public StatesMachine playerScript;
+    public PlayerController playerScript;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -40,12 +42,10 @@ public class panelErmitaño : MonoBehaviour
         textoPanel.text = paginas[paginaActual];
         if (paginaActual >= paginas.Length - 1)
         {
-            //btnNext.GetComponentInChildren<TextMeshProUGUI>().text = "Cerrar";
             btnNext.image.sprite = iconoCruz;
         }
         else
         {
-            //btnNext.GetComponentInChildren<TextMeshProUGUI>().text = "Siguiente";
             btnNext.image.sprite = iconoFlecha;
         }
     }
@@ -61,7 +61,13 @@ public class panelErmitaño : MonoBehaviour
         {
             animator.SetTrigger("Close");
             hasTalked = true;
-            playerScript.GetComponent<movement>().puedoMoverme = true;
+            playerScript.puedoMoverme = true;
+            //ermitañoScript.esErmitañoTienda = true;
+            //Mostrar cinematica ermitaño tienda
+            //forzar mirar a la derecha
+            ermitañoScript.enabled = false;
+            ermitañoScript.transform.localScale = new Vector3(3, 3, 3);
+            GameManager.Instance.ReproducirTimelineErmitañoTienda();
         }
     }
 
@@ -79,6 +85,7 @@ public class panelErmitaño : MonoBehaviour
             animator.SetTrigger("Close");
             scrollPanel.entregarObjeto = false;
             tsunadeScript.EntregarRecompensa();
+            playerScript.puedoMoverme = true;
         }
     }
 
@@ -94,6 +101,7 @@ public class panelErmitaño : MonoBehaviour
         {
             animator.SetTrigger("Close");
             tsunadeScript.ultimoDialogo = Time.time;
+            playerScript.puedoMoverme = true;
         }
     }
 

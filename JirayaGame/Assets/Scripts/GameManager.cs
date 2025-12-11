@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using UnityEngine.Playables;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,14 +11,15 @@ public class GameManager : MonoBehaviour
     public enum Estado { Normal, Intro };
     public Estado estadoActual = Estado.Normal;
     public Inventario inventario;
-    public StatesMachine player;
+    //public StatesMachine player;
+    public PlayerController player;
     private Objeto objetoCompradoNuevo;
 
     public NpcStates npcIntro;
     private NpcStates npcIntroActual;
     public TextMeshProUGUI textoMonedas;
     public int monedas = 0;
-
+    public GameObject monedaPrefab;
 
     private string ubicacion = "overworld";
 
@@ -45,11 +47,32 @@ public class GameManager : MonoBehaviour
 
     public GameObject tiendaAlerta;
 
+    //HUD
+    //private TextMeshProUGUI textoVida;
+
+    //Sonidos
+    [Header("Sonidos")]
+    //Vida
+
+    //Player
+
+    //Estadisticas
+    private int enemiesKilled = 0;
+
+    [Header("Sprites")]
+
+    //Partituras obtendias
     private Vector2 posicionInicioSiguienteEscena;
     private Image indicadorVida;
 
     //Controlar Que Puertas estan activadas
     public Dictionary<string, bool> estadosTP = new Dictionary<string, bool>();
+
+    //Cinematica de tsunade al coger primer objeto entregable
+    public PlayableDirector timelineTsunade;
+
+    //Cinematica ermitaño para introducir tienda
+    public PlayableDirector timelineErmitañoTienda;
 
     void Awake()
     {
@@ -72,12 +95,19 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        //IniciarIntro();
+        //textoVida = GameObject.Find("TextoVida").GetComponent<TextMeshProUGUI>();
+        audioSource = gameObject.GetComponent<AudioSource>();
+        playerGameObject = GameObject.Find("Player");
+
+
+        IniciarIntro();
         monedas = 0;
         //textoMonedas.text = monedas.ToString();
         //tiendaAlerta.SetActive(false);
 
         playerGameObject = GameObject.Find("Player");
+
+        player.puedoMoverme = true;
     }
 
     // Update is called once per frame
@@ -88,7 +118,7 @@ public class GameManager : MonoBehaviour
             if (npcIntroActual.introTerminada)
             {
                 estadoActual = Estado.Normal;
-                player.GetComponent<movement>().puedoMoverme = true;
+                player.puedoMoverme = true;
                 npcIntroActual = null;
             }
         }
@@ -99,12 +129,15 @@ public class GameManager : MonoBehaviour
     public void IniciarIntro()
     {
         estadoActual = Estado.Intro;
-        player.GetComponent<movement>().puedoMoverme = false;
+        player.puedoMoverme = false;
 
         npcIntro.NpcIntro = true;
+        npcIntro.introAsignada = false;   // << IMPORTANTE
+        npcIntro.introTerminada = false;  // << IMPORTANTE
         npcIntro.currentState = NpcStates.State.Intro;
         npcIntroActual = npcIntro;
     }
+
 
     public void FinalizarIntro(NpcStates npc)
     {
@@ -113,9 +146,19 @@ public class GameManager : MonoBehaviour
             npcIntroActual.introTerminada = true;
         }
     }
-
-    public void PantallaJefeFinal()
+    
+     public void PlayerDie()
     {
+        audioSource.PlayOneShot(deathSound);
+        Transform playerTransform = playerGameObject.transform;
+        Instantiate(sangrePrefab, playerTransform.position, Quaternion.identity);
+
+        Time.timeScale = 0f;
+    }
+
+    public void ObtenerPartitura()
+    {
+        partiturasNumero += 1;
 
     }
 
@@ -123,7 +166,10 @@ public class GameManager : MonoBehaviour
     public void RecolectarMonedas()
     {
         monedas += 1;
-        textoMonedas.text = monedas.ToString();
+        if (textoMonedas != null)
+        {
+            textoMonedas.text = monedas.ToString();
+        }
     }
 
     public void ComprarObjetos(Objeto objetoComprado)
@@ -139,7 +185,6 @@ public class GameManager : MonoBehaviour
             GameObject ObjInstanciado = Instantiate(objetoComprado.gameObject);
             objetoCompradoNuevo = ObjInstanciado.GetComponent<Objeto>();
             inventario.AñadirObjeto(objetoCompradoNuevo);
-            //Equipar objeto y cada vez que se use restar cantidad en el inventario
         }
         else
         {
@@ -177,15 +222,6 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void PlayerDie()
-    {
-        audioSource.PlayOneShot(deathSound);
-        Transform playerTransform = playerGameObject.transform;
-        Instantiate(sangrePrefab, playerTransform.position, Quaternion.identity);
-
-        Time.timeScale = 0f;
-    }
-
     public void ChangeUbication(string ubi)
     {
         ubicacion = ubi;
@@ -194,11 +230,6 @@ public class GameManager : MonoBehaviour
     public void PlayDeathSound()
     {
         audioSource.PlayOneShot(enemyDeathSound);
-    }
-
-    public void ObtenerPartitura()
-    {
-        partiturasNumero += 1;
     }
 
     public void CambiarEscena(string escenaObjetivo, Vector2 posicionObjetivo)
@@ -244,5 +275,37 @@ public class GameManager : MonoBehaviour
     public void DesabilitarTP(string claveTP)
     {
         estadosTP[claveTP] = false;
+    }
+
+    public void ReproducirTimelineTsunade()
+    {
+        timelineTsunade.Play();
+    }
+
+    public void ReproducirTimelineErmitañoTienda()
+    {
+        timelineErmitañoTienda.Play();
+    }
+
+    public void RecuperarVida(float cantidad)
+    {
+        vidaPlayer += cantidad;
+        if (vidaPlayer > 10f)
+        {
+            vidaPlayer = 10f;
+        }
+        indicadorVida.fillAmount = vidaPlayer / 10;
+    }
+
+    public void AumentarVelocidad(float cantidad)
+    {
+        player.maxSpeed += cantidad;
+        //temporalmnente aumentar la velocidad del player usando timedeltaTime
+        Invoke("RestablecerVelocidad", 5f);
+    }
+
+    private void RestablecerVelocidad()
+    {
+        player.maxSpeed = 5f;
     }
 }

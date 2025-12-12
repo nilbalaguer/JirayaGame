@@ -99,14 +99,18 @@ public class tsunade : MonoBehaviour
                     }
                 }
                 //anim.SetInteger("state", 1);
-                panelDialogo.SetActive(true);
-                panelDialogo.GetComponent<panelTsunade>().DialogoSetup(objetoRecibido.nombreObjeto);
+                //panelDialogo.SetActive(true);
+                if (objetoRecibido != null){
+                    panelDialogo.SetActive(true);
+                    panelDialogo.GetComponent<panelTsunade>().DialogoSetup(objetoRecibido.nombreObjeto);
+                }
                 //Si se han entregado los 3 objetos mostrar dialofo final
                 playerScript.puedoMoverme = false;
+                
                 break;
         }
         
-        if (PlayerinRange() && playerScript.objetoSujeto == null && !scrollPanel.entregarObjeto)
+        if (PlayerinRange() && !playerScript.ObjetoTsunadeExiste() && !scrollPanel.entregarObjeto)
         {
             if (Time.time - ultimoDialogo >= cooldownDialogo)
             {
@@ -135,6 +139,15 @@ public class tsunade : MonoBehaviour
         {
             tsunadePanel2.SetActive(false);
         }
+    }
+
+    public void MostrarDialogo()
+    {
+        if (objetoRecibido == null) return;
+
+        panelDialogo.SetActive(true);
+
+        panelDialogo.GetComponent<panelTsunade>().DialogoSetup(objetoRecibido.nombreObjeto);
     }
 
     bool PlayerinRange()

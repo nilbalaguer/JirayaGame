@@ -28,6 +28,10 @@ public class Inventario : MonoBehaviour
     public PlayerController player;
     private bool navegacionActiva = false;
     private int indiceSeleccionActual = 0;
+
+    public bool modoEntrega = false;
+    private tsunade tsunadeScript;
+    public ScrollPanel panelTsunade;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -41,6 +45,7 @@ public class Inventario : MonoBehaviour
             textoCantidad.gameObject.SetActive(true);
             btnSlots.Add(btnObj);
         }
+        tsunadeScript = GameObject.FindWithTag("Tsunade").GetComponent<tsunade>();
     }
 
     // Update is called once per frame
@@ -155,8 +160,8 @@ public class Inventario : MonoBehaviour
                 entry.escalaOriginal = objeto.transform.localScale;
                 objetos.Add(entry);
 
-                // Auto-equip si no tiene nada equipado
-                if (player.objetoSujeto == null)
+                // Auto-equip si no tiene nada equipado y el shuriken es el objeto añadido
+                if (player.objetoSujeto == null && entry.nombre == "Shuriken")
                 {
                     GameObject nueva = Instantiate(entry.prefab);
                     Objeto nuevoObj = nueva.GetComponent<Objeto>();
@@ -181,7 +186,7 @@ public class Inventario : MonoBehaviour
         {
             existe.cantidad++;
 
-            if (player.objetoSujeto == null)
+            if (player.objetoSujeto == null && existe.nombre == "Shuriken")
             {
                 GameObject nuevaExist = Instantiate(existe.prefab);
                 Objeto nuevoDesdeExist = nuevaExist.GetComponent<Objeto>();
@@ -236,6 +241,25 @@ public class Inventario : MonoBehaviour
                 InventoryEntry captured = entry;
                 btnComp.onClick.AddListener(() =>
                 {
+                    if (modoEntrega)
+                    {
+                        //modo entrega para tsunade
+                        GameObject objeto = Instantiate(captured.prefab);
+                        Objeto objInstanciado = objeto.GetComponent<Objeto>();
+                        tsunadeScript.objetoRecibido = objInstanciado;
+                        
+                        tsunadeScript.entregado = true;
+                        panelTsunade.entregarObjeto = true;
+                        panelTsunade.animator.SetTrigger("Close");
+
+                        EliminarObjeto(captured);
+
+                        //tsunadeScript.MostrarDialogo();
+
+                        modoEntrega = false;
+
+                        return;
+                    }
                     GameObject go = Instantiate(captured.prefab);
                     Objeto objInst = go.GetComponent<Objeto>();
                     go.transform.localScale = captured.escalaOriginal;
@@ -291,6 +315,22 @@ public class Inventario : MonoBehaviour
         {
             Debug.Log("No se ha encontrado nada para eliminar");
         }
+    }
+
+    public List<InventoryEntry> ObtenerEntregables()
+    {
+        List<InventoryEntry> entregables = new List<InventoryEntry>();
+
+        foreach (var entry in objetos)
+        {
+            if (entry.tipo == Objeto.TipoObjeto.PergaminoSagrado ||
+                entry.tipo == Objeto.TipoObjeto.Flor ||
+                entry.tipo == Objeto.TipoObjeto.CollarShizune)
+            {
+                entregables.Add(entry);
+            }
+        }
+        return entregables;
     }
     
 }

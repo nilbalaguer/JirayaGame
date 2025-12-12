@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using System.Collections.Generic;
+
 
 public class PlayerController : MonoBehaviour
 {
@@ -69,7 +71,8 @@ public class PlayerController : MonoBehaviour
     private Objeto objetoCercano;
     public Objeto objetoSujeto;
     public float fuerzaLanzamiento = 10f;
-    private Inventario inventario;
+    [HideInInspector]
+    public Inventario inventario;
 
     public GameObject CanvasInfo;
     public GameObject tsunadePanel;
@@ -579,7 +582,7 @@ public class PlayerController : MonoBehaviour
             float rangoDeteccion = 2f;
             if (distancia <= rangoDeteccion)
             {
-                objetoSujeto = objetoCercano;
+                /*objetoSujeto = objetoCercano;
                 objetoSujeto.Coger(puntoSujecion);
     
                 CanvasInfo.SetActive(true);
@@ -587,7 +590,8 @@ public class PlayerController : MonoBehaviour
                 if (light != null)
                 {
                     light.gameObject.SetActive(false);
-                }
+                }*/
+                inventario.AñadirObjeto(objetoCercano);
                 if ((objetoCercano.nombreObjeto == "PergaminoSagrado" || objetoCercano.nombreObjeto == "CollarShizune" || objetoCercano.nombreObjeto == "Flor")
                 && objetoCercano.yaRecogido == false)
                 {
@@ -599,6 +603,7 @@ public class PlayerController : MonoBehaviour
                         GameManager.Instance.ReproducirTimelineTsunade();
                         timelineMostrado = true;
                     }
+                    objetoCercano.gameObject.SetActive(false);
                 }
                 else
                 {
@@ -707,6 +712,7 @@ public class PlayerController : MonoBehaviour
         if (objetoSujeto != null)
         {
             Objeto objetoDejado = objetoSujeto;
+            objetoDejado.transform.position = transform.position;
             objetoSujeto.Soltar();
             objetoSujeto = null;
             Transform light = objetoDejado.transform.Find("Light");
@@ -930,7 +936,7 @@ public class PlayerController : MonoBehaviour
         objetoEntregado.gameObject.SetActive(false);
         inventario.EliminarObjeto(objetoEntregado);*/
 
-        Inventario.InventoryEntry entry = inventario.objetos.Find(e =>
+        /*Inventario.InventoryEntry entry = inventario.objetos.Find(e =>
         e.tipo == Objeto.TipoObjeto.PergaminoSagrado || e.tipo == Objeto.TipoObjeto.Flor || e.tipo == Objeto.TipoObjeto.CollarShizune);
 
         if (entry == null)
@@ -939,7 +945,38 @@ public class PlayerController : MonoBehaviour
         }
 
         tsunade tsunadeScript = GameObject.FindWithTag("Tsunade").GetComponent<tsunade>();
-        tsunadeScript.objetoRecibido = new Objeto {tipo = entry.tipo};
+        tsunadeScript.objetoRecibido = new Objeto
+        {
+            tipo = entry.tipo,
+            nombreObjeto = entry.nombre
+        };
+
+        inventario.EliminarObjeto(entry);*/
+        List<Inventario.InventoryEntry> entregables = inventario.ObtenerEntregables();
+
+        if (entregables.Count == 0)
+        {
+            return; 
+        }
+
+        if (entregables.Count == 1)
+        {
+           
+            AceptarEntregaDirecta(entregables[0]);
+        }
+        else
+        {
+            // hay varios por lo tanto se entra en el modo de seleccion
+            inventario.modoEntrega = true;
+        }
+    }
+
+    public void AceptarEntregaDirecta(Inventario.InventoryEntry entry)
+    {
+        tsunade tsunadeScript = GameObject.FindWithTag("Tsunade").GetComponent<tsunade>();
+        GameObject objeto = Instantiate(entry.prefab);
+        Objeto objInstanciado = objeto.GetComponent<Objeto>();
+        tsunadeScript.objetoRecibido = objInstanciado;
 
         inventario.EliminarObjeto(entry);
     }

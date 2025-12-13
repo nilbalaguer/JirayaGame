@@ -32,6 +32,12 @@ public class Inventario : MonoBehaviour
     public bool modoEntrega = false;
     private tsunade tsunadeScript;
     public ScrollPanel panelTsunade;
+
+    //navegacion xbox modo entrega
+    [HideInInspector]
+    public int indiceSeleccionEntrega = 0;
+    private float dpadCooldown = 0.2f;
+    private float dpadTimer = 0f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -90,6 +96,7 @@ public class Inventario : MonoBehaviour
         {
             Image img = btn.GetComponent<Image>();
             img.color = new Color(img.color.r, img.color.g, img.color.b, 0f);
+            btn.GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
         }
     }
 
@@ -99,13 +106,16 @@ public class Inventario : MonoBehaviour
         {
             GameObject btn = btnSlots[i];
             Image img = btn.GetComponent<Image>();
+            RectTransform rt = btn.GetComponent<RectTransform>();
             if (i == indiceSeleccionActual)
             {
                 img.color = new Color(img.color.r, img.color.g, img.color.b, 1f);
+                rt.localScale = new Vector3(2,2,2);
             }
             else
             {
                 img.color = new Color(img.color.r, img.color.g, img.color.b, 0.5f);
+                rt.localScale = new Vector3(1,1,1);
             }
         }
     }
@@ -243,6 +253,7 @@ public class Inventario : MonoBehaviour
                 {
                     if (modoEntrega)
                     {
+                        NavegarEntregaXbox();
                         //modo entrega para tsunade
                         GameObject objeto = Instantiate(captured.prefab);
                         Objeto objInstanciado = objeto.GetComponent<Objeto>();
@@ -317,6 +328,7 @@ public class Inventario : MonoBehaviour
         }
     }
 
+    //Comprobar que los objetos entregables a tsunade existen en el inventario
     public List<InventoryEntry> ObtenerEntregables()
     {
         List<InventoryEntry> entregables = new List<InventoryEntry>();
@@ -331,6 +343,49 @@ public class Inventario : MonoBehaviour
             }
         }
         return entregables;
+    }
+
+    //Navegacion xbox para el modo entrega
+    public void NavegarEntregaXbox()
+    {
+        dpadTimer -= Time.deltaTime;
+
+        float dpadX = Input.GetAxis("DPadX");
+
+        if (Mathf.Abs(dpadX) > 0.5f && dpadTimer <= 0f)
+        {
+             if (dpadX > 0.5f)
+            {
+                indiceSeleccionEntrega++;
+            }
+            else if (dpadX < -0.5f)
+            {
+                indiceSeleccionEntrega--;
+            }
+
+            indiceSeleccionEntrega = Mathf.Clamp(indiceSeleccionEntrega, 0, objetos.Count - 1);
+
+            dpadTimer = dpadCooldown;
+        }
+
+        if (Input.GetButtonDown("Submit"))
+        {
+            EntregarObjetoSeleccionado();
+        }
+    }
+
+    private void EntregarObjetoSeleccionado()
+    {
+        InventoryEntry entry = objetos[indiceSeleccionEntrega];
+
+        GameObject objeto = Instantiate(entry.prefab);
+        Objeto objInstanciado = objeto.GetComponent<Objeto>();
+        tsunadeScript.objetoRecibido = objInstanciado;
+
+        EliminarObjeto(entry);
+
+
+        modoEntrega = false;
     }
     
 }

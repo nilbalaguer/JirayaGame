@@ -108,6 +108,11 @@ public class ScrollPanel : MonoBehaviour
 
             animator.SetTrigger("Close");
         }
+        else
+        {
+            animator.SetTrigger("Close");
+            entregarObjeto = false;
+        }
         //tsunadeScript.entregado = true;
     }
     

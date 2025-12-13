@@ -293,7 +293,7 @@ public class PlayerController : MonoBehaviour
 
                 //Mostrar paneles tsunade al acercarme a ella
                 //if (!tsunadePanel.activeSelf && tsunadeInRange() && objetoSujeto != null && !objetoSujeto.esRecompensa)
-                if (!tsunadePanel.activeSelf && tsunadeInRange() && ObjetoTsunadeExiste())
+                if (!tsunadePanel.activeSelf && tsunadeInRange() && ObjetoTsunadeExiste() && !inventario.modoEntrega)
                 {
                     if (Time.time - ultimoDialogo >= cooldownDialogo)
                     {
@@ -607,7 +607,7 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("El objeto ya ha sido recogido anteriormente.");
+                    objetoCercano.gameObject.SetActive(false);
                 }
             }
             else
@@ -968,6 +968,7 @@ public class PlayerController : MonoBehaviour
         {
             // hay varios por lo tanto se entra en el modo de seleccion
             inventario.modoEntrega = true;
+            inventario.indiceSeleccionEntrega = 0;
         }
     }
 

@@ -77,6 +77,7 @@ public class PuzzleEspejoScript : MonoBehaviour
 
         if (contdown > 0 && contdown < 10)
         {
+            light2D.enabled = true;
             contdown += Time.deltaTime;
 
             audioSource.pitch = contdown*2;

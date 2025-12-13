@@ -142,10 +142,13 @@ public class Inventario : MonoBehaviour
             GameObject go = Instantiate(entry.prefab);
             Objeto objInst = go.GetComponent<Objeto>();
             go.transform.localScale = entry.escalaOriginal;
-            if (objInst != null)
+            if (objInst != null && objInst.tipo == Objeto.TipoObjeto.Recompensa)
             {
                 player.EquiparObjeto(objInst);
                 EliminarObjeto(entry);
+            }else{
+                player.SoltarObjetoInventario(objInst);
+                EliminarObjeto(captured);
             }
             ActualizarInventario();
             ActualizarVisual();

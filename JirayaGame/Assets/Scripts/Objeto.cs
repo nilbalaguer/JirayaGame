@@ -77,6 +77,23 @@ public class Objeto : MonoBehaviour
         Canvas.SetActive(true);
     }
 
+    public void SoltarInventario(Vector3 posicionSoltado)
+    {
+
+        estaSujeto = false;
+
+        gameObject.SetActive(true);
+        transform.SetParent(null);
+        transform.position = posicionSoltado;
+
+        if (rb != null)
+        {
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            rb.simulated = true;
+            rb.gravityScale = 0;
+        }
+    }
+
     public void DesactivarObjeto()
     {
         gameObject.SetActive(false);

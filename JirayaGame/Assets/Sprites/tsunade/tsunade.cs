@@ -25,6 +25,8 @@ public class tsunade : MonoBehaviour
     public float ultimoDialogo = 0f;
     public float cooldownDialogo = 2f;
     public bool entregado = false;
+    [HideInInspector]
+    public bool recompensaEntregadaRecientemente = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -110,7 +112,7 @@ public class tsunade : MonoBehaviour
                 break;
         }
         
-        if (PlayerinRange() && !playerScript.ObjetoTsunadeExiste() && !scrollPanel.entregarObjeto)
+        if (PlayerinRange() && !playerScript.ObjetoTsunadeExiste() && !scrollPanel.entregarObjeto && !recompensaEntregadaRecientemente)
         {
             if (Time.time - ultimoDialogo >= cooldownDialogo)
             {
@@ -135,9 +137,15 @@ public class tsunade : MonoBehaviour
                 
                 playerScript.puedoMoverme = false;
             }
-        }else if (PlayerinRange() && playerScript.objetoSujeto != null && objetoRecompensa != null &&objetoRecompensa.esRecompensa)
+        }else if (PlayerinRange() && recompensaEntregadaRecientemente)
+        //else if (PlayerinRange() && playerScript.objetoSujeto != null && objetoRecompensa != null &&objetoRecompensa.esRecompensa)
         {
             tsunadePanel2.SetActive(false);
+        }
+
+        if (!PlayerinRange())
+        {
+            recompensaEntregadaRecientemente = false;
         }
     }
 
@@ -188,12 +196,14 @@ public class tsunade : MonoBehaviour
                 prefabRecompensa = recompensas[2];
                 break;
         }
-        GameObject recompensaInstanciada = Instantiate(prefabRecompensa, playerScript.puntoSujecion.position, Quaternion.identity);
+        GameObject recompensaInstanciada = Instantiate(prefabRecompensa);
         objetoRecompensa = recompensaInstanciada.GetComponent<Objeto>();
         objetoRecompensa.esRecompensa = true;
 
-        playerScript.objetoSujeto = objetoRecompensa;
-        objetoRecompensa.Coger(playerScript.puntoSujecion);
+        playerScript.inventario.AñadirObjeto(objetoRecompensa);
+        recompensaEntregadaRecientemente = true;
+
+        //Destroy(recompensaInstanciada);
         objetoRecibido = null;
     }
 }

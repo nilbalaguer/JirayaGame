@@ -82,7 +82,7 @@ public class Inventario : MonoBehaviour
             EquiparSeleccionado();
         }
         
-        if (Input.GetButtonDown("Cancel"))
+        if (Input.GetButtonDown("B"))
         {
             navegacionActiva = false;
             OcultarVisual();
@@ -268,15 +268,21 @@ public class Inventario : MonoBehaviour
                         //tsunadeScript.MostrarDialogo();
 
                         modoEntrega = false;
+                        panelTsunade.flecha.SetActive(false);
 
                         return;
                     }
                     GameObject go = Instantiate(captured.prefab);
                     Objeto objInst = go.GetComponent<Objeto>();
                     go.transform.localScale = captured.escalaOriginal;
-                    if (objInst != null)
+                    if (objInst != null && objInst.tipo == Objeto.TipoObjeto.Recompensa)
                     {
                         player.EquiparObjeto(objInst);
+                        EliminarObjeto(captured);
+                    }
+                    else
+                    {
+                        player.SoltarObjetoInventario(objInst);
                         EliminarObjeto(captured);
                     }
                 });

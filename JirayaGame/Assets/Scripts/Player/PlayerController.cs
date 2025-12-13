@@ -264,24 +264,24 @@ public class PlayerController : MonoBehaviour
 
                 if (objetoSujeto != null && (objetoSujeto.nombreObjeto == "Pocion1" || objetoSujeto.nombreObjeto == "Pocion2" || 
                 objetoSujeto.nombreObjeto == "Pocion3")  
-                && Input.GetKeyDown(KeyCode.X))
+                && (Input.GetKeyDown(KeyCode.X) || Input.GetButtonDown("X")))
                 {
                     //BeberPocion();
                     state = "BeberPocion";
                 }
 
-                if (Input.GetKeyDown(KeyCode.X))
+                if (Input.GetKeyDown(KeyCode.X) || Input.GetButtonDown("X"))
                 {
                     Debug.Log("x pulsada");
                     CogerObjeto();
                 }
 
                 //si el objeto esta cogido puedo lanzarlo o guardarlo en el inventario
-                if (Input.GetKeyDown(KeyCode.Space) && objetoSujeto != null)
+                if ((Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("B")) && objetoSujeto != null)
                 {
                     LanzarObjeto();
                 }
-                else if (Input.GetKeyDown(KeyCode.G) && objetoSujeto != null)
+                else if ((Input.GetKeyDown(KeyCode.G) || Input.GetButtonDown("Y")) && objetoSujeto != null)
                 {
                     GuardarObjeto();
                 }
@@ -707,6 +707,8 @@ public class PlayerController : MonoBehaviour
         objetoSujeto.Coger(puntoSujecion);
         objetoSujeto.transform.localScale = Vector3.one;
     }
+
+    //Soltar objeto
     public void SoltarObjeto()
     {
         if (objetoSujeto != null)
@@ -722,6 +724,23 @@ public class PlayerController : MonoBehaviour
             }
             CanvasInfo.SetActive(false);
         }
+    }
+
+    public void SoltarObjetoInventario(Objeto obj)
+    {
+        if (obj == null)
+        {
+            return;
+        }
+
+        obj.SoltarInventario(transform.position);
+        Transform light = obj.transform.Find("Light");
+        if (light != null)
+        {
+            light.gameObject.SetActive(true);
+        }
+
+        CanvasInfo.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D other)

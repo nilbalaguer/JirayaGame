@@ -49,6 +49,7 @@ public class Enemigo1Script : MonoBehaviour
 
     [Header("GameManager")]
     private GameManager gameManager;
+    public bool estaMuerto = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -194,6 +195,7 @@ public class Enemigo1Script : MonoBehaviour
                 //instanciar moneda
                 //Instantiate(gameManager.monedaPrefab, transform.position, Quaternion.identity);
                 gameManager.RecolectarMonedas();
+                estaMuerto = true;
                 Destroy(gameObject);
             } else
             {
@@ -211,6 +213,28 @@ public class Enemigo1Script : MonoBehaviour
     void OnTriggerExit2D(Collider2D other)
     {
 
+    }
+    public void RecibirDaño(int cantidad)
+    {
+        vida -= cantidad;
+        healthFillImage.fillAmount = Mathf.Clamp01(vida * (float)0.1);
+
+        enemigoKnockout = 0.4f;
+        enemigoKnockBack = 0.1f;
+
+        if (vida <= 0)
+        {
+            gameManager.PlayDeathSound();
+            Instantiate(sangre, transform.position, Quaternion.identity);
+            Instantiate(sangre, transform.position, Quaternion.identity);
+            gameManager.RecolectarMonedas();
+            estaMuerto = true;
+            Destroy(gameObject);
+        }
+        else
+        {
+            audioSource.PlayOneShot(sonidoDamage);
+        }
     }
 
     void TryAttack()

@@ -38,6 +38,7 @@ public class Inventario : MonoBehaviour
     public int indiceSeleccionEntrega = 0;
     private float dpadCooldown = 0.2f;
     private float dpadTimer = 0f;
+    private float lastDpadY = 0f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -74,19 +75,21 @@ public class Inventario : MonoBehaviour
         if (!navegacionActiva) return;
 
         dpadTimer -= Time.deltaTime;
-        if (Mathf.Abs(dpadY) > 0.5f && dpadTimer <= 0f)
+
+        if (dpadTimer <= 0f)
         {
-            if (dpadY > 0.5f)
+            if (dpadY > 0.5f && lastDpadY <= 0.5f)
             {
                 CambiarSeleccion(1);
+                dpadTimer = dpadCooldown;
             }
-            else if (dpadY < -0.5f)
+            else if (dpadY < -0.5f && lastDpadY >= -0.5f)
             {
                 CambiarSeleccion(-1);
+                dpadTimer = dpadCooldown;
             }
-
-            dpadTimer = dpadCooldown;
         }
+        lastDpadY = dpadY;
 
         if (Input.GetButtonDown("Submit")){
             EquiparSeleccionado();
@@ -380,24 +383,27 @@ public class Inventario : MonoBehaviour
 
         float dpadX = Input.GetAxis("DPadX");
         float dpadY = Input.GetAxisRaw("DPadY");
-
-        if (Mathf.Abs(dpadY) > 0.5f && dpadTimer <= 0f)
+        if (dpadTimer <= 0f)
         {
-             if (dpadY > 0.5f)
+            if (dpadY > 0.5f && lastDpadY <= 0.5f)
             {
-                indiceSeleccionActual++;
-                ActualizarVisual();
-            }
-            else if (dpadY < -0.5f)
-            {
-                indiceSeleccionActual--;
-                ActualizarVisual();
-            }
+                if (dpadY > 0.5f)
+                {
+                    indiceSeleccionActual++;
+                    ActualizarVisual();
+                }
+                else if (dpadY < -0.5f && lastDpadY >= -0.5f)
+                {
+                    indiceSeleccionActual--;
+                    ActualizarVisual();
+                }
 
-            indiceSeleccionActual = Mathf.Clamp(indiceSeleccionActual, 0, objetos.Count - 1);
+                indiceSeleccionActual = Mathf.Clamp(indiceSeleccionActual, 0, objetos.Count - 1);
 
-            dpadTimer = dpadCooldown;
+                dpadTimer = dpadCooldown;
+            }
         }
+        lastDpadY = dpadY;
 
         if (Input.GetButtonDown("Submit"))
         {

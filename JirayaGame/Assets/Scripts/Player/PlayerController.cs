@@ -913,8 +913,6 @@ public class PlayerController : MonoBehaviour
 
     bool tsunadeInRange()
     {
-        //float distancia = Vector2.Distance(transform.position, tsunade.transform.position);
-        //return distancia <= 1.5f;
         Vector2 direccion = ultimaDireccion;
         float distancia = 1f;
         Vector2[] direcciones = 
@@ -939,34 +937,9 @@ public class PlayerController : MonoBehaviour
         }return false;
     }
 
+    //Funciones para aceptar entrega y entregar objetos tsunade 
     public void AceptarEntrega()
     {
-        /*Objeto objetoEntregado = objetoSujeto;
-        tsunade tsunadeScript = GameObject.FindWithTag("Tsunade").GetComponent<tsunade>();
-        tsunadeScript.objetoRecibido = objetoEntregado;
-
-        objetoSujeto.Soltar();
-        objetoSujeto = null;
-
-        objetoEntregado.gameObject.SetActive(false);
-        inventario.EliminarObjeto(objetoEntregado);*/
-
-        /*Inventario.InventoryEntry entry = inventario.objetos.Find(e =>
-        e.tipo == Objeto.TipoObjeto.PergaminoSagrado || e.tipo == Objeto.TipoObjeto.Flor || e.tipo == Objeto.TipoObjeto.CollarShizune);
-
-        if (entry == null)
-        {
-            return;
-        }
-
-        tsunade tsunadeScript = GameObject.FindWithTag("Tsunade").GetComponent<tsunade>();
-        tsunadeScript.objetoRecibido = new Objeto
-        {
-            tipo = entry.tipo,
-            nombreObjeto = entry.nombre
-        };
-
-        inventario.EliminarObjeto(entry);*/
         List<Inventario.InventoryEntry> entregables = inventario.ObtenerEntregables();
 
         if (entregables.Count == 0)

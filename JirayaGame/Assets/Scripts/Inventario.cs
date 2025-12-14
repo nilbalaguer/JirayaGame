@@ -67,17 +67,25 @@ public class Inventario : MonoBehaviour
         {
             navegacionActiva = true;
             indiceSeleccionActual = 0;
+            dpadTimer = 0f;
             ActualizarVisual();
         }
 
         if (!navegacionActiva) return;
 
-        if (dpadY > 0.5f){
-            CambiarSeleccion(1);
-        }
+        dpadTimer -= Time.deltaTime;
+        if (Mathf.Abs(dpadY) > 0.5f && dpadTimer <= 0f)
+        {
+            if (dpadY > 0.5f)
+            {
+                CambiarSeleccion(1);
+            }
+            else if (dpadY < -0.5f)
+            {
+                CambiarSeleccion(-1);
+            }
 
-        if  (dpadY < -0.5f){
-            CambiarSeleccion(-1);
+            dpadTimer = dpadCooldown;
         }
 
         if (Input.GetButtonDown("Submit")){
@@ -371,15 +379,16 @@ public class Inventario : MonoBehaviour
         dpadTimer -= Time.deltaTime;
 
         float dpadX = Input.GetAxis("DPadX");
+        float dpadY = Input.GetAxisRaw("DPadY");
 
-        if (Mathf.Abs(dpadX) > 0.5f && dpadTimer <= 0f)
+        if (Mathf.Abs(dpadY) > 0.5f && dpadTimer <= 0f)
         {
-             if (dpadX > 0.5f)
+             if (dpadY > 0.5f)
             {
                 indiceSeleccionActual++;
                 ActualizarVisual();
             }
-            else if (dpadX < -0.5f)
+            else if (dpadY < -0.5f)
             {
                 indiceSeleccionActual--;
                 ActualizarVisual();

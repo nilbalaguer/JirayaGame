@@ -15,7 +15,7 @@ public class habilidaddeintercambio : MonoBehaviour
     public bool isOnCooldown = false;
     void Start()
     {
-        gameManager = GameObject.FindObjectOfType<GameManager>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         focusAnimator.enabled = false;
         
         prefabHitboxRadius.enabled = false;

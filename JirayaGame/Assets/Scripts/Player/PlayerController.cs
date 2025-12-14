@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
-    public static PlayerController Instance;
+    
     [Header("Varios")]
     [SerializeField] Animator animator;
 
@@ -100,18 +100,7 @@ public class PlayerController : MonoBehaviour
     public Sprite iconoRana1;
     public Sprite iconoRana2;
 
-    void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

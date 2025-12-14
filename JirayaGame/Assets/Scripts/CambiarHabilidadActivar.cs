@@ -7,7 +7,7 @@ public class CambiarHabilidadActivar : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        gameManager = GameObject.FindObjectOfType<GameManager>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
@@ -20,7 +20,9 @@ public class CambiarHabilidadActivar : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             gameManager.swapHabilidad = true;
+            gameManager.estadosTP["mazmorraHabilidad"] = false;
             aprenderHabilidad.SetActive(false);
+            
         }
     }
     

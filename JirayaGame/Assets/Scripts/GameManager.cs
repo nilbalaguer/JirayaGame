@@ -92,6 +92,7 @@ public class GameManager : MonoBehaviour
 
             estadosTP["mazzmorraEspjeos"] = true;
             estadosTP["mazzmorraBotones"] = true;
+            estadosTP["mazmorraHabilidad"] = true;
         }
         else
         {

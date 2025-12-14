@@ -319,7 +319,7 @@ public class PlayerController : MonoBehaviour
 
                 }
 
-                if (Input.GetButtonDown("Fire3") && puedeTransformarse)
+                if (Input.GetButtonDown("Fire3") && GameManager.Instance.puedeTransformarse)
                 {
                     human = !human;
 

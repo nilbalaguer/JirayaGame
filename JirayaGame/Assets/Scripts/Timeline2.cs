@@ -67,7 +67,7 @@ public class Timeline2 : MonoBehaviour
         //playerScript.puedoMoverme = true;
         playerScript.maxSpeed = 5;
         playerScript.human = false;
-        playerScript.puedeTransformarse = true;
+        GameManager.Instance.puedeTransformarse = true;
         habilidadRana.enabled = true;
     }
 }

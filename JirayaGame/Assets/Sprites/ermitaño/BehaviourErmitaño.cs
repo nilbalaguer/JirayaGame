@@ -71,7 +71,7 @@ public class BehaviourErmitaño : MonoBehaviour
                     //currentState = State.Talking;
                     currentState = State.Chasing;
                 }
-                else if (PlayerinRange() && esErmitañoTienda && Input.GetKeyDown(KeyCode.E))
+                else if (PlayerinRange() && esErmitañoTienda && (Input.GetKeyDown(KeyCode.X) || Input.GetButtonDown("X")))
                 {
                     currentState = State.TalkingShop;
                 }

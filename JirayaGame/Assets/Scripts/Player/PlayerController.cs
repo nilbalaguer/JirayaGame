@@ -621,54 +621,48 @@ public class PlayerController : MonoBehaviour
     //Lanzar objeto sujeto
     public void LanzarObjeto()
     {
-        if (objetoSujeto == null)
-        {
+            if (objetoSujeto == null)
             return;
-        }
 
-    Vector2 direccion = puntoSujecion.position - transform.position;
-    if (direccion.sqrMagnitude < 0.01)
-    {
-        if (rigidBody != null && rigidBody.linearVelocity.magnitude > 0.01f)
-            direccion = rigidBody.linearVelocity.normalized;
-        else
-            direccion = Vector2.right; 
+            Vector2 direccion = ultimaDireccion;
+
+        Objeto objetoLanzado = objetoSujeto;
+        objetoSujeto = null;
+
+        objetoLanzado.transform.SetParent(null);
+        objetoLanzado.gameObject.SetActive(true);
+        objetoLanzado.Lanzar(direccion, fuerzaLanzamiento);
+
+        // Consumir 1 del inventario
+        Inventario.InventoryEntry entrada =
+            inventario.objetos.Find(e => e.nombre == objetoLanzado.nombreObjeto);
+
+        if (entrada != null)
+            inventario.EliminarObjeto(entrada);
+
+        // Equipar siguiente si queda alguno
+        Invoke(nameof(EquiparSiguienteShuriken), 0.01f);
     }
 
-    
-    Objeto objetoLanzado = objetoSujeto;
-    objetoLanzado.Lanzar(direccion, fuerzaLanzamiento);
-    
-    objetoSujeto = null;
+    //Equipar siguiente shuriken 
+    public void EquiparSiguienteShuriken()
+    {
+        if (objetoSujeto != null)
+            return;
 
-        
-        string nombre = objetoLanzado != null ? objetoLanzado.nombreObjeto : null;
+        Inventario.InventoryEntry entrada =
+            inventario.objetos.Find(e => e.nombre == "Shuriken");
 
-        Inventario.InventoryEntry entrada = inventario.objetos.Find(e => e.nombre == nombre);
-    if (entrada != null && entrada.cantidad > 0)
-        {
+        if (entrada == null)
+            return;
 
-            GameObject nueva = Instantiate(entrada.prefab, puntoSujecion.position, puntoSujecion.rotation);
-            Objeto nuevoObjeto = nueva.GetComponent<Objeto>();
-            if (nuevoObjeto != null)
-            {
-                nueva.SetActive(true);
+        GameObject nueva = Instantiate(entrada.prefab, puntoSujecion.position, puntoSujecion.rotation);
+        Objeto nuevoObj = nueva.GetComponent<Objeto>();
+        nueva.transform.localScale = entrada.escalaOriginal;
 
-                // Equipar el nuevo objeto y decrementar la cantidad en el inventario
-                EquiparObjeto(nuevoObjeto);
-                inventario.EliminarObjeto(entrada);
-            }
-            else
-            {
-                Debug.Log("El objeto instanciado no tiene componente Objeto.");
-                objetoSujeto = null;
-            }
-        }
-        else
-        {
-            objetoSujeto = null;
-            //objetoLanzado.gameObject.SetActive(false);
-        }
+        if (nuevoObj != null)
+            EquiparObjeto(nuevoObj);
+            inventario.EliminarObjeto(entrada);
     }
 
     //Guardar objeto en inventario
@@ -706,6 +700,7 @@ public class PlayerController : MonoBehaviour
 
         objetoSujeto.Coger(puntoSujecion);
         objetoSujeto.transform.localScale = Vector3.one;
+        CanvasInfo.SetActive(true);
     }
 
     //Soltar objeto

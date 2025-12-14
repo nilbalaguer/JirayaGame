@@ -47,6 +47,8 @@ public class Inventario : MonoBehaviour
             btnObj.SetActive(true);
             btnObj.GetComponent<Image>().enabled = false;
             btnObj.GetComponent<Button>().interactable = false;
+            Transform cursor = btnObj.transform.Find("Flecha");
+            cursor.gameObject.SetActive(false);
             TextMeshProUGUI textoCantidad = btnObj.GetComponentInChildren<TextMeshProUGUI>();
             textoCantidad.gameObject.SetActive(true);
             btnSlots.Add(btnObj);
@@ -107,15 +109,24 @@ public class Inventario : MonoBehaviour
             GameObject btn = btnSlots[i];
             Image img = btn.GetComponent<Image>();
             RectTransform rt = btn.GetComponent<RectTransform>();
+            Transform cursor = btn.transform.Find("Flecha");
             if (i == indiceSeleccionActual)
             {
                 img.color = new Color(img.color.r, img.color.g, img.color.b, 1f);
                 rt.localScale = new Vector3(2,2,2);
+                if (cursor != null)
+                {
+                    cursor.gameObject.SetActive(true);
+                }
             }
             else
             {
                 img.color = new Color(img.color.r, img.color.g, img.color.b, 0.5f);
                 rt.localScale = new Vector3(1,1,1);
+                if (cursor != null)
+                {
+                    cursor.gameObject.SetActive(false);
+                }
             }
         }
     }
@@ -148,7 +159,7 @@ public class Inventario : MonoBehaviour
                 EliminarObjeto(entry);
             }else{
                 player.SoltarObjetoInventario(objInst);
-                EliminarObjeto(captured);
+                EliminarObjeto(entry);
             }
             ActualizarInventario();
             ActualizarVisual();
@@ -182,7 +193,7 @@ public class Inventario : MonoBehaviour
                     if (nuevoObj != null)
                     {
                         player.EquiparObjeto(nuevoObj);
-                        EliminarObjeto(entry);
+                        //EliminarObjeto(entry);
                     }
                     else
                     {
@@ -207,7 +218,7 @@ public class Inventario : MonoBehaviour
                 if (nuevoDesdeExist != null)
                 {
                     player.EquiparObjeto(nuevoDesdeExist);
-                    EliminarObjeto(existe);
+                    //EliminarObjeto(existe);
                 }
             }
         }
@@ -366,10 +377,12 @@ public class Inventario : MonoBehaviour
              if (dpadX > 0.5f)
             {
                 indiceSeleccionEntrega++;
+                ActualizarVisual();
             }
             else if (dpadX < -0.5f)
             {
                 indiceSeleccionEntrega--;
+                ActualizarVisual();
             }
 
             indiceSeleccionEntrega = Mathf.Clamp(indiceSeleccionEntrega, 0, objetos.Count - 1);

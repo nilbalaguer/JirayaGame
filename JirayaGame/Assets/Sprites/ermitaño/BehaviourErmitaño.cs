@@ -71,7 +71,7 @@ public class BehaviourErmitaño : MonoBehaviour
                     //currentState = State.Talking;
                     currentState = State.Chasing;
                 }
-                else if (PlayerinRange() && esErmitañoTienda && Input.GetKeyDown(KeyCode.E))
+                else if (PlayerinRange() && esErmitañoTienda && (Input.GetKeyDown(KeyCode.X) || Input.GetButtonDown("X")))
                 {
                     currentState = State.TalkingShop;
                 }
@@ -161,7 +161,24 @@ public class BehaviourErmitaño : MonoBehaviour
                 }
                 break;
             case State.Chasing:
-                anim.SetInteger("state", 5);
+                Vector2 dirPlayer = player.transform.position - transform.position;
+                if (Mathf.Abs(dirPlayer.x) > Mathf.Abs(dirPlayer.y))
+                {
+                    transform.localScale = new Vector3(dirPlayer.x < 0 ? -3 : 3, 3, 3);
+                    anim.SetInteger("state", 1);
+                }
+                else
+                {
+                    if (dirPlayer.y < 0)
+                    {
+                        anim.SetInteger("state", 5); 
+                    }
+                    else
+                    {
+                        anim.SetInteger("state", 5);
+                    }
+                }
+                //anim.SetInteger("state", 5);
                 player.GetComponent<PlayerController>().puedoMoverme = false;
                 break;
         }

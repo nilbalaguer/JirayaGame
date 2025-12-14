@@ -8,6 +8,7 @@ using UnityEngine.Playables;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    public bool puedeTransformarse = false;
     public enum Estado { Normal, Intro };
     public Estado estadoActual = Estado.Normal;
     public Inventario inventario;
@@ -111,11 +112,22 @@ public class GameManager : MonoBehaviour
         //tiendaAlerta.SetActive(false);
 
         playerGameObject = GameObject.Find("Player");
+
+        if (npcIntro == null)
+        {
+            return;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        if (npcIntro == null)
+        {
+            estadoActual = Estado.Normal;
+        }
+
         if (estadoActual == Estado.Intro && npcIntroActual != null)
         {
             if (npcIntroActual.introTerminada)
@@ -131,6 +143,11 @@ public class GameManager : MonoBehaviour
 
     public void IniciarIntro()
     {
+        if (npcIntro == null)
+        {
+            return;
+        }
+
         estadoActual = Estado.Intro;
         player.puedoMoverme = false;
 

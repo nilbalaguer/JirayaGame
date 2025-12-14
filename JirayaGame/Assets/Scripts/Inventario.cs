@@ -28,6 +28,16 @@ public class Inventario : MonoBehaviour
     public PlayerController player;
     private bool navegacionActiva = false;
     private int indiceSeleccionActual = 0;
+
+    public bool modoEntrega = false;
+    private tsunade tsunadeScript;
+    public ScrollPanel panelTsunade;
+
+    //navegacion xbox modo entrega
+    [HideInInspector]
+    public int indiceSeleccionEntrega = 0;
+    private float dpadCooldown = 0.2f;
+    private float dpadTimer = 0f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -37,10 +47,13 @@ public class Inventario : MonoBehaviour
             btnObj.SetActive(true);
             btnObj.GetComponent<Image>().enabled = false;
             btnObj.GetComponent<Button>().interactable = false;
+            Transform cursor = btnObj.transform.Find("Flecha");
+            cursor.gameObject.SetActive(false);
             TextMeshProUGUI textoCantidad = btnObj.GetComponentInChildren<TextMeshProUGUI>();
             textoCantidad.gameObject.SetActive(true);
             btnSlots.Add(btnObj);
         }
+        tsunadeScript = GameObject.FindWithTag("Tsunade").GetComponent<tsunade>();
     }
 
     // Update is called once per frame
@@ -71,7 +84,7 @@ public class Inventario : MonoBehaviour
             EquiparSeleccionado();
         }
         
-        if (Input.GetButtonDown("Cancel"))
+        if (Input.GetButtonDown("B"))
         {
             navegacionActiva = false;
             OcultarVisual();
@@ -85,6 +98,7 @@ public class Inventario : MonoBehaviour
         {
             Image img = btn.GetComponent<Image>();
             img.color = new Color(img.color.r, img.color.g, img.color.b, 0f);
+            btn.GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
         }
     }
 
@@ -94,13 +108,25 @@ public class Inventario : MonoBehaviour
         {
             GameObject btn = btnSlots[i];
             Image img = btn.GetComponent<Image>();
+            RectTransform rt = btn.GetComponent<RectTransform>();
+            Transform cursor = btn.transform.Find("Flecha");
             if (i == indiceSeleccionActual)
             {
                 img.color = new Color(img.color.r, img.color.g, img.color.b, 1f);
+                rt.localScale = new Vector3(2,2,2);
+                if (cursor != null)
+                {
+                    cursor.gameObject.SetActive(true);
+                }
             }
             else
             {
                 img.color = new Color(img.color.r, img.color.g, img.color.b, 0.5f);
+                rt.localScale = new Vector3(1,1,1);
+                if (cursor != null)
+                {
+                    cursor.gameObject.SetActive(false);
+                }
             }
         }
     }
@@ -127,9 +153,12 @@ public class Inventario : MonoBehaviour
             GameObject go = Instantiate(entry.prefab);
             Objeto objInst = go.GetComponent<Objeto>();
             go.transform.localScale = entry.escalaOriginal;
-            if (objInst != null)
+            if (objInst != null && objInst.tipo == Objeto.TipoObjeto.Recompensa)
             {
                 player.EquiparObjeto(objInst);
+                EliminarObjeto(entry);
+            }else{
+                player.SoltarObjetoInventario(objInst);
                 EliminarObjeto(entry);
             }
             ActualizarInventario();
@@ -155,8 +184,8 @@ public class Inventario : MonoBehaviour
                 entry.escalaOriginal = objeto.transform.localScale;
                 objetos.Add(entry);
 
-                // Auto-equip si no tiene nada equipado
-                if (player.objetoSujeto == null)
+                // Auto-equip si no tiene nada equipado y el shuriken es el objeto añadido
+                if (player.objetoSujeto == null && entry.nombre == "Shuriken")
                 {
                     GameObject nueva = Instantiate(entry.prefab);
                     Objeto nuevoObj = nueva.GetComponent<Objeto>();
@@ -164,7 +193,7 @@ public class Inventario : MonoBehaviour
                     if (nuevoObj != null)
                     {
                         player.EquiparObjeto(nuevoObj);
-                        EliminarObjeto(entry);
+                        //EliminarObjeto(entry);
                     }
                     else
                     {
@@ -181,7 +210,7 @@ public class Inventario : MonoBehaviour
         {
             existe.cantidad++;
 
-            if (player.objetoSujeto == null)
+            if (player.objetoSujeto == null && existe.nombre == "Shuriken")
             {
                 GameObject nuevaExist = Instantiate(existe.prefab);
                 Objeto nuevoDesdeExist = nuevaExist.GetComponent<Objeto>();
@@ -189,7 +218,7 @@ public class Inventario : MonoBehaviour
                 if (nuevoDesdeExist != null)
                 {
                     player.EquiparObjeto(nuevoDesdeExist);
-                    EliminarObjeto(existe);
+                    //EliminarObjeto(existe);
                 }
             }
         }
@@ -236,12 +265,38 @@ public class Inventario : MonoBehaviour
                 InventoryEntry captured = entry;
                 btnComp.onClick.AddListener(() =>
                 {
+                    if (modoEntrega)
+                    {
+                        NavegarEntregaXbox();
+                        //modo entrega para tsunade
+                        GameObject objeto = Instantiate(captured.prefab);
+                        Objeto objInstanciado = objeto.GetComponent<Objeto>();
+                        tsunadeScript.objetoRecibido = objInstanciado;
+                        
+                        tsunadeScript.entregado = true;
+                        panelTsunade.entregarObjeto = true;
+                        panelTsunade.animator.SetTrigger("Close");
+
+                        EliminarObjeto(captured);
+
+                        //tsunadeScript.MostrarDialogo();
+
+                        modoEntrega = false;
+                        panelTsunade.flecha.SetActive(false);
+
+                        return;
+                    }
                     GameObject go = Instantiate(captured.prefab);
                     Objeto objInst = go.GetComponent<Objeto>();
                     go.transform.localScale = captured.escalaOriginal;
-                    if (objInst != null)
+                    if (objInst != null && objInst.tipo == Objeto.TipoObjeto.Recompensa)
                     {
                         player.EquiparObjeto(objInst);
+                        EliminarObjeto(captured);
+                    }
+                    else
+                    {
+                        player.SoltarObjetoInventario(objInst);
                         EliminarObjeto(captured);
                     }
                 });
@@ -291,6 +346,68 @@ public class Inventario : MonoBehaviour
         {
             Debug.Log("No se ha encontrado nada para eliminar");
         }
+    }
+
+    //Comprobar que los objetos entregables a tsunade existen en el inventario
+    public List<InventoryEntry> ObtenerEntregables()
+    {
+        List<InventoryEntry> entregables = new List<InventoryEntry>();
+
+        foreach (var entry in objetos)
+        {
+            if (entry.tipo == Objeto.TipoObjeto.PergaminoSagrado ||
+                entry.tipo == Objeto.TipoObjeto.Flor ||
+                entry.tipo == Objeto.TipoObjeto.CollarShizune)
+            {
+                entregables.Add(entry);
+            }
+        }
+        return entregables;
+    }
+
+    //Navegacion xbox para el modo entrega
+    public void NavegarEntregaXbox()
+    {
+        dpadTimer -= Time.deltaTime;
+
+        float dpadX = Input.GetAxis("DPadX");
+
+        if (Mathf.Abs(dpadX) > 0.5f && dpadTimer <= 0f)
+        {
+             if (dpadX > 0.5f)
+            {
+                indiceSeleccionActual++;
+                ActualizarVisual();
+            }
+            else if (dpadX < -0.5f)
+            {
+                indiceSeleccionActual--;
+                ActualizarVisual();
+            }
+
+            indiceSeleccionActual = Mathf.Clamp(indiceSeleccionActual, 0, objetos.Count - 1);
+
+            dpadTimer = dpadCooldown;
+        }
+
+        if (Input.GetButtonDown("Submit"))
+        {
+            EntregarObjetoSeleccionado();
+        }
+    }
+
+    private void EntregarObjetoSeleccionado()
+    {
+        InventoryEntry entry = objetos[indiceSeleccionActual];
+
+        GameObject objeto = Instantiate(entry.prefab);
+        Objeto objInstanciado = objeto.GetComponent<Objeto>();
+        tsunadeScript.objetoRecibido = objInstanciado;
+
+        EliminarObjeto(entry);
+
+
+        modoEntrega = false;
     }
     
 }

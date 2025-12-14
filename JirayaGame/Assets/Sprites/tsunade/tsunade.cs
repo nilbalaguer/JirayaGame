@@ -25,6 +25,8 @@ public class tsunade : MonoBehaviour
     public float ultimoDialogo = 0f;
     public float cooldownDialogo = 2f;
     public bool entregado = false;
+    [HideInInspector]
+    public bool recompensaEntregadaRecientemente = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -99,14 +101,18 @@ public class tsunade : MonoBehaviour
                     }
                 }
                 //anim.SetInteger("state", 1);
-                panelDialogo.SetActive(true);
-                panelDialogo.GetComponent<panelTsunade>().DialogoSetup(objetoRecibido.nombreObjeto);
+                //panelDialogo.SetActive(true);
+                if (objetoRecibido != null){
+                    panelDialogo.SetActive(true);
+                    panelDialogo.GetComponent<panelTsunade>().DialogoSetup(objetoRecibido.nombreObjeto);
+                }
                 //Si se han entregado los 3 objetos mostrar dialofo final
                 playerScript.puedoMoverme = false;
+                
                 break;
         }
         
-        if (PlayerinRange() && playerScript.objetoSujeto == null && !scrollPanel.entregarObjeto)
+        if (PlayerinRange() && !playerScript.ObjetoTsunadeExiste() && !scrollPanel.entregarObjeto && !recompensaEntregadaRecientemente)
         {
             if (Time.time - ultimoDialogo >= cooldownDialogo)
             {
@@ -131,16 +137,25 @@ public class tsunade : MonoBehaviour
                 
                 playerScript.puedoMoverme = false;
             }
-        }else if (PlayerinRange() && playerScript.objetoSujeto != null && objetoRecompensa != null &&objetoRecompensa.esRecompensa)
+        }else if (PlayerinRange() && recompensaEntregadaRecientemente)
+        //else if (PlayerinRange() && playerScript.objetoSujeto != null && objetoRecompensa != null &&objetoRecompensa.esRecompensa)
         {
             tsunadePanel2.SetActive(false);
         }
 
-        /*if (PlayerinRange() && CambioMapa.Instance.objetosRecogidos.Count >= 3)
+        if (!PlayerinRange())
         {
-            panelDialogo.SetActive(true);
-            panelDialogo.GetComponent<panelTsunade>().DialogoFinal();
-        }*/
+            recompensaEntregadaRecientemente = false;
+        }
+    }
+
+    public void MostrarDialogo()
+    {
+        if (objetoRecibido == null) return;
+
+        panelDialogo.SetActive(true);
+
+        panelDialogo.GetComponent<panelTsunade>().DialogoSetup(objetoRecibido.nombreObjeto);
     }
 
     bool PlayerinRange()
@@ -181,17 +196,14 @@ public class tsunade : MonoBehaviour
                 prefabRecompensa = recompensas[2];
                 break;
         }
-        GameObject recompensaInstanciada = Instantiate(prefabRecompensa, playerScript.puntoSujecion.position, Quaternion.identity);
+        GameObject recompensaInstanciada = Instantiate(prefabRecompensa);
         objetoRecompensa = recompensaInstanciada.GetComponent<Objeto>();
         objetoRecompensa.esRecompensa = true;
 
-        playerScript.objetoSujeto = objetoRecompensa;
-        objetoRecompensa.Coger(playerScript.puntoSujecion);
-        objetoRecibido = null;
+        playerScript.inventario.AñadirObjeto(objetoRecompensa);
+        recompensaEntregadaRecientemente = true;
 
-        //playerScript.RecibirRecompensa(objetoRecompensa);
-        
-        //StatesMachine playerScript = player.GetComponent<StatesMachine>();
-        //playerScript.RecibirRecompensa(recompensaInstanciada.GetComponent<Objeto>());
+        //Destroy(recompensaInstanciada);
+        objetoRecibido = null;
     }
 }

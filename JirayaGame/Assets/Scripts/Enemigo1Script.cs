@@ -214,6 +214,28 @@ public class Enemigo1Script : MonoBehaviour
     {
 
     }
+    public void RecibirDaño(int cantidad)
+    {
+        vida -= cantidad;
+        healthFillImage.fillAmount = Mathf.Clamp01(vida * (float)0.1);
+
+        enemigoKnockout = 0.4f;
+        enemigoKnockBack = 0.1f;
+
+        if (vida <= 0)
+        {
+            gameManager.PlayDeathSound();
+            Instantiate(sangre, transform.position, Quaternion.identity);
+            Instantiate(sangre, transform.position, Quaternion.identity);
+            gameManager.RecolectarMonedas();
+            estaMuerto = true;
+            Destroy(gameObject);
+        }
+        else
+        {
+            audioSource.PlayOneShot(sonidoDamage);
+        }
+    }
 
     void TryAttack()
     {

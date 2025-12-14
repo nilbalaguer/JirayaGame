@@ -113,7 +113,8 @@ public class NpcStates : MonoBehaviour
         }
         
         Vector2 pos = transform.position;
-
+        
+        //Switch para gestionar los cambios de estado
         switch (currentState)
         {
             case State.Idle:
@@ -194,22 +195,16 @@ public class NpcStates : MonoBehaviour
                 break;
         }
 
+        //Switch para gestionar las animaciones y todo lo que se ejecutara en cada estado (cambio de propiedades, etc)
+
         switch (currentState)
         {
             case State.Idle:
                 rb.linearVelocity = Vector2.zero;
                 anim.SetInteger("state", 0);
-                /*if (dialogueBox != null)
-                {
-                    scrollPanel.ClosePanel();
-                }*/
                 break;
             case State.Patrol:
                 MoveTowards(patrolPoints[currentPointIndex].position);
-                /*if (dialogueBox != null)
-                {
-                    scrollPanel.ClosePanel();
-                }*/
                 break;
             case State.Alerted:
                 rb.linearVelocity = Vector2.zero;
@@ -260,7 +255,6 @@ public class NpcStates : MonoBehaviour
             case State.Scared:
                 rb.linearVelocity = Vector2.zero;
                 anim.SetInteger("state", 6);
-                //anim.SetTrigger("scared");
                 break;
             case State.Intro:
                 npcIcono.sprite = iconoIntro;
@@ -285,13 +279,13 @@ public class NpcStates : MonoBehaviour
                         anim.SetInteger("state", 4);
                     }
                 }
-                 //Añadir logica para mostrar dialogo de mision completada
                 break;
 
 
         }
 
     }
+    //Funciones para patrullar por los puntos y seguir al jugador en el caso del npc inicial
         void MoveTowards(Vector2 target)
         {
             Vector2 dir = (target - (Vector2)transform.position).normalized;
@@ -319,7 +313,6 @@ public class NpcStates : MonoBehaviour
         else
         {
             rb.linearVelocity = Vector2.zero;
-            //anim.SetInteger("state", 0);
             if (Mathf.Abs(directionToPlayer.x) > Mathf.Abs(directionToPlayer.y))
                 {
                     transform.localScale = new Vector3(directionToPlayer.x < 0 ? -3 : 3, 3, 3);
@@ -349,6 +342,7 @@ public class NpcStates : MonoBehaviour
             currentPointIndex = (currentPointIndex + 1) % patrolPoints.Length;
         }
 
+    //Actualizar animaciones de walk al patrullar
     void UpdateSpriteDirection(Vector2 dir)
     {
         float absX = Mathf.Abs(dir.x);
@@ -408,12 +402,22 @@ public class NpcStates : MonoBehaviour
             }
         }
         return false;
-        //float distancia = Vector2.Distance(transform.position, enemy.transform.position);
-        //return distancia <= rangoEnemy;
-
-        //usar raycast
     }
 
+    public bool ObjetoMisionExiste()
+    {
+        foreach (var entry in player.GetComponent<PlayerController>().inventario.objetos){
+            if (entry.nombre == "ObjetoCampesino" || 
+            entry.nombre == "NotaMision")
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    //Sistema de misiones npc
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
@@ -433,6 +437,7 @@ public class NpcStates : MonoBehaviour
                 return;
             }
 
+            //Dependiendo de la mision activa se ejecutara una funcion o otra para poder determinar si se ha completado la mision correspondiente
             switch (misionNpc.tipoMision)
             {
                 case Misions.MisionTipo.RecolectarMoneda:
@@ -461,15 +466,22 @@ public class NpcStates : MonoBehaviour
 
     public void MisionObjeto()
     {
-        Objeto objeto = player.GetComponent<PlayerController>().objetoSujeto;
-        if (objeto != null && objeto.nombreObjeto == "ObjetoCampesino")
+        //Objeto objeto = player.GetComponent<PlayerController>().objetoSujeto;
+        Inventario.InventoryEntry entry = player.GetComponent<PlayerController>().inventario.objetos.Find(e => e.nombre == "ObjetoCampesino");
+        
+        if (entry != null)
         {
             misionNpc.CompletarMision();
-            Objeto objetoEntregado = objeto;
+            player.GetComponent<PlayerController>().inventario.EliminarObjeto(entry);
+            /*Objeto objetoEntregado = objeto;
             objeto.Soltar();
             Destroy(objetoEntregado.gameObject);
-            objeto = null;
+            objeto = null;*/
             player.GetComponent<PlayerController>().CanvasInfo.SetActive(false);
+        }
+        else
+        {
+            return;
         }
     }
 

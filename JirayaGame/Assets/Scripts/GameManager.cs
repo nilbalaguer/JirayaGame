@@ -8,6 +8,7 @@ using UnityEngine.Playables;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    public bool puedeTransformarse = false;
     public enum Estado { Normal, Intro };
     public Estado estadoActual = Estado.Normal;
     public Inventario inventario;
@@ -73,6 +74,9 @@ public class GameManager : MonoBehaviour
 
     //Cinematica ermitaño para introducir tienda
     public PlayableDirector timelineErmitañoTienda;
+    public int objetosTotales = 6;
+    public int objetosRecogidos = 0;
+    public TextMeshProUGUI textoObjetos;
 
     void Awake()
     {
@@ -108,11 +112,21 @@ public class GameManager : MonoBehaviour
         playerGameObject = GameObject.Find("Player");
 
         player.puedoMoverme = true;
+        if (npcIntro == null)
+        {
+            return;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        if (npcIntro == null)
+        {
+            estadoActual = Estado.Normal;
+        }
+
         if (estadoActual == Estado.Intro && npcIntroActual != null)
         {
             if (npcIntroActual.introTerminada)
@@ -128,6 +142,11 @@ public class GameManager : MonoBehaviour
 
     public void IniciarIntro()
     {
+        if (npcIntro == null)
+        {
+            return;
+        }
+
         estadoActual = Estado.Intro;
         player.puedoMoverme = false;
 
@@ -316,5 +335,9 @@ public class GameManager : MonoBehaviour
         RecuperarVida(10);
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    public void ActualizarContadorObjetos()
+    {
+        textoObjetos.text = "Objetos encontrados: " + objetosRecogidos + "/" + objetosTotales;
     }
 }

@@ -1,11 +1,32 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class MenuManager : MonoBehaviour
 {
     public GameObject panelOpciones;
     public GameObject panelControles;
+
+    public GameObject botonInicialMenu;
+    public GameObject botonInicialOpciones;
+    public GameObject botonInicialControles;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public void Start()
+    {
+        EventSystem.current.SetSelectedGameObject(botonInicialMenu);
+    }
+
+    public void Update()
+    {
+        if (Input.GetButtonDown("Cancel"))
+        {
+            if (panelOpciones.activeSelf)
+                CerrarOpciones();
+            else if (panelControles.activeSelf)
+                CerrarControles();
+        }
+    }
+
     public void Jugar()
     {
         //GraphicsSettings.renderPipelineAsset = Resources.Load<RenderPipelineAsset>("UniversalRenderPipelineAsset");
@@ -15,21 +36,25 @@ public class MenuManager : MonoBehaviour
     public void AbrirOpciones()
     {
         panelOpciones.SetActive(true); 
+        EventSystem.current.SetSelectedGameObject(botonInicialOpciones);
     }
 
     public void CerrarOpciones()
     {
-        panelOpciones.SetActive(false); 
+        panelOpciones.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(botonInicialMenu); 
     }
 
     public void AbrirControles()
     {
-        panelControles.SetActive(true); 
+        panelControles.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(botonInicialControles); 
     }
 
     public void CerrarControles()
     {
         panelControles.SetActive(false); 
+        EventSystem.current.SetSelectedGameObject(botonInicialMenu);
     }
 
     public void salir(){

@@ -5,7 +5,7 @@ using TMPro;
 public class ScrollPanel : MonoBehaviour
 {
     public GameObject text;
-    private Animator animator;
+    public Animator animator;
     public npcReputacion reputacion;
     public bool hasTalked = false;
     public bool entregarObjeto = false;
@@ -14,16 +14,19 @@ public class ScrollPanel : MonoBehaviour
     public NpcStates npcScript;
     public Misions misionsScript;
     private tsunade tsunadeScript;
+    public GameObject flecha;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Start()
     {
-        tsunadeScript = GameObject.FindWithTag("Tsunade").GetComponent<tsunade>();   
+        tsunadeScript = GameObject.FindWithTag("Tsunade").GetComponent<tsunade>();
+        flecha.SetActive(false);   
     }
 
     void Awake()
     {
         animator = GetComponent<Animator>();
+        flecha.SetActive(false); 
     }
     void OnEnable()
     {
@@ -101,9 +104,20 @@ public class ScrollPanel : MonoBehaviour
     public void btnAceptar()
     {
         playerScript.AceptarEntrega();
-        entregarObjeto = true;
-        animator.SetTrigger("Close");
-        tsunadeScript.entregado = true;
+        if (!playerScript.inventario.modoEntrega)
+        {
+            entregarObjeto = true;
+            tsunadeScript.entregado = true;
+
+            animator.SetTrigger("Close");
+        }
+        else
+        {
+            animator.SetTrigger("Close");
+            entregarObjeto = false;
+            flecha.SetActive(true);
+        }
+        //tsunadeScript.entregado = true;
     }
     
     public void btnRechazar()

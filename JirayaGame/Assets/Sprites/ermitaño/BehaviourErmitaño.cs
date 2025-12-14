@@ -25,6 +25,8 @@ public class BehaviourErmitaño : MonoBehaviour
     public bool puedeMoverse = false;
     public float rangoEnemy = 5f;
     private GameObject enemy;
+
+    public GameObject[] enemies;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -64,12 +66,12 @@ public class BehaviourErmitaño : MonoBehaviour
                         currentState = State.Patrol;
                     }
                 }
-                else if (PlayerinRange() && !panelScript.hasTalked && !esErmitañoTienda && !EnemyinRange())
+                else if (PlayerinRange() && !panelScript.hasTalked && !esErmitañoTienda && EnemigosMuertos())
                 {
                     //currentState = State.Talking;
                     currentState = State.Chasing;
                 }
-                else if (PlayerinRange() && esErmitañoTienda && Input.GetKeyDown(KeyCode.E))
+                else if (PlayerinRange() && esErmitañoTienda && (Input.GetKeyDown(KeyCode.X) || Input.GetButtonDown("X")))
                 {
                     currentState = State.TalkingShop;
                 }
@@ -89,7 +91,7 @@ public class BehaviourErmitaño : MonoBehaviour
                     currentState = State.Idle;
                     break;
                 }
-                if (PlayerinRange() && !panelScript.hasTalked && !EnemyinRange())
+                if (PlayerinRange() && !panelScript.hasTalked && EnemigosMuertos())
                 {
                     //currentState = State.Talking;
                     currentState = State.Chasing;
@@ -159,7 +161,25 @@ public class BehaviourErmitaño : MonoBehaviour
                 }
                 break;
             case State.Chasing:
-                anim.SetInteger("state", 5);
+                Vector2 dirPlayer = player.transform.position - transform.position;
+                if (Mathf.Abs(dirPlayer.x) > Mathf.Abs(dirPlayer.y))
+                {
+                    transform.localScale = new Vector3(dirPlayer.x < 0 ? -3 : 3, 3, 3);
+                    anim.SetInteger("state", 1);
+                }
+                else
+                {
+                    if (dirPlayer.y < 0)
+                    {
+                        anim.SetInteger("state", 5); 
+                    }
+                    else
+                    {
+                        anim.SetInteger("state", 5);
+                    }
+                }
+                //anim.SetInteger("state", 5);
+                player.GetComponent<PlayerController>().puedoMoverme = false;
                 break;
         }
 
@@ -242,5 +262,17 @@ public class BehaviourErmitaño : MonoBehaviour
         }
         float distancia = Vector2.Distance(transform.position, enemy.transform.position);
         return distancia <= rangoEnemy;
+    }
+
+    bool EnemigosMuertos()
+    {
+        foreach (GameObject enemigo in enemies)
+        {
+            if (enemigo != null)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }

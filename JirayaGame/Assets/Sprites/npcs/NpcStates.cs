@@ -37,7 +37,7 @@ public class NpcStates : MonoBehaviour
 
     public bool necesitaAlejarse = false;
     public bool introTerminada = false;
-    private bool introAsignada = false;
+    public bool introAsignada = false;
 
     public bool puedeInteractuar = true;
 
@@ -54,6 +54,16 @@ public class NpcStates : MonoBehaviour
         anim = GetComponent<Animator>();
         currentState = State.Idle;
         
+        /*if (NpcIntro)
+        {
+            currentState = State.Intro;
+        }*/
+        //else
+        //{
+        if (!NpcIntro)
+        currentState = State.Idle;
+
+        //}
         waitCounter = waitTime;
 
         player = GameObject.FindWithTag("Player");
@@ -85,21 +95,31 @@ public class NpcStates : MonoBehaviour
             player = GameObject.FindWithTag("Player");
         }
 
-        if (!introAsignada && GameManager.Instance != null)
-        {
-            if (NpcIntro)
-            {
-                currentState = State.Intro;
-                introAsignada = true;
-            }
-            else
-            {
-                introAsignada = true;
-            }
-        }
+        // if (!introAsignada && GameManager.Instance != null)
+        // {
+        //     if (NpcIntro)
+        //     {
+        //         currentState = State.Intro;
+        //         introAsignada = true;
+        //     }
+        //     else
+        //     {
+        //         introAsignada = true;
+        //     }
+        // }
+        // if (!introAsignada)
+        // {
+        //     return;
+        // }
         if (!introAsignada)
         {
-            return;
+            if (GameManager.Instance == null) return;
+            if (player == null) return;
+
+            if (NpcIntro)
+                currentState = State.Intro;
+
+            introAsignada = true;
         }
         
         Vector2 pos = transform.position;
@@ -288,7 +308,7 @@ public class NpcStates : MonoBehaviour
         Vector2 npcPos = transform.position;
         Vector2 directionToPlayer = (playerPos - npcPos).normalized;
 
-        float distanciaParada = 1.5f;
+        float distanciaParada = 0.7f;
         float distance = Vector2.Distance(npcPos, playerPos);
         Vector2 targetPos = playerPos - directionToPlayer * distanciaParada;
         UpdateSpriteDirection(directionToPlayer);

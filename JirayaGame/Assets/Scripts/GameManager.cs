@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
     //Player
 
     //Estadisticas
-    private int enemiesKilled = 0;
+    // private int enemiesKilled = 0;
 
     [Header("Sprites")]
 
@@ -103,6 +103,7 @@ public class GameManager : MonoBehaviour
         audioSource = gameObject.GetComponent<AudioSource>();
         playerGameObject = GameObject.Find("Player");
 
+
         IniciarIntro();
         monedas = 0;
         //textoMonedas.text = monedas.ToString();
@@ -110,6 +111,7 @@ public class GameManager : MonoBehaviour
 
         playerGameObject = GameObject.Find("Player");
 
+        player.puedoMoverme = true;
         if (npcIntro == null)
         {
             return;
@@ -149,9 +151,12 @@ public class GameManager : MonoBehaviour
         player.puedoMoverme = false;
 
         npcIntro.NpcIntro = true;
+        npcIntro.introAsignada = false;   // << IMPORTANTE
+        npcIntro.introTerminada = false;  // << IMPORTANTE
         npcIntro.currentState = NpcStates.State.Intro;
         npcIntroActual = npcIntro;
     }
+
 
     public void FinalizarIntro(NpcStates npc)
     {
@@ -168,6 +173,8 @@ public class GameManager : MonoBehaviour
         Instantiate(sangrePrefab, playerTransform.position, Quaternion.identity);
 
         Time.timeScale = 0f;
+
+        Reintentar();
     }
 
     public void ObtenerPartitura()
@@ -180,7 +187,10 @@ public class GameManager : MonoBehaviour
     public void RecolectarMonedas()
     {
         monedas += 1;
-        textoMonedas.text = monedas.ToString();
+        if (textoMonedas != null)
+        {
+            textoMonedas.text = monedas.ToString();
+        }
     }
 
     public void ComprarObjetos(Objeto objetoComprado)
@@ -320,6 +330,12 @@ public class GameManager : MonoBehaviour
         player.maxSpeed = 5f;
     }
 
+    public void Reintentar()
+    {
+        RecuperarVida(10);
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
     public void ActualizarContadorObjetos()
     {
         textoObjetos.text = "Objetos encontrados: " + objetosRecogidos + "/" + objetosTotales;

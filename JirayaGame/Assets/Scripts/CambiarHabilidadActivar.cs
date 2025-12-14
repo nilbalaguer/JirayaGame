@@ -3,6 +3,7 @@ using UnityEngine;
 public class CambiarHabilidadActivar : MonoBehaviour
 {
     private GameManager gameManager;
+    public GameObject aprenderHabilidad;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -19,6 +20,7 @@ public class CambiarHabilidadActivar : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             gameManager.swapHabilidad = true;
+            aprenderHabilidad.SetActive(false);
         }
     }
     

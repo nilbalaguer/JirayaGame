@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class panelTsunade : MonoBehaviour
 {
@@ -31,6 +32,8 @@ public class panelTsunade : MonoBehaviour
     {
         paginaActual = 0;
         //ShowPage();
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(btnNext.gameObject);
     }
 
     // Update is called once per frame

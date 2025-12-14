@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 public class PanelNpc : MonoBehaviour
 {
     public string[] paginas;
@@ -26,6 +27,8 @@ public class PanelNpc : MonoBehaviour
     {
         paginaActual = 0;
         //ShowPage();
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(btnNext.gameObject);
     }
 
     public void ShowPage()

@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class panelErmitaño : MonoBehaviour
 {
@@ -35,6 +36,9 @@ public class panelErmitaño : MonoBehaviour
     {
         paginaActual = 0;
         textoPanel.gameObject.SetActive(true);
+
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(btnNext.gameObject);
     }
 
     public void ShowPage()

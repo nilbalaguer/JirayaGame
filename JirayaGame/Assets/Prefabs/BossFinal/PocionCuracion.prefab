@@ -101,7 +101,7 @@ MonoBehaviour:
   m_UseRendererSilhouette: 1
   m_CastsShadows: 1
   m_SelfShadows: 0
-  m_AlphaCutoff: 0.1
+  m_AlphaCutoff: 0.106
   m_ApplyToSortingLayers: 00000000
   m_ShapePath:
   - {x: -0.5, y: -0.5, z: 0}
@@ -118,14 +118,14 @@ MonoBehaviour:
     m_Mesh: {fileID: 0}
     m_LocalBounds:
       m_Center: {x: -0.050071716, y: 0.071250916, z: 0}
-      m_Extent: {x: 0.12250519, y: 0.3519516, z: 0}
+      m_Extent: {x: 0.012504578, y: 0.24195099, z: 0}
     m_EdgeProcessing: 1
-    m_TrimEdge: 0
+    m_TrimEdge: 0.11
     m_FlipX: 0
     m_FlipY: 0
     m_InitialTrim: 0
   m_CastingOption: 1
-  m_PreviousTrimEdge: 0
+  m_PreviousTrimEdge: 0.11
   m_PreviousEdgeProcessing: 1
   m_PreviousShadowCastingSource: 2
   m_PreviousShadowShape2DSource: {fileID: 2759683885166606833}

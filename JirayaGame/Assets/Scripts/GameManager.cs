@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour
     //Player
 
     //Estadisticas
-    private int enemiesKilled = 0;
+    // private int enemiesKilled = 0;
 
     [Header("Sprites")]
 
@@ -154,6 +154,8 @@ public class GameManager : MonoBehaviour
         Instantiate(sangrePrefab, playerTransform.position, Quaternion.identity);
 
         Time.timeScale = 0f;
+
+        Reintentar();
     }
 
     public void ObtenerPartitura()
@@ -307,5 +309,12 @@ public class GameManager : MonoBehaviour
     private void RestablecerVelocidad()
     {
         player.maxSpeed = 5f;
+    }
+
+    public void Reintentar()
+    {
+        RecuperarVida(10);
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

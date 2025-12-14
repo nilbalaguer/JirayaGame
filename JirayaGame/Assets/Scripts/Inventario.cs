@@ -376,16 +376,16 @@ public class Inventario : MonoBehaviour
         {
              if (dpadX > 0.5f)
             {
-                indiceSeleccionEntrega++;
+                indiceSeleccionActual++;
                 ActualizarVisual();
             }
             else if (dpadX < -0.5f)
             {
-                indiceSeleccionEntrega--;
+                indiceSeleccionActual--;
                 ActualizarVisual();
             }
 
-            indiceSeleccionEntrega = Mathf.Clamp(indiceSeleccionEntrega, 0, objetos.Count - 1);
+            indiceSeleccionActual = Mathf.Clamp(indiceSeleccionActual, 0, objetos.Count - 1);
 
             dpadTimer = dpadCooldown;
         }
@@ -398,7 +398,7 @@ public class Inventario : MonoBehaviour
 
     private void EntregarObjetoSeleccionado()
     {
-        InventoryEntry entry = objetos[indiceSeleccionEntrega];
+        InventoryEntry entry = objetos[indiceSeleccionActual];
 
         GameObject objeto = Instantiate(entry.prefab);
         Objeto objInstanciado = objeto.GetComponent<Objeto>();

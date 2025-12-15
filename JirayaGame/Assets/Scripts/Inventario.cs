@@ -69,7 +69,7 @@ public class Inventario : MonoBehaviour
             navegacionActiva = true;
             indiceSeleccionActual = 0;
             dpadTimer = 0f;
-            ActualizarVisual();
+            MostrarVisualInicial();
         }
 
         if (!navegacionActiva) return;
@@ -111,6 +111,37 @@ public class Inventario : MonoBehaviour
             img.color = new Color(img.color.r, img.color.g, img.color.b, 0f);
             btn.GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
         }
+    }
+    void MostrarVisualInicial()
+    {
+        for (int i = 0; i < btnSlots.Count; i++)
+        {
+            GameObject btn = btnSlots[i];
+            Image img = btn.GetComponent<Image>();
+            RectTransform rt = btn.GetComponent<RectTransform>();
+            Transform cursor = btn.transform.Find("Flecha");
+
+            if (i < objetos.Count)
+            {
+                // Mostrar todos los objetos
+                img.color = new Color(img.color.r, img.color.g, img.color.b, 0.5f);
+                rt.localScale = new Vector3(1,1,1);
+
+                if (cursor != null)
+                    cursor.gameObject.SetActive(false);
+            }
+            else
+            {
+
+                img.color = new Color(img.color.r, img.color.g, img.color.b, 0f);
+                rt.localScale = new Vector3(1,1,1);
+
+                if (cursor != null)
+                    cursor.gameObject.SetActive(false);
+            }
+        }
+
+        ActualizarVisual();
     }
 
     void ActualizarVisual()

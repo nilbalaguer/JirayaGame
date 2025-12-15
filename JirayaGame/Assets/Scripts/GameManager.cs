@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     public int monedas = 0;
 
     public bool swapHabilidad = false;
+    public GameObject habilidadSwapIcono;  
 
     public GameObject monedaPrefab;
 
@@ -120,6 +121,16 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
+
+        if (swapHabilidad)
+        {
+            habilidadSwapIcono.SetActive(true);
+        }
+        else
+        {
+            habilidadSwapIcono.SetActive(false);
+        }
+
     }
 
     // Update is called once per frame

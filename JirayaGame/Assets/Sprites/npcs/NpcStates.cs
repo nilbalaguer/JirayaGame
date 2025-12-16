@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class NpcStates : MonoBehaviour
 {
@@ -47,6 +48,8 @@ public class NpcStates : MonoBehaviour
     public string nameNpc;
     
     public bool esNpcShamizen;
+
+    public string dialogMision;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -84,6 +87,11 @@ public class NpcStates : MonoBehaviour
         else
         {
             dialogueShamuzen.SetActive(false);
+        }
+
+        if (dialogMision == null || dialogMision == "")
+        {
+            return;
         }
     }
 
@@ -240,6 +248,7 @@ public class NpcStates : MonoBehaviour
                     if (!esNpcShamizen){
                         dialogueBox.SetActive(true);
                         scrollPanel.npcScript = this;
+                        scrollPanel.AsignarTextoMision(this);
                         player.GetComponent<PlayerController>().puedoMoverme = false;
 
                         scrollPanel.misionsScript = misionNpc;

@@ -5,6 +5,7 @@ using TMPro;
 public class ScrollPanel : MonoBehaviour
 {
     public GameObject text;
+    public TextMeshProUGUI textPanel;
     public Animator animator;
     public npcReputacion reputacion;
     public bool hasTalked = false;
@@ -15,6 +16,7 @@ public class ScrollPanel : MonoBehaviour
     public Misions misionsScript;
     private tsunade tsunadeScript;
     public GameObject flecha;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Start()
@@ -97,6 +99,13 @@ public class ScrollPanel : MonoBehaviour
             npcScript = null;
         }
         playerScript.puedoMoverme = true;
+    }
+
+    //Asignar texto de la mision correspondiente
+    public void AsignarTextoMision(NpcStates npc)
+    {
+        npcScript = npc;
+        textPanel.text = npc.dialogMision;
     }
 
     //Botones panel tsunade

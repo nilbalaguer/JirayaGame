@@ -350,14 +350,14 @@ public class PlayerController : MonoBehaviour
                         objectPicked = null;
                     }
 
-                    if (human)
+                    /*if (human)
                     {
                         Timeline2.Instance.habilidadRana.sprite = iconoRana2;
                     }
                     else
                     {
                         Timeline2.Instance.habilidadRana.sprite = iconoRana1;
-                    }
+                    }*/
                 }
 
                 if (Input.GetButtonDown("Jump") || Input.GetButtonDown("A")) //mando A

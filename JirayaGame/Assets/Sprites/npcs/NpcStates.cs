@@ -52,6 +52,8 @@ public class NpcStates : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        currentState = State.Idle;
+        
         /*if (NpcIntro)
         {
             currentState = State.Intro;
@@ -64,10 +66,6 @@ public class NpcStates : MonoBehaviour
         //}
         waitCounter = waitTime;
 
-        /*if (patrolPoints.Length > 0)
-        {
-            transform.position = patrolPoints[0].position;
-        }*/
         player = GameObject.FindWithTag("Player");
         enemy = GameObject.FindWithTag("Enemy");
         dialogueBox.SetActive(false);

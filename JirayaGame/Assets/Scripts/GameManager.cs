@@ -20,6 +20,10 @@ public class GameManager : MonoBehaviour
     private NpcStates npcIntroActual;
     public TextMeshProUGUI textoMonedas;
     public int monedas = 0;
+
+    public bool swapHabilidad = false;
+    public GameObject habilidadSwapIcono;  
+
     public GameObject monedaPrefab;
 
     private string ubicacion = "overworld";
@@ -89,6 +93,7 @@ public class GameManager : MonoBehaviour
 
             estadosTP["mazzmorraEspjeos"] = true;
             estadosTP["mazzmorraBotones"] = true;
+            estadosTP["mazmorraHabilidad"] = true;
         }
         else
         {
@@ -116,6 +121,16 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
+
+        if (swapHabilidad)
+        {
+            habilidadSwapIcono.SetActive(true);
+        }
+        else
+        {
+            habilidadSwapIcono.SetActive(false);
+        }
+
     }
 
     // Update is called once per frame

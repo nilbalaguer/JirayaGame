@@ -38,6 +38,7 @@ public class Inventario : MonoBehaviour
     public int indiceSeleccionEntrega = 0;
     private float dpadCooldown = 0.2f;
     private float dpadTimer = 0f;
+    private float lastDpadY = 0f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -67,18 +68,28 @@ public class Inventario : MonoBehaviour
         {
             navegacionActiva = true;
             indiceSeleccionActual = 0;
-            ActualizarVisual();
+            dpadTimer = 0f;
+            MostrarVisualInicial();
         }
 
         if (!navegacionActiva) return;
 
-        if (dpadY > 0.5f){
-            CambiarSeleccion(1);
-        }
+        dpadTimer -= Time.deltaTime;
 
-        if  (dpadY < -0.5f){
-            CambiarSeleccion(-1);
+        if (dpadTimer <= 0f)
+        {
+            if (dpadY > 0.5f && lastDpadY <= 0.5f)
+            {
+                CambiarSeleccion(1);
+                dpadTimer = dpadCooldown;
+            }
+            else if (dpadY < -0.5f && lastDpadY >= -0.5f)
+            {
+                CambiarSeleccion(-1);
+                dpadTimer = dpadCooldown;
+            }
         }
+        lastDpadY = dpadY;
 
         if (Input.GetButtonDown("Submit")){
             EquiparSeleccionado();
@@ -100,6 +111,37 @@ public class Inventario : MonoBehaviour
             img.color = new Color(img.color.r, img.color.g, img.color.b, 0f);
             btn.GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
         }
+    }
+    void MostrarVisualInicial()
+    {
+        for (int i = 0; i < btnSlots.Count; i++)
+        {
+            GameObject btn = btnSlots[i];
+            Image img = btn.GetComponent<Image>();
+            RectTransform rt = btn.GetComponent<RectTransform>();
+            Transform cursor = btn.transform.Find("Flecha");
+
+            if (i < objetos.Count)
+            {
+                // Mostrar todos los objetos
+                img.color = new Color(img.color.r, img.color.g, img.color.b, 0.5f);
+                rt.localScale = new Vector3(1,1,1);
+
+                if (cursor != null)
+                    cursor.gameObject.SetActive(false);
+            }
+            else
+            {
+
+                img.color = new Color(img.color.r, img.color.g, img.color.b, 0f);
+                rt.localScale = new Vector3(1,1,1);
+
+                if (cursor != null)
+                    cursor.gameObject.SetActive(false);
+            }
+        }
+
+        ActualizarVisual();
     }
 
     void ActualizarVisual()
@@ -371,24 +413,28 @@ public class Inventario : MonoBehaviour
         dpadTimer -= Time.deltaTime;
 
         float dpadX = Input.GetAxis("DPadX");
-
-        if (Mathf.Abs(dpadX) > 0.5f && dpadTimer <= 0f)
+        float dpadY = Input.GetAxisRaw("DPadY");
+        if (dpadTimer <= 0f)
         {
-             if (dpadX > 0.5f)
+            if (dpadY > 0.5f && lastDpadY <= 0.5f)
             {
-                indiceSeleccionActual++;
-                ActualizarVisual();
-            }
-            else if (dpadX < -0.5f)
-            {
-                indiceSeleccionActual--;
-                ActualizarVisual();
-            }
+                if (dpadY > 0.5f)
+                {
+                    indiceSeleccionActual++;
+                    ActualizarVisual();
+                }
+                else if (dpadY < -0.5f && lastDpadY >= -0.5f)
+                {
+                    indiceSeleccionActual--;
+                    ActualizarVisual();
+                }
 
-            indiceSeleccionActual = Mathf.Clamp(indiceSeleccionActual, 0, objetos.Count - 1);
+                indiceSeleccionActual = Mathf.Clamp(indiceSeleccionActual, 0, objetos.Count - 1);
 
-            dpadTimer = dpadCooldown;
+                dpadTimer = dpadCooldown;
+            }
         }
+        lastDpadY = dpadY;
 
         if (Input.GetButtonDown("Submit"))
         {

@@ -4,7 +4,7 @@ using System.Collections;
 
 public class habilidaddeintercambio : MonoBehaviour
 {
-
+    private GameManager gameManager;
     public GameObject player;
     public GameObject selectedObject;
     public Collider2D prefabHitboxRadius;
@@ -15,17 +15,19 @@ public class habilidaddeintercambio : MonoBehaviour
     public bool isOnCooldown = false;
     void Start()
     {
+        gameManager = GameObject.FindObjectOfType<GameManager>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        focusAnimator.enabled = false;
 
-       focusAnimator.enabled = false;
-        
         prefabHitboxRadius.enabled = false;
         abilityUI.enabled = false;
     }
 
 
     void Update()
-    { 
-        if (Input.GetKey(KeyCode.E))
+    {
+        
+        if ((Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.JoystickButton0)) && gameManager.swapHabilidad == true)
         {
             prefabHitboxRadius.enabled = true;
 
@@ -36,16 +38,16 @@ public class habilidaddeintercambio : MonoBehaviour
             }
         }
 
-    
-        if (Input.GetKeyUp(KeyCode.E) && selectedObject != null)
+
+        if ((Input.GetKeyUp(KeyCode.E) || Input.GetKeyUp(KeyCode.JoystickButton0)) && selectedObject != null && gameManager.swapHabilidad == true)
         {
             SwapPositionsWithSelected();
             prefabHitboxRadius.enabled = false;
             abilityUI.enabled = false;
-            
-            
-            
-        } else if (Input.GetKeyUp(KeyCode.E))
+
+
+
+        } else if (Input.GetKeyUp(KeyCode.E) || Input.GetKeyUp(KeyCode.JoystickButton0))
         {
             prefabHitboxRadius.enabled = false;
 
@@ -66,7 +68,7 @@ public class habilidaddeintercambio : MonoBehaviour
 
 
     }
-    
+
     IEnumerator Cooldown()
     {
         isOnCooldown = true;
@@ -86,7 +88,7 @@ public class habilidaddeintercambio : MonoBehaviour
             isOnCooldown = false;
             yield return null;         // espera al siguiente frame
         }
-        
+
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -95,7 +97,7 @@ public class habilidaddeintercambio : MonoBehaviour
         if (other != null && other.CompareTag("intObject") && prefabHitboxRadius != null && prefabHitboxRadius.enabled)
         {
             selectedObject = other.gameObject;
-            
+
         }
     }
 
@@ -109,4 +111,3 @@ public class habilidaddeintercambio : MonoBehaviour
         }
     }
 }
-

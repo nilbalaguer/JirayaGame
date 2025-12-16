@@ -7,6 +7,7 @@ using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
+    
     [Header("Varios")]
     [SerializeField] Animator animator;
 
@@ -99,6 +100,7 @@ public class PlayerController : MonoBehaviour
     public Sprite iconoRana1;
     public Sprite iconoRana2;
 
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -193,7 +195,7 @@ public class PlayerController : MonoBehaviour
 
         if (state == "Parry")
         {
-            if (Input.GetButtonUp("Fire2"))
+            if (Input.GetButtonUp("Fire2") || Input.GetButtonUp("LB"))
             {
                 state = "idle";
             }
@@ -320,7 +322,7 @@ public class PlayerController : MonoBehaviour
                 //Beber pocion si la tiene equipada y mostrar mensaje HUD
                 MostrarMensajePocion();
 
-                if (Input.GetButtonDown("Fire1") && cooldownMele <= 0)
+                if (Input.GetButtonDown("Fire1") && cooldownMele <= 0) //mando X
                 {
                     if (objectPicked != null)
                     {
@@ -335,7 +337,7 @@ public class PlayerController : MonoBehaviour
 
                 }
 
-                if (Input.GetButtonDown("Fire3") && GameManager.Instance.puedeTransformarse)
+                if ((Input.GetButtonDown("Fire3") || Input.GetButtonDown("Y")) && GameManager.Instance.puedeTransformarse) //mando Y
                 {
                     human = !human;
 
@@ -358,12 +360,12 @@ public class PlayerController : MonoBehaviour
                     }
                 }
 
-                if (Input.GetButtonDown("Jump"))
+                if (Input.GetButtonDown("Jump") || Input.GetButtonDown("A")) //mando A
                 {
                     saltarSapo();
                 }
 
-                if (Input.GetButton("Fire2") && staminaParry > 0 && human)
+                if (Input.GetButton("Fire2") || Input.GetButton("LB") && staminaParry > 0 && human)
                 {
                     state = "Parry";
                 }
@@ -766,7 +768,7 @@ public class PlayerController : MonoBehaviour
 
         if (other.CompareTag("KatanaEnemigo"))
         {
-            if (staminaParry < 4 && staminaParry > 0.1 && Input.GetButton("Fire2"))
+            if (staminaParry < 4 && staminaParry > 0.1 && (Input.GetButton("Fire2") || Input.GetButton("LB")))
             {
                 staminaParry -= 0.3f;
                 fuenteSonido.PlayOneShot(sonidoParry);

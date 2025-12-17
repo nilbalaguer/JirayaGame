@@ -48,7 +48,7 @@ public class CabezaSerpiente : MonoBehaviour
     void Update()
     {
 
-        if (transform.position.x +0.5f >= player.transform.position.x && transform.position.x -0.5f <= player.transform.position.x && !disparando)
+        if (player.transform.position.y > -10.81f && transform.position.x +0.5f >= player.transform.position.x && transform.position.x -0.5f <= player.transform.position.x && !disparando)
         {
             Debug.Log("Player Detectado");
 

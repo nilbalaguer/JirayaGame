@@ -44,14 +44,14 @@ public class panelErmitaño : MonoBehaviour
     public void ShowPage()
     {
         textoPanel.text = paginas[paginaActual];
-        if (paginaActual >= paginas.Length - 1)
+        /*if (paginaActual >= paginas.Length - 1)
         {
             btnNext.image.sprite = iconoCruz;
         }
         else
         {
             btnNext.image.sprite = iconoFlecha;
-        }
+        }*/
     }
 
     public void Next()

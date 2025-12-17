@@ -72,7 +72,7 @@ public class panelTsunade : MonoBehaviour
     public void ShowPage()
     {
         textoPanel.text = paginas[paginaActual];
-        if (paginaActual >= paginas.Length - 1)
+        /*if (paginaActual >= paginas.Length - 1)
         {
             //btnNext.GetComponentInChildren<TextMeshProUGUI>().text = "Cerrar";
             btnNext.image.sprite = iconoCruz;
@@ -81,7 +81,7 @@ public class panelTsunade : MonoBehaviour
         {
             //btnNext.GetComponentInChildren<TextMeshProUGUI>().text = "Siguiente";
             btnNext.image.sprite = iconoFlecha;
-        }
+        }*/
     }
     
     public void NextTsunade()

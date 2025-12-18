@@ -6,6 +6,7 @@ public class ScrollPanel : MonoBehaviour
 {
     public GameObject text;
     public TextMeshProUGUI textPanel;
+    public TextMeshProUGUI nombreNpc;
     public Animator animator;
     public npcReputacion reputacion;
     public bool hasTalked = false;
@@ -106,6 +107,7 @@ public class ScrollPanel : MonoBehaviour
     {
         npcScript = npc;
         textPanel.text = npc.dialogMision;
+        nombreNpc.text = npc.nameNpc;
     }
 
     //Botones panel tsunade

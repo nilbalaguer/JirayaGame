@@ -13,6 +13,7 @@ public class Misions : MonoBehaviour
     }
     public MisionTipo tipoMision;
     public TextMeshProUGUI texto;
+    public TextMeshProUGUI nombreNpc;
     public Sprite[] npcIconos;
     public Image panelIconoNpc;
     public GameObject panelMision;
@@ -74,6 +75,7 @@ public class Misions : MonoBehaviour
         {
             misionActiva = true;
             texto.text = textoMision;
+            nombreNpc.text = npcScript.nameNpc;
             //npcScript.npcIcono.sprite = npcScript.iconoIntro;
 
             if (npcScript.nameNpc == "campesino1"){

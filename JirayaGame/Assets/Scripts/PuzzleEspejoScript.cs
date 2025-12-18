@@ -37,8 +37,6 @@ public class PuzzleEspejoScript : MonoBehaviour
         lineRenderer.positionCount = 2;
         lineRenderer.startWidth = 0.05f;
         lineRenderer.endWidth = 0.05f;
-        lineRenderer.startColor = Color.yellow;
-        lineRenderer.endColor = Color.red;
 
         //Fase final
         audioSource = gameObject.GetComponent<AudioSource>();

@@ -275,7 +275,7 @@ Transform:
   m_GameObject: {fileID: 3980292468753202575}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.7391439, y: -0.9761383, z: -1.0840373}
+  m_LocalPosition: {x: 0.7391439, y: -0.9761383, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -350,6 +350,7 @@ MonoBehaviour:
   sonidoDamage: {fileID: 8300000, guid: 158e2252b80ef4245ab44991ee6b9173, type: 3}
   sonidoMuerte: {fileID: 8300000, guid: 2a7f79dd9b1bdcf4bb1a9eddf8f64d46, type: 3}
   sonidoKatana: {fileID: 8300000, guid: a7c12aedb8536de48b28f29f560c21f5, type: 3}
+  estaMuerto: 0
 --- !u!50 &2712279804875914508
 Rigidbody2D:
   serializedVersion: 5
@@ -524,7 +525,7 @@ Transform:
   m_GameObject: {fileID: 5516660377179594655}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.221, z: 1.0840373}
+  m_LocalPosition: {x: 0, y: -0.221, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public bool puedeTransformarse = false;
     public enum Estado { Normal, Intro };
     public Estado estadoActual = Estado.Normal;
+    public bool introFinalizadaGlobal = false;
     public Inventario inventario;
     //public StatesMachine player;
     public PlayerController player;
@@ -108,8 +109,10 @@ public class GameManager : MonoBehaviour
         audioSource = gameObject.GetComponent<AudioSource>();
         playerGameObject = GameObject.Find("Player");
 
-
-        IniciarIntro();
+        if (!introFinalizadaGlobal)
+        {
+            IniciarIntro();
+        }
         monedas = 0;
         //textoMonedas.text = monedas.ToString();
         //tiendaAlerta.SetActive(false);
@@ -166,8 +169,8 @@ public class GameManager : MonoBehaviour
         player.puedoMoverme = false;
 
         npcIntro.NpcIntro = true;
-        npcIntro.introAsignada = false;   // << IMPORTANTE
-        npcIntro.introTerminada = false;  // << IMPORTANTE
+        npcIntro.introAsignada = false;   
+        npcIntro.introTerminada = false;  
         npcIntro.currentState = NpcStates.State.Intro;
         npcIntroActual = npcIntro;
     }
@@ -178,6 +181,7 @@ public class GameManager : MonoBehaviour
         if (npc == npcIntroActual)
         {
             npcIntroActual.introTerminada = true;
+            introFinalizadaGlobal = true;
         }
     }
     

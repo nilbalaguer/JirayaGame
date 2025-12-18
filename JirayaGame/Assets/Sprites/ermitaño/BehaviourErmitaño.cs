@@ -70,6 +70,7 @@ public class BehaviourErmitaño : MonoBehaviour
                 {
                     //currentState = State.Talking;
                     currentState = State.Chasing;
+                    Timeline.Instance.panelErmitañoMision.SetActive(false);
                 }
                 else if (PlayerinRange() && esErmitañoTienda && (Input.GetKeyDown(KeyCode.X) || Input.GetButtonDown("X")))
                 {
@@ -95,6 +96,7 @@ public class BehaviourErmitaño : MonoBehaviour
                 {
                     //currentState = State.Talking;
                     currentState = State.Chasing;
+                    Timeline.Instance.panelErmitañoMision.SetActive(false);
                 }
                 else
                 {

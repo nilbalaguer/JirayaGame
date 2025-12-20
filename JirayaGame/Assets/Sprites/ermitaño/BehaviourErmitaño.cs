@@ -150,6 +150,7 @@ public class BehaviourErmitaño : MonoBehaviour
                 if (!panelScript.hasTalked)
                 {
                     panelDialogo.SetActive(true);
+                    panelDialogo.GetComponent<panelErmitaño>().audioSource = GetComponent<AudioSource>();
                     player.GetComponent<PlayerController>().puedoMoverme = false;
                 }
                 break;

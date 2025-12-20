@@ -1,9 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
+using System.Collections.Generic;
 
 public class panelInfoManager : MonoBehaviour
 {
+    public AudioSource audioSource;
+    public AudioClip blip;
     public string[] paginas;
     private int paginaActual = 0;
     public TextMeshProUGUI textoPanel;
@@ -12,10 +16,18 @@ public class panelInfoManager : MonoBehaviour
     public Sprite iconoFlecha;
     public Sprite iconoCruz;
     public NpcStates npcScript;
+    public float velocidadTypewriter = 0.03f;
+    private Coroutine typeCoroutine;
+    public int letrasPorSonido = 2; 
+    private int contadorLetras = 0;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         animator = GetComponent<Animator>(); 
+        if (audioSource == null)
+        {
+            return;
+        }
     }
 
     // Update is called once per frame
@@ -32,17 +44,11 @@ public class panelInfoManager : MonoBehaviour
 
     public void ShowPage()
     {
-        textoPanel.text = paginas[paginaActual];
-        if (paginaActual >= paginas.Length - 1)
+        if (typeCoroutine != null)
         {
-            //btnNext.GetComponentInChildren<TextMeshProUGUI>().text = "Cerrar";
-            btnNext.image.sprite = iconoCruz;
+            StopCoroutine(typeCoroutine);
         }
-        else
-        {
-            //btnNext.GetComponentInChildren<TextMeshProUGUI>().text = "Siguiente";
-            btnNext.image.sprite = iconoFlecha;
-        }
+        typeCoroutine = StartCoroutine(TypeText(paginas[paginaActual]));
     }
     
     public void Next()
@@ -75,5 +81,35 @@ public class panelInfoManager : MonoBehaviour
     public void DisablePanel()
     {
         gameObject.SetActive(false);
+    }
+
+    public void PlayBlip()
+    {
+        audioSource.pitch = Random.Range(0.9f, 1.2f);
+        audioSource.PlayOneShot(blip);
+    }
+
+    //Efecto de typwriter para el texto del panel
+    IEnumerator TypeText(string text)
+    {
+        textoPanel.text = "";
+        contadorLetras = 0;
+
+        foreach (char letter in text.ToCharArray())
+        {
+            textoPanel.text += letter;
+
+            if (letter != ' ' && letter != '\n')
+            {
+                contadorLetras++;
+
+                if (contadorLetras % letrasPorSonido == 0)
+                {
+                    PlayBlip();
+                }
+            }
+
+            yield return new WaitForSeconds(velocidadTypewriter);
+        }
     }
 }

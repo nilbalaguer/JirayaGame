@@ -107,6 +107,7 @@ public class tsunade : MonoBehaviour
                 if (objetoRecibido != null){
                     panelDialogo.SetActive(true);
                     panelDialogo.GetComponent<panelTsunade>().DialogoSetup(objetoRecibido.nombreObjeto);
+                    panelDialogo.GetComponent<panelTsunade>().audioSource = GetComponent<AudioSource>();
                 }
                 //Si se han entregado los 3 objetos mostrar dialofo final
                 playerScript.puedoMoverme = false;
@@ -119,6 +120,7 @@ public class tsunade : MonoBehaviour
             if (Time.time - ultimoDialogo >= cooldownDialogo)
             {
                 tsunadePanel2.SetActive(true);
+                tsunadePanel2.GetComponent<panelErmitaño>().audioSource = GetComponent<AudioSource>();
                 Vector2 dirToPlayer = player.transform.position - transform.position;
                 if (Mathf.Abs(dirToPlayer.x) > Mathf.Abs(dirToPlayer.y))    
                 {

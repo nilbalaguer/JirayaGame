@@ -252,9 +252,11 @@ public class NpcStates : MonoBehaviour
                         player.GetComponent<PlayerController>().puedoMoverme = false;
 
                         scrollPanel.misionsScript = misionNpc;
+                        scrollPanel.audioSource = GetComponent<AudioSource>();
                     }
                     else{
                         dialogueShamuzen.SetActive(true);
+                        dialogueShamuzen.GetComponent<PanelNpc>().audioSource = GetComponent<AudioSource>();
                         panelNpcScript.npcScript = this;
                         player.GetComponent<PlayerController>().puedoMoverme = false;
                     }
@@ -349,6 +351,7 @@ public class NpcStates : MonoBehaviour
                     }
                 }
             introDialog.SetActive(true);
+            introDialog.GetComponent<PanelNpc>().audioSource = GetComponent<AudioSource>();
 
             rb.simulated = false;
             npcIcono.sprite = iconoNormal;
@@ -541,6 +544,7 @@ public class NpcStates : MonoBehaviour
         misionNpc.panelMisionesCompletadas[2].SetActive(true); 
         panelInfoManager info3 = misionNpc.panelMisionesCompletadas[2].GetComponent<panelInfoManager>();
         info3.npcScript = this;
+        info3.audioSource = GetComponent<AudioSource>();
         canvasImagen.SetActive(false);
     }
 

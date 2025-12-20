@@ -2,9 +2,13 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Collections;
+using System.Collections.Generic;
 
 public class panelTsunade : MonoBehaviour
 {
+    public AudioSource audioSource;
+    public AudioClip blip;
     private string[] paginas;
     private int paginaActual = 0;
     public string[] paginasFlor;
@@ -21,11 +25,19 @@ public class panelTsunade : MonoBehaviour
     public tsunade tsunadeScript;
     //public StatesMachine playerScript;
     public PlayerController playerScript;
+    public float velocidadTypewriter = 0.03f;
+    private Coroutine typeCoroutine;
+    public int letrasPorSonido = 2; 
+    private int contadorLetras = 0;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         animator = GetComponent<Animator>();
         gameObject.SetActive(false);
+        if (audioSource == null)
+        {
+            return;
+        }   
     }
     
     void OnEnable()
@@ -59,7 +71,7 @@ public class panelTsunade : MonoBehaviour
         }
 
         paginaActual = 0;
-        ShowPage();
+        //ShowPage();
     }
 
     public void DialogoFinal()
@@ -71,7 +83,7 @@ public class panelTsunade : MonoBehaviour
 
     public void ShowPage()
     {
-        textoPanel.text = paginas[paginaActual];
+        //textoPanel.text = paginas[paginaActual];
         /*if (paginaActual >= paginas.Length - 1)
         {
             //btnNext.GetComponentInChildren<TextMeshProUGUI>().text = "Cerrar";
@@ -82,10 +94,24 @@ public class panelTsunade : MonoBehaviour
             //btnNext.GetComponentInChildren<TextMeshProUGUI>().text = "Siguiente";
             btnNext.image.sprite = iconoFlecha;
         }*/
+        
+        if (typeCoroutine != null)
+        {
+            StopCoroutine(typeCoroutine);
+        }
+        typeCoroutine = StartCoroutine(TypeText(paginas[paginaActual]));
     }
     
     public void NextTsunade()
     {
+        if (typeCoroutine != null)
+        {
+            StopCoroutine(typeCoroutine);
+            textoPanel.text = paginas[paginaActual];
+            typeCoroutine = null;
+            return;
+        }
+
         if (paginaActual < paginas.Length - 1)
         {
             paginaActual++;
@@ -104,5 +130,35 @@ public class panelTsunade : MonoBehaviour
     public void DisablePanel()
     {
         gameObject.SetActive(false);
+    }
+
+    public void PlayBlip()
+    {
+        audioSource.pitch = Random.Range(0.9f, 1.2f);
+        audioSource.PlayOneShot(blip);
+    }
+    
+    //Efecto de typwriter para el texto del panel
+    IEnumerator TypeText(string text)
+    {
+        textoPanel.text = "";
+        contadorLetras = 0;
+
+        foreach (char letter in text.ToCharArray())
+        {
+            textoPanel.text += letter;
+
+            if (letter != ' ' && letter != '\n')
+            {
+                contadorLetras++;
+
+                if (contadorLetras % letrasPorSonido == 0)
+                {
+                    PlayBlip();
+                }
+            }
+
+            yield return new WaitForSeconds(velocidadTypewriter);
+        }
     }
 }

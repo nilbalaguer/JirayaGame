@@ -123,6 +123,7 @@ public class Misions : MonoBehaviour
                     panelMisionesCompletadas[0].SetActive(true); 
                     panelInfoManager info = panelMisionesCompletadas[0].GetComponent<panelInfoManager>();
                     info.npcScript = npcScript;
+                    info.audioSource = npcScript.GetComponent<AudioSource>();
                     break;
                 case MisionTipo.BuscarObjeto:
                     GameManager.Instance.monedas += 20;
@@ -130,6 +131,7 @@ public class Misions : MonoBehaviour
                     panelMisionesCompletadas[1].SetActive(true); 
                     panelInfoManager info2 = panelMisionesCompletadas[1].GetComponent<panelInfoManager>();
                     info2.npcScript = npcScript;
+                    info2.audioSource = npcScript.GetComponent<AudioSource>();
                     break;
                 case MisionTipo.HablarConNpc:
                     GameManager.Instance.monedas += 15;

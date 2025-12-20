@@ -65,5 +65,6 @@ public class Timeline : MonoBehaviour
         playerScript.maxSpeed = 5;
         misionIniciada = true;
         panelErmitañoMision.SetActive(true);
+        ScreenCinematic.Instance.ActivarCinematic();
     }
 }

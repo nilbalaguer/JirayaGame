@@ -93,6 +93,11 @@ public class NpcStates : MonoBehaviour
         {
             return;
         }
+
+        if (introDialog == null)
+        {
+            return;
+        }
     }
 
     // Update is called once per frame
@@ -163,7 +168,7 @@ public class NpcStates : MonoBehaviour
                     currentState = State.EndMision;
                 }
                 break;
-
+            //Patrullaje del npc
             case State.Patrol:
                 if (puedeInteractuar && PlayerinRange() && !hasTalked){
                     currentState = State.Alerted;

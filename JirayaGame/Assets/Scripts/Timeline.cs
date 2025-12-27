@@ -66,5 +66,6 @@ public class Timeline : MonoBehaviour
         misionIniciada = true;
         panelErmitañoMision.SetActive(true);
         ScreenCinematic.Instance.ActivarCinematic();
+        ermitañoScript.canvasPatrol.SetActive(true);
     }
 }

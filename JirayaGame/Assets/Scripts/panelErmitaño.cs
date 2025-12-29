@@ -159,5 +159,10 @@ public class panelErmitaño : MonoBehaviour
             yield return new WaitForSeconds(velocidadTypewriter);
         }
     }
+
+    public void CerrarPanelTimeline()
+    {
+        animator.SetTrigger("Close");
+    }
     
 }

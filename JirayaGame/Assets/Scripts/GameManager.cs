@@ -82,6 +82,8 @@ public class GameManager : MonoBehaviour
     public int objetosTotales = 6;
     public int objetosRecogidos = 0;
     public TextMeshProUGUI textoObjetos;
+    //panel informativo de tienda desbloqueada timeline
+    public GameObject panelTiendaDesbloqueo;
 
     void Awake()
     {
@@ -327,6 +329,11 @@ public class GameManager : MonoBehaviour
         timelineErmitañoTienda.Play();
     }
 
+    public void OnCinematicEndTsunade()
+    {
+        panelTiendaDesbloqueo.SetActive(true);
+    }
+
     public void RecuperarVida(float cantidad)
     {
         vidaPlayer += cantidad;
@@ -359,4 +366,10 @@ public class GameManager : MonoBehaviour
     {
         textoObjetos.text = "Objetos encontrados: " + objetosRecogidos + "/" + objetosTotales;
     }
+
+    public void CerrarPanelTienda()
+    {
+        panelTiendaDesbloqueo.SetActive(false);
+    }
+
 }

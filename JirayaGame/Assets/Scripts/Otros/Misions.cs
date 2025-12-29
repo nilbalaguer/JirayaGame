@@ -36,6 +36,7 @@ public class Misions : MonoBehaviour
     [HideInInspector]
     public bool panelCompletadoMostrado = false;
     public Sprite iconoMisionKama;
+    public Sprite iconoEntregarNota;
     public int objetivoMonedas;
     [HideInInspector]
     public int monedasMin = 5;
@@ -56,6 +57,10 @@ public class Misions : MonoBehaviour
                 panel.SetActive(false);
         }
         objetoKana.SetActive(false);
+        if (iconoEntregarNota == null)
+        {
+            return;
+        }
     }
 
     // Update is called once per frame
@@ -78,10 +83,14 @@ public class Misions : MonoBehaviour
             nombreNpc.text = npcScript.nameNpc;
             //npcScript.npcIcono.sprite = npcScript.iconoIntro;
 
-            if (npcScript.nameNpc == "campesino1"){
+            if (npcScript.nameNpc == "Goro"){
                 panelIconoNpc.sprite = npcIconos[0];
-            }else if (npcScript.nameNpc == "campesino2"){
+            }else if (npcScript.nameNpc == "Kichiro"){
                 panelIconoNpc.sprite = npcIconos[1];
+            }else if (npcScript.nameNpc == "Jiro"){
+                panelIconoNpc.sprite = npcIconos[2];
+            }else if (npcScript.nameNpc == "Taro"){
+                panelIconoNpc.sprite = npcIconos[3];
             }
 
             switch (tipoMision)
@@ -92,6 +101,7 @@ public class Misions : MonoBehaviour
                     Objeto objetoNota = nota.GetComponent<Objeto>();
                     playerScript.objetoSujeto = objetoNota;
                     objetoNota.Coger(playerScript.puntoSujecion);
+                    npcScript.npcIcono.sprite = iconoEntregarNota;
                     break;
                 case MisionTipo.BuscarObjeto:
                     npcScript.npcIcono.sprite = iconoMisionKama;

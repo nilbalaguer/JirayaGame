@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 public class CicloDiaController : MonoBehaviour
 {
@@ -10,6 +11,9 @@ public class CicloDiaController : MonoBehaviour
     private float cicloActualIndex;
     private int cicloActual = 0;
     private int cicloSiguiente = 1;
+    public Image iconosCiclo;
+    public Sprite iconoSol;
+    public Sprite iconoLuna;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -29,6 +33,15 @@ public class CicloDiaController : MonoBehaviour
 
         }
         CambiarColor(ciclosDia[cicloActual].colorLuz, ciclosDia[cicloSiguiente].colorLuz);
+
+        if (cicloActual == 0)
+        {
+            iconosCiclo.sprite = iconoSol;
+        }
+        else
+        {
+            iconosCiclo.sprite = iconoLuna;
+        }
     }
 
     private void CambiarColor(Color colorActual, Color colorSiguiente)

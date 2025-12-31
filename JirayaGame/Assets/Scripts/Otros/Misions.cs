@@ -173,6 +173,29 @@ public class Misions : MonoBehaviour
         panelMision.SetActive(false);
     }
 
+    public void CancelarMision()
+    {
+        misionActiva = false;
+        panelMision.SetActive(false);
+
+        if (npcScript != null)
+        {
+            npcScript.canvasImagen.SetActive(false);
+            npcScript.misionNpc = null;
+        }
+    }
+
+    public void ActivarMision()
+    {
+        if (misiones != null && misiones != this)
+        {
+            misiones.CancelarMision();
+        }
+        misiones = this;
+        misionActiva = true;
+        MostrarMision();
+    }
+
     public void DesactivarPanel()
     {
         panelMision.SetActive(false);

@@ -86,8 +86,11 @@ public class ScrollPanel : MonoBehaviour
             npcScript.hasTalked = true;
             npcScript = null;
         }
-        misionsScript.MostrarMision();
         playerScript.puedoMoverme = true;
+
+        //Sobreescribir mision activa si ya existe una 
+        misionsScript.ActivarMision();
+
         if (misionsScript.tipoMision == Misions.MisionTipo.HablarConNpc)
         {
             GameObject npcDest = GameObject.Find(misionsScript.npcDestino);

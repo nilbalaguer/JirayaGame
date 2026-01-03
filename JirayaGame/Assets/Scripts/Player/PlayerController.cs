@@ -1005,4 +1005,13 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
+    public void OnCinematicTsunadeEnd()
+    {
+        PanelInterno.Instance.AbrirPanelInterno(new string[]
+        {
+            "Parece que tengo que encontrar objetos para tsunade.",
+            "Sera mejor que la ayude si quiero obtener recompensas."
+        });
+    }
+
 }

@@ -2,10 +2,12 @@ using UnityEngine;
 
 public class MonedasController : MonoBehaviour
 {
+    private AudioSource audioSource;
+    public AudioClip coinSound;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -18,6 +20,7 @@ public class MonedasController : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            AudioSource.PlayClipAtPoint(coinSound, transform.position);
             Destroy(gameObject);
         }
     }

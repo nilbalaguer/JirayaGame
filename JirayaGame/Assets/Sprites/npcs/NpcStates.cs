@@ -546,10 +546,7 @@ public class NpcStates : MonoBehaviour
     public void MostrarDialogoFinal()
     {
         //dialogFinalMision.SetActive(true);
-        misionNpc.panelMisionesCompletadas[2].SetActive(true); 
-        panelInfoManager info3 = misionNpc.panelMisionesCompletadas[2].GetComponent<panelInfoManager>();
-        info3.npcScript = this;
-        info3.audioSource = GetComponent<AudioSource>();
+        misionNpc.MostrarPanelMisionCompletada(new string[] {"¡Gracias por la nota!", "Dicen que orochimaru esta furioso, ten cuidado."});
         canvasImagen.SetActive(false);
     }
 

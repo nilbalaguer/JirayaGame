@@ -30,7 +30,7 @@ public class Misions : MonoBehaviour
     private Objeto objetoRecompensa;
     //public StatesMachine playerScript;
     public PlayerController playerScript;
-    public GameObject[] panelMisionesCompletadas;
+    public GameObject panelMisionCompletada;
     public string npcDestino;
     public GameObject notaPrefab;
     [HideInInspector]
@@ -51,11 +51,7 @@ public class Misions : MonoBehaviour
         panelMision.SetActive(false);
         //playerScript = GameObject.Find("player").GetComponent<StatesMachine>();
         playerScript = GameObject.Find("Player").GetComponent<PlayerController>();
-        foreach (GameObject panel in panelMisionesCompletadas)
-        {
-            if (panel != null)
-                panel.SetActive(false);
-        }
+        panelMisionCompletada.SetActive(false);
         objetoKana.SetActive(false);
         if (iconoEntregarNota == null)
         {
@@ -83,7 +79,7 @@ public class Misions : MonoBehaviour
             nombreNpc.text = npcScript.nameNpc;
             //npcScript.npcIcono.sprite = npcScript.iconoIntro;
 
-            if (npcScript.nameNpc == "Goro"){
+            if (npcScript.nameNpc == "Goro" || npcScript.nameNpc == "Saburo"){
                 panelIconoNpc.sprite = npcIconos[0];
             }else if (npcScript.nameNpc == "Kichiro"){
                 panelIconoNpc.sprite = npcIconos[1];
@@ -117,6 +113,15 @@ public class Misions : MonoBehaviour
         }
     }
 
+    public void MostrarPanelMisionCompletada(string[] textoCompletado)
+    {
+        panelMisionCompletada.SetActive(true);
+        panelInfoManager info = panelMisionCompletada.GetComponent<panelInfoManager>();
+        info.npcScript = npcScript;
+        info.paginas = textoCompletado;
+        info.audioSource = npcScript.GetComponent<AudioSource>();
+    }
+
     public void CompletarMision()
     {
         //npcScript.currentState = NpcStates.State.EndMision;
@@ -130,18 +135,13 @@ public class Misions : MonoBehaviour
             {
                 case MisionTipo.RecolectarMoneda:
                     GameManager.Instance.monedas += 10;
-                    panelMisionesCompletadas[0].SetActive(true); 
-                    panelInfoManager info = panelMisionesCompletadas[0].GetComponent<panelInfoManager>();
-                    info.npcScript = npcScript;
-                    info.audioSource = npcScript.GetComponent<AudioSource>();
+                    GameManager.Instance.textoMonedas.text = GameManager.Instance.monedas.ToString();
+                    MostrarPanelMisionCompletada(new string[] {"¡Gracias por traerme las monedas!", "Aquí tienes tu recompensa."});
                     break;
                 case MisionTipo.BuscarObjeto:
                     GameManager.Instance.monedas += 20;
                     GameManager.Instance.textoMonedas.text = GameManager.Instance.monedas.ToString();
-                    panelMisionesCompletadas[1].SetActive(true); 
-                    panelInfoManager info2 = panelMisionesCompletadas[1].GetComponent<panelInfoManager>();
-                    info2.npcScript = npcScript;
-                    info2.audioSource = npcScript.GetComponent<AudioSource>();
+                    MostrarPanelMisionCompletada(new string[] {"¡Porfin podre cortar mi arroz!", "Te lo agradezco mucho."});
                     break;
                 case MisionTipo.HablarConNpc:
                     GameManager.Instance.monedas += 15;

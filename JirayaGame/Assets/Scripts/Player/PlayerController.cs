@@ -548,6 +548,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void MirarObjetivo(Transform objetivo)
+    {
+        float direccion = objetivo.position.x - transform.position.x;
+
+        transform.localScale = new Vector3(direccion < 0 ? -1 : 1, 1, 1);
+        animator.SetFloat("State", 0);
+        animator.SetInteger("State-int", 0);
+    }
+
     private void MostrarMensajePocion()
     {
         if (objetoSujeto != null && (objetoSujeto.nombreObjeto == "Pocion1" || objetoSujeto.nombreObjeto == "Pocion2" || objetoSujeto.nombreObjeto == "Pocion3"))

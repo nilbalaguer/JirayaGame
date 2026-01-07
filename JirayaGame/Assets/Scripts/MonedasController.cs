@@ -20,8 +20,13 @@ public class MonedasController : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            AudioSource.PlayClipAtPoint(coinSound, transform.position);
-            Destroy(gameObject);
+            audioSource.PlayOneShot(coinSound);
+            Destroy(gameObject, coinSound.length);
+            PanelInterno.Instance.AbrirPanelInterno(new string[]
+            {
+                "Esto parece una moneda",
+                "Me pregunto para que podrian servir."
+            });
         }
     }
 }

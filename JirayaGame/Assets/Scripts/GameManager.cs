@@ -169,6 +169,7 @@ public class GameManager : MonoBehaviour
 
         estadoActual = Estado.Intro;
         player.puedoMoverme = false;
+        player.MirarObjetivo(npcIntro.transform);
 
         npcIntro.NpcIntro = true;
         npcIntro.introAsignada = false;   

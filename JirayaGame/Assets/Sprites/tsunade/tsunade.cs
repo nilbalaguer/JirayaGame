@@ -27,7 +27,6 @@ public class tsunade : MonoBehaviour
     public bool entregado = false;
     [HideInInspector]
     public bool recompensaEntregadaRecientemente = false;
-    public TextMeshProUGUI nombreTsunade;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -37,7 +36,6 @@ public class tsunade : MonoBehaviour
         anim = GetComponent<Animator>();
         currentState = State.Idle;
         tsunadePanel2.SetActive(false);
-        nombreTsunade.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -150,16 +148,6 @@ public class tsunade : MonoBehaviour
         if (!PlayerinRange())
         {
             recompensaEntregadaRecientemente = false;
-        }
-
-        float distanciaTsunadePlayer = Vector2.Distance(player.transform.position, transform.position);
-        if (distanciaTsunadePlayer <= 2.5f)
-        {
-            nombreTsunade.gameObject.SetActive(true);
-        }
-        else
-        {
-            nombreTsunade.gameObject.SetActive(false);
         }
     }
 

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public class ScrollPanel : MonoBehaviour
 {
@@ -27,6 +28,8 @@ public class ScrollPanel : MonoBehaviour
     public int letrasPorSonido = 2; 
     private int contadorLetras = 0;
 
+    public Button btnDefecto;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Start()
@@ -47,6 +50,11 @@ public class ScrollPanel : MonoBehaviour
     void OnEnable()
     {
         text.SetActive(false);
+        if (btnDefecto != null)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(btnDefecto.gameObject);
+        }
     }
     public void ShowText()
     {

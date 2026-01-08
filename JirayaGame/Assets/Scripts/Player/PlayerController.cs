@@ -193,7 +193,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (state == "Parry")
+        if (state == "Parry" && human)
         {
             if (Input.GetButtonUp("Fire2") || Input.GetButtonUp("LB"))
             {
@@ -509,7 +509,7 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("LastDirection", lastMove);
         animator.SetBool("Human", human);
 
-        if (state == "Parry")
+        if (state == "Parry" && human)
         {
             animator.enabled = false;
             spriteRendererPlayer.sprite = spritesBloqueo[lastMove - 1];

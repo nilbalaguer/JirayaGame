@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     private float cooldownMele = 0;
     private float cooldownTonge = 0.375f;
     [SerializeField] float cooldownForMele = 0.5f;
-    private int lastMove;
+    public int lastMove;
 
     [Header("Vida i Habilidades")]
 
@@ -548,13 +548,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void MirarObjetivo(Transform objetivo)
+    public void MirarObjetivo()
     {
-        float direccion = objetivo.position.x - transform.position.x;
-
-        transform.localScale = new Vector3(direccion < 0 ? -1 : 1, 1, 1);
-        animator.SetFloat("State", 0);
-        animator.SetInteger("State-int", 0);
+        animator.SetTrigger("MirarIzquierda");
     }
 
     private void MostrarMensajePocion()

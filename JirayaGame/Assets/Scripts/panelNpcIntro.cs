@@ -81,6 +81,7 @@ public class PanelNpc : MonoBehaviour
             npcScript.introTerminada = true;
 
             GameManager.Instance.FinalizarIntro(npcScript);
+            playerScript.puedoMoverme = true;
         }
     }
 

@@ -284,6 +284,7 @@ public class NpcStates : MonoBehaviour
                 break;
             case State.Intro:
                 npcIcono.sprite = iconoIntro;
+                player.GetComponent<PlayerController>().MirarObjetivo();
                 MoveTowardsPlayer();
                 break;
             case State.EndMision:
@@ -320,6 +321,7 @@ public class NpcStates : MonoBehaviour
         }
         void MoveTowardsPlayer()
         {
+        player.GetComponent<PlayerController>().puedoMoverme = false;
         Vector2 playerPos = player.transform.position;
         Vector2 npcPos = transform.position;
         Vector2 directionToPlayer = (playerPos - npcPos).normalized;
@@ -398,12 +400,31 @@ public class NpcStates : MonoBehaviour
 
     bool PlayerinRange()
     {
-        float distancia = Vector2.Distance(transform.position, player.transform.position);
+        /*float distancia = Vector2.Distance(transform.position, player.transform.position);
         if (necesitaAlejarse && distancia > 3f)
         {
             necesitaAlejarse = false;
         }
-        return distancia <= rangoPlayer && !necesitaAlejarse;
+        return distancia <= rangoPlayer && !necesitaAlejarse;*/
+
+        Collider2D[] hit = Physics2D.OverlapCircleAll(transform.position, rangoPlayer, LayerMask.GetMask("Player"));
+        if (hit.Length > 0)
+        {
+            if (necesitaAlejarse)
+            {
+                float distancia = Vector2.Distance(transform.position, player.transform.position);
+                if (distancia > 3f)
+                {
+                    necesitaAlejarse = false;
+                }
+                return false;
+            }
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     
     bool EnemyinRange()

@@ -9,11 +9,12 @@ public class CicloDiaController : MonoBehaviour
     public float duracionTransicion;
     private float tiempoActualCiclo = 0f;
     private float cicloActualIndex;
-    private int cicloActual = 0;
+    public int cicloActual = 0;
     private int cicloSiguiente = 1;
     public Image iconosCiclo;
     public Sprite iconoSol;
     public Sprite iconoLuna;
+    public ParticleSystem particulasLluvia;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -34,13 +35,36 @@ public class CicloDiaController : MonoBehaviour
         }
         CambiarColor(ciclosDia[cicloActual].colorLuz, ciclosDia[cicloSiguiente].colorLuz);
 
-        if (cicloActual == 0)
+        if (cicloActual == 0 || cicloActual == 2)
         {
             iconosCiclo.sprite = iconoSol;
+            if (particulasLluvia.isPlaying)
+            {
+                particulasLluvia.Stop();
+            }
         }
         else
         {
             iconosCiclo.sprite = iconoLuna;
+            if (ProbabilidadLluvia())
+            {
+                if (!particulasLluvia.isPlaying)
+                {
+                    particulasLluvia.Play();
+                }
+            }
+        }
+    }
+
+    public bool ProbabilidadLluvia()
+    {
+        int probabilidad = Random.Range(0, 100);
+        if (probabilidad < 30)
+        {
+            return true;
+        }else
+        {
+            return false;
         }
     }
 

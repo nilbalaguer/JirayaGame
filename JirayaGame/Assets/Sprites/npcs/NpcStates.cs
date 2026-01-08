@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class NpcStates : MonoBehaviour
 {
@@ -47,6 +48,8 @@ public class NpcStates : MonoBehaviour
     public string nameNpc;
     
     public bool esNpcShamizen;
+
+    public string dialogMision;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -84,6 +87,16 @@ public class NpcStates : MonoBehaviour
         else
         {
             dialogueShamuzen.SetActive(false);
+        }
+
+        if (dialogMision == null || dialogMision == "")
+        {
+            return;
+        }
+
+        if (introDialog == null)
+        {
+            return;
         }
     }
 
@@ -155,7 +168,7 @@ public class NpcStates : MonoBehaviour
                     currentState = State.EndMision;
                 }
                 break;
-
+            //Patrullaje del npc
             case State.Patrol:
                 if (puedeInteractuar && PlayerinRange() && !hasTalked){
                     currentState = State.Alerted;
@@ -240,12 +253,15 @@ public class NpcStates : MonoBehaviour
                     if (!esNpcShamizen){
                         dialogueBox.SetActive(true);
                         scrollPanel.npcScript = this;
+                        scrollPanel.AsignarTextoMision(this);
                         player.GetComponent<PlayerController>().puedoMoverme = false;
 
                         scrollPanel.misionsScript = misionNpc;
+                        scrollPanel.audioSource = GetComponent<AudioSource>();
                     }
                     else{
                         dialogueShamuzen.SetActive(true);
+                        dialogueShamuzen.GetComponent<PanelNpc>().audioSource = GetComponent<AudioSource>();
                         panelNpcScript.npcScript = this;
                         player.GetComponent<PlayerController>().puedoMoverme = false;
                     }
@@ -340,6 +356,7 @@ public class NpcStates : MonoBehaviour
                     }
                 }
             introDialog.SetActive(true);
+            introDialog.GetComponent<PanelNpc>().audioSource = GetComponent<AudioSource>();
 
             rb.simulated = false;
             npcIcono.sprite = iconoNormal;
@@ -529,9 +546,7 @@ public class NpcStates : MonoBehaviour
     public void MostrarDialogoFinal()
     {
         //dialogFinalMision.SetActive(true);
-        misionNpc.panelMisionesCompletadas[2].SetActive(true); 
-        panelInfoManager info3 = misionNpc.panelMisionesCompletadas[2].GetComponent<panelInfoManager>();
-        info3.npcScript = this;
+        misionNpc.MostrarPanelMisionCompletada(new string[] {"¡Gracias por la nota!", "Dicen que orochimaru esta furioso, ten cuidado."});
         canvasImagen.SetActive(false);
     }
 

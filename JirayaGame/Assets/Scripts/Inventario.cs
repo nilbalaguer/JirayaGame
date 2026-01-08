@@ -66,10 +66,18 @@ public class Inventario : MonoBehaviour
         //if (Input.GetButtonDown("Fire2"))
         if (Input.GetButtonDown("RB"))
         {
-            navegacionActiva = true;
-            indiceSeleccionActual = 0;
-            dpadTimer = 0f;
-            MostrarVisualInicial();
+            if (!navegacionActiva)
+            {
+                navegacionActiva = true;
+                indiceSeleccionActual = 0;
+                dpadTimer = 0f;
+                MostrarVisualInicial();
+            }
+            else
+            {
+                navegacionActiva = false;
+                OcultarVisual();
+            }
         }
 
         if (!navegacionActiva) return;
@@ -128,7 +136,9 @@ public class Inventario : MonoBehaviour
                 rt.localScale = new Vector3(1,1,1);
 
                 if (cursor != null)
+                {
                     cursor.gameObject.SetActive(false);
+                }    
             }
             else
             {
@@ -137,13 +147,16 @@ public class Inventario : MonoBehaviour
                 rt.localScale = new Vector3(1,1,1);
 
                 if (cursor != null)
+                {
                     cursor.gameObject.SetActive(false);
+                }
             }
         }
 
         ActualizarVisual();
     }
 
+    //Mostrar botones seleccionados con el mando, con una flechita al lado de cada boton
     void ActualizarVisual()
     {
         for (int i = 0; i < btnSlots.Count; i++)
@@ -278,6 +291,7 @@ public class Inventario : MonoBehaviour
         inventarioUI.SetActive(false);
     }
 
+    //Mostrar botones actualizados en el inventario
     public void ActualizarInventario()
     {  
         for (int i = 0; i < btnSlots.Count; i++)
@@ -359,15 +373,6 @@ public class Inventario : MonoBehaviour
     {
         entry.cantidad--;
 
-        /*if (objetos.Contains(objeto))
-        {
-            objetos.Remove(objeto);
-            ActualizarInventario();        
-        }
-        else
-        {
-            Debug.Log("El objeto no está en el inventario.");
-        }*/
         if (entry.cantidad <= 0)
         {
             objetos.Remove(entry);

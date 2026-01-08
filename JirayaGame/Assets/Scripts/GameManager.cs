@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public bool puedeTransformarse = false;
     public enum Estado { Normal, Intro };
     public Estado estadoActual = Estado.Normal;
+    public bool introFinalizadaGlobal = false;
     public Inventario inventario;
     //public StatesMachine player;
     public PlayerController player;
@@ -81,6 +82,8 @@ public class GameManager : MonoBehaviour
     public int objetosTotales = 6;
     public int objetosRecogidos = 0;
     public TextMeshProUGUI textoObjetos;
+    //panel informativo de tienda desbloqueada timeline
+    public GameObject panelTiendaDesbloqueo;
 
     void Awake()
     {
@@ -108,8 +111,10 @@ public class GameManager : MonoBehaviour
         audioSource = gameObject.GetComponent<AudioSource>();
         playerGameObject = GameObject.Find("Player");
 
-
-        IniciarIntro();
+        if (!introFinalizadaGlobal)
+        {
+            IniciarIntro();
+        }
         monedas = 0;
         //textoMonedas.text = monedas.ToString();
         //tiendaAlerta.SetActive(false);
@@ -164,10 +169,11 @@ public class GameManager : MonoBehaviour
 
         estadoActual = Estado.Intro;
         player.puedoMoverme = false;
+        player.MirarObjetivo(npcIntro.transform);
 
         npcIntro.NpcIntro = true;
-        npcIntro.introAsignada = false;   // << IMPORTANTE
-        npcIntro.introTerminada = false;  // << IMPORTANTE
+        npcIntro.introAsignada = false;   
+        npcIntro.introTerminada = false;  
         npcIntro.currentState = NpcStates.State.Intro;
         npcIntroActual = npcIntro;
     }
@@ -178,6 +184,7 @@ public class GameManager : MonoBehaviour
         if (npc == npcIntroActual)
         {
             npcIntroActual.introTerminada = true;
+            introFinalizadaGlobal = true;
         }
     }
     
@@ -323,6 +330,11 @@ public class GameManager : MonoBehaviour
         timelineErmitañoTienda.Play();
     }
 
+    public void OnCinematicEndTsunade()
+    {
+        panelTiendaDesbloqueo.SetActive(true);
+    }
+
     public void RecuperarVida(float cantidad)
     {
         vidaPlayer += cantidad;
@@ -355,4 +367,10 @@ public class GameManager : MonoBehaviour
     {
         textoObjetos.text = "Objetos encontrados: " + objetosRecogidos + "/" + objetosTotales;
     }
+
+    public void CerrarPanelTienda()
+    {
+        panelTiendaDesbloqueo.SetActive(false);
+    }
+
 }

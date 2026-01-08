@@ -350,14 +350,14 @@ public class PlayerController : MonoBehaviour
                         objectPicked = null;
                     }
 
-                    if (human)
+                    /*if (human)
                     {
                         Timeline2.Instance.habilidadRana.sprite = iconoRana2;
                     }
                     else
                     {
                         Timeline2.Instance.habilidadRana.sprite = iconoRana1;
-                    }
+                    }*/
                 }
 
                 if (Input.GetButtonDown("Jump") || Input.GetButtonDown("A")) //mando A
@@ -546,6 +546,15 @@ public class PlayerController : MonoBehaviour
 
                 break;
         }
+    }
+
+    public void MirarObjetivo(Transform objetivo)
+    {
+        float direccion = objetivo.position.x - transform.position.x;
+
+        transform.localScale = new Vector3(direccion < 0 ? -1 : 1, 1, 1);
+        animator.SetFloat("State", 0);
+        animator.SetInteger("State-int", 0);
     }
 
     private void MostrarMensajePocion()
@@ -1003,6 +1012,15 @@ public class PlayerController : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public void OnCinematicTsunadeEnd()
+    {
+        PanelInterno.Instance.AbrirPanelInterno(new string[]
+        {
+            "Parece que tengo que encontrar objetos para tsunade.",
+            "Sera mejor que la ayude si quiero obtener recompensas."
+        });
     }
 
 }

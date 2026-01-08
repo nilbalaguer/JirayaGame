@@ -2,10 +2,12 @@ using UnityEngine;
 
 public class MonedasController : MonoBehaviour
 {
+    private AudioSource audioSource;
+    public AudioClip coinSound;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -18,7 +20,13 @@ public class MonedasController : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            Destroy(gameObject);
+            audioSource.PlayOneShot(coinSound);
+            Destroy(gameObject, coinSound.length);
+            PanelInterno.Instance.AbrirPanelInterno(new string[]
+            {
+                "Esto parece una moneda",
+                "Me pregunto para que podrian servir."
+            });
         }
     }
 }

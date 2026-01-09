@@ -408,23 +408,23 @@ public class NpcStates : MonoBehaviour
         return distancia <= rangoPlayer && !necesitaAlejarse;*/
 
         Collider2D[] hit = Physics2D.OverlapCircleAll(transform.position, rangoPlayer, LayerMask.GetMask("Player"));
-        if (hit.Length > 0)
+        if (hit != null && hit.Length > 0 && !necesitaAlejarse)
         {
-            if (necesitaAlejarse)
-            {
-                float distancia = Vector2.Distance(transform.position, player.transform.position);
-                if (distancia > 3f)
-                {
-                    necesitaAlejarse = false;
-                }
-                return false;
-            }
             return true;
         }
-        else
+        
+        if (necesitaAlejarse && hit.Length == 0)
         {
-            return false;
+            necesitaAlejarse = false;
         }
+
+        return false;
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, rangoPlayer);
     }
     
     bool EnemyinRange()
@@ -567,7 +567,7 @@ public class NpcStates : MonoBehaviour
     public void MostrarDialogoFinal()
     {
         //dialogFinalMision.SetActive(true);
-        misionNpc.MostrarPanelMisionCompletada(new string[] {"¡Gracias por la nota!", "Dicen que orochimaru esta furioso, ten cuidado."});
+        misionNpc.MostrarPanelMisionCompletada(new string[] {"Gracias por la nota", "Dicen que orochimaru esta furioso, ten cuidado."});
         canvasImagen.SetActive(false);
     }
 

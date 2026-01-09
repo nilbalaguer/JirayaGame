@@ -14,6 +14,8 @@ public class CicloDiaController : MonoBehaviour
     public Image iconosCiclo;
     public Sprite iconoSol;
     public Sprite iconoLuna;
+    [Range(0,100)]
+    public int probabilidadNublado = 30;
     public ParticleSystem particulasLluvia;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -35,24 +37,38 @@ public class CicloDiaController : MonoBehaviour
         }
         CambiarColor(ciclosDia[cicloActual].colorLuz, ciclosDia[cicloSiguiente].colorLuz);
 
-        if (cicloActual == 0 || cicloActual == 2)
+        //Ciclo dia 
+        if (cicloActual == 0)
         {
             iconosCiclo.sprite = iconoSol;
+            cicloSiguiente = (Random.Range(0, 100) < probabilidadNublado) ? 1 : 2;
+        }
+        //Ciclo nublado
+        else if (cicloActual == 1)
+        {
+            iconosCiclo.sprite = iconoLuna;
+            cicloSiguiente = 2;
+            if (!particulasLluvia.isPlaying)
+            {
+                particulasLluvia.Play();
+            }
+        }
+        //Ciclo noche
+        else if (cicloActual == 2)
+        {
+            iconosCiclo.sprite = iconoLuna;
+            cicloSiguiente = 3;
             if (particulasLluvia.isPlaying)
             {
                 particulasLluvia.Stop();
             }
         }
+        //Ciclo amanecer
         else
         {
-            iconosCiclo.sprite = iconoLuna;
-            if (ProbabilidadLluvia())
-            {
-                if (!particulasLluvia.isPlaying)
-                {
-                    particulasLluvia.Play();
-                }
-            }
+            iconosCiclo.sprite = iconoSol;
+            cicloSiguiente = 0;
+
         }
     }
 
@@ -70,10 +86,6 @@ public class CicloDiaController : MonoBehaviour
 
     private void CambiarColor(Color colorActual, Color colorSiguiente)
     {
-        if (cicloActualIndex < 0 || cicloActualIndex > 1)
-        {
-            return;
-        }
         luzGlobal.color = Color.Lerp(colorActual, colorSiguiente, cicloActualIndex);
     }
 }

@@ -20,6 +20,7 @@ public class panelInfoManager : MonoBehaviour
     private Coroutine typeCoroutine;
     public int letrasPorSonido = 2; 
     private int contadorLetras = 0;
+    public TextMeshProUGUI nombreNpc;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

@@ -120,6 +120,11 @@ public class Misions : MonoBehaviour
         info.npcScript = npcScript;
         info.paginas = textoCompletado;
         info.audioSource = npcScript.GetComponent<AudioSource>();
+        info.nombreNpc.text = npcScript.nameNpc;
+        if (tipoMision == MisionTipo.HablarConNpc)
+        {
+            info.nombreNpc.text = "Jiro";
+        }
     }
 
     public void CompletarMision()

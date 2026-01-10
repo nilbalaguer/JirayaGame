@@ -326,7 +326,7 @@ public class NpcStates : MonoBehaviour
         Vector2 npcPos = transform.position;
         Vector2 directionToPlayer = (playerPos - npcPos).normalized;
 
-        float distanciaParada = 0.7f;
+        float distanciaParada = 1f;
         float distance = Vector2.Distance(npcPos, playerPos);
         Vector2 targetPos = playerPos - directionToPlayer * distanciaParada;
         UpdateSpriteDirection(directionToPlayer);

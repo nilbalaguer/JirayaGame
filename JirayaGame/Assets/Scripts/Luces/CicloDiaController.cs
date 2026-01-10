@@ -14,6 +14,7 @@ public class CicloDiaController : MonoBehaviour
     public Image iconosCiclo;
     public Sprite iconoSol;
     public Sprite iconoLuna;
+    public Sprite iconoLluvia;
     [Range(0,100)]
     public int probabilidadNublado = 30;
     public ParticleSystem particulasLluvia;
@@ -21,6 +22,7 @@ public class CicloDiaController : MonoBehaviour
     void Start()
     {
         luzGlobal.color = ciclosDia[0].colorLuz;
+        particulasLluvia.Stop();
     }
 
     // Update is called once per frame
@@ -32,21 +34,35 @@ public class CicloDiaController : MonoBehaviour
         {
             tiempoActualCiclo = 0f;
             cicloActual = cicloSiguiente;
-            cicloSiguiente = (cicloSiguiente + 1) % ciclosDia.Length;
-
+            CambiarCiclo();
+            //cicloSiguiente = (cicloSiguiente + 1) % ciclosDia.Length;
         }
         CambiarColor(ciclosDia[cicloActual].colorLuz, ciclosDia[cicloSiguiente].colorLuz);
+    }
 
+    public void CambiarCiclo()
+    {
         //Ciclo dia 
         if (cicloActual == 0)
         {
             iconosCiclo.sprite = iconoSol;
-            cicloSiguiente = (Random.Range(0, 100) < probabilidadNublado) ? 1 : 2;
+            if (ProbabilidadLluvia())
+            {
+                cicloSiguiente = 1;
+            }
+            else
+            {
+                cicloSiguiente = 2;
+            }
+            if (particulasLluvia.isPlaying)
+            {
+                particulasLluvia.Stop();
+            }
         }
         //Ciclo nublado
         else if (cicloActual == 1)
         {
-            iconosCiclo.sprite = iconoLuna;
+            iconosCiclo.sprite = iconoLluvia;
             cicloSiguiente = 2;
             if (!particulasLluvia.isPlaying)
             {
@@ -68,6 +84,10 @@ public class CicloDiaController : MonoBehaviour
         {
             iconosCiclo.sprite = iconoSol;
             cicloSiguiente = 0;
+            if (particulasLluvia.isPlaying)
+            {
+                particulasLluvia.Stop();
+            }
 
         }
     }
@@ -86,6 +106,6 @@ public class CicloDiaController : MonoBehaviour
 
     private void CambiarColor(Color colorActual, Color colorSiguiente)
     {
-        luzGlobal.color = Color.Lerp(colorActual, colorSiguiente, cicloActualIndex);
+        luzGlobal.color = Color.Lerp(colorActual, colorSiguiente, Mathf.Clamp01(cicloActualIndex));
     }
 }

@@ -41,6 +41,11 @@ public class Cartel : MonoBehaviour
             textoCartel.text = contenidoCartel;
             panelCartel.SetActive(true);
         }
+
+        if (distance >= 2f && panelCartel.activeSelf)
+        {
+            panelCartel.SetActive(false);
+        }
     }
 
     public void ClosePanel()

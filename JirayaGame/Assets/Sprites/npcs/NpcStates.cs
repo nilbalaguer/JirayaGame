@@ -50,6 +50,7 @@ public class NpcStates : MonoBehaviour
     public bool esNpcShamizen;
 
     public string dialogMision;
+    public bool playerDetectado = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -108,22 +109,6 @@ public class NpcStates : MonoBehaviour
             player = GameObject.FindWithTag("Player");
         }
 
-        // if (!introAsignada && GameManager.Instance != null)
-        // {
-        //     if (NpcIntro)
-        //     {
-        //         currentState = State.Intro;
-        //         introAsignada = true;
-        //     }
-        //     else
-        //     {
-        //         introAsignada = true;
-        //     }
-        // }
-        // if (!introAsignada)
-        // {
-        //     return;
-        // }
         if (!introAsignada)
         {
             if (GameManager.Instance == null) return;
@@ -325,18 +310,23 @@ public class NpcStates : MonoBehaviour
         Vector2 playerPos = player.transform.position;
         Vector2 npcPos = transform.position;
         Vector2 directionToPlayer = (playerPos - npcPos).normalized;
+        playerDetectado = PlayerinRange();
 
-        float distanciaParada = 1f;
-        float distance = Vector2.Distance(npcPos, playerPos);
-        Vector2 targetPos = playerPos - directionToPlayer * distanciaParada;
-        UpdateSpriteDirection(directionToPlayer);
-        
-        if (distance > distanciaParada)
+        if (!playerDetectado)
         {
-            transform.position = Vector2.MoveTowards(
-            npcPos, targetPos,
-            3f * Time.deltaTime
-            );
+            /*float distanciaParada = 1f;
+            float distance = Vector2.Distance(npcPos, playerPos);
+            Vector2 targetPos = playerPos - directionToPlayer * distanciaParada;*/
+            Vector2 dir = (playerPos - npcPos).normalized;
+            UpdateSpriteDirection(dir);
+            
+            //if (distance > distanciaParada)
+            //{
+                transform.position = Vector2.MoveTowards(
+                npcPos, playerPos,
+                3f * Time.deltaTime
+                );
+            //}
         }
         else
         {

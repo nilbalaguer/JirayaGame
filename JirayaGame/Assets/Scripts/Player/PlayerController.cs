@@ -566,10 +566,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void BeberPocion()
+    public void BeberPocion(string nombrePocion)
     {
         Debug.Log("Has bebido la poción");
-        if (objetoSujeto.nombreObjeto == "Pocion1")
+        if (nombrePocion == "Pocion1")
         {
             if (gameManager.vidaPlayer >= 10)
             {
@@ -578,11 +578,11 @@ public class PlayerController : MonoBehaviour
             }
             gameManager.RecuperarVida(2f);
         }
-        else if (objetoSujeto.nombreObjeto == "Pocion2")
+        else if (nombrePocion == "Pocion2")
         {
             gameManager.AumentarVelocidad(3f);
         }
-        else if (objetoSujeto.nombreObjeto == "Pocion3")
+        else if (nombrePocion == "Pocion3")
         {
             if (gameManager.vidaPlayer > 6)
             {
@@ -591,8 +591,8 @@ public class PlayerController : MonoBehaviour
             }
             gameManager.RecuperarVida(4f);
         }
-        Destroy(objetoSujeto.gameObject);
-        objetoSujeto = null;
+        //Destroy(objetoSujeto.gameObject);
+        //objetoSujeto = null;
         mensajePocion.SetActive(false);
     }
 

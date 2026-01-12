@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class Inventario : MonoBehaviour
 {
@@ -39,6 +40,9 @@ public class Inventario : MonoBehaviour
     private float dpadCooldown = 0.2f;
     private float dpadTimer = 0f;
     private float lastDpadY = 0f;
+
+    public GameObject usarBoton;
+    private InventoryEntry objetoUsable;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -55,6 +59,7 @@ public class Inventario : MonoBehaviour
             btnSlots.Add(btnObj);
         }
         tsunadeScript = GameObject.FindWithTag("Tsunade").GetComponent<tsunade>();
+        usarBoton.SetActive(false);
     }
 
     // Update is called once per frame
@@ -81,6 +86,7 @@ public class Inventario : MonoBehaviour
         }
 
         if (!navegacionActiva) return;
+        if (usarBoton.activeSelf) return;
 
         dpadTimer -= Time.deltaTime;
 
@@ -105,8 +111,13 @@ public class Inventario : MonoBehaviour
         
         if (Input.GetButtonDown("B"))
         {
-            navegacionActiva = false;
-            OcultarVisual();
+            if (usarBoton.activeSelf)
+            {
+                CancelarUso();
+            }else{
+                navegacionActiva = false;
+                OcultarVisual();
+            }
         }
     }
 
@@ -210,8 +221,15 @@ public class Inventario : MonoBehaviour
             go.transform.localScale = entry.escalaOriginal;
             if (objInst != null && objInst.tipo == Objeto.TipoObjeto.Recompensa)
             {
-                player.EquiparObjeto(objInst);
-                EliminarObjeto(entry);
+                //player.EquiparObjeto(objInst);
+                //EliminarObjeto(entry);
+                objetoUsable = entry;
+                GameObject slot = btnSlots[indiceSeleccionActual];
+                Vector3 botonPos = slot.transform.position;
+                
+                usarBoton.transform.position = botonPos;
+                usarBoton.SetActive(true);
+                EventSystem.current.SetSelectedGameObject(usarBoton);
             }else{
                 player.SoltarObjetoInventario(objInst);
                 EliminarObjeto(entry);
@@ -347,8 +365,12 @@ public class Inventario : MonoBehaviour
                     go.transform.localScale = captured.escalaOriginal;
                     if (objInst != null && objInst.tipo == Objeto.TipoObjeto.Recompensa)
                     {
-                        player.EquiparObjeto(objInst);
-                        EliminarObjeto(captured);
+                        //player.EquiparObjeto(objInst);
+                        //EliminarObjeto(captured);
+                        //Mostrar boton usar
+                        objetoUsable = captured;
+                        usarBoton.transform.position = btn.transform.position;
+                        usarBoton.SetActive(true);
                     }
                     else
                     {
@@ -365,6 +387,27 @@ public class Inventario : MonoBehaviour
                 btnComp.onClick.RemoveAllListeners();
             }
         }
+    }
+
+    public void Usar()
+    {
+        player.BeberPocion(objetoUsable.nombre);
+        //eliminar pocion del inventario
+        EliminarObjeto(objetoUsable);
+        objetoUsable = null;
+        usarBoton.SetActive(false);
+        ActualizarInventario();
+
+        indiceSeleccionActual = 0;
+        ActualizarVisual();
+    }
+
+    public void CancelarUso()
+    {
+        objetoUsable = null;
+        usarBoton.SetActive(false);
+
+        ActualizarVisual();
     }
 
     //Eliminar objeto del inventario

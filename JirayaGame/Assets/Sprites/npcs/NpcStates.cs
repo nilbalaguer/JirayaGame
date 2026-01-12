@@ -141,7 +141,7 @@ public class NpcStates : MonoBehaviour
                         currentState = State.Patrol;
                     }
                 }
-                else if (puedeInteractuar && PlayerinRange() && !hasTalked)
+                else if (puedeInteractuar && PlayerinRange() && !hasTalked && (Input.GetButtonDown("Submit") || Input.GetKeyDown(KeyCode.X)))
                 {
                     currentState = State.Alerted;
                 }
@@ -155,7 +155,7 @@ public class NpcStates : MonoBehaviour
                 break;
             //Patrullaje del npc
             case State.Patrol:
-                if (puedeInteractuar && PlayerinRange() && !hasTalked){
+                if (puedeInteractuar && PlayerinRange() && !hasTalked && (Input.GetButtonDown("Submit") || Input.GetKeyDown(KeyCode.X))){
                     currentState = State.Alerted;
                 }else if (EnemyinRange()){
                     currentState = State.Scared;

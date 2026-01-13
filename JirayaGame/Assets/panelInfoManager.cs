@@ -21,6 +21,10 @@ public class panelInfoManager : MonoBehaviour
     public int letrasPorSonido = 2; 
     private int contadorLetras = 0;
     public TextMeshProUGUI nombreNpc;
+    [HideInInspector]
+    public bool dialogoCerrado = false;
+    private GameObject npcJiro;
+    public NpcStates jiro;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -29,6 +33,8 @@ public class panelInfoManager : MonoBehaviour
         {
             return;
         }
+        npcJiro = GameObject.Find("Jiro");
+        jiro = npcJiro.GetComponent<NpcStates>();
     }
 
     // Update is called once per frame
@@ -76,6 +82,10 @@ public class panelInfoManager : MonoBehaviour
         {
             animator.SetTrigger("Close");
             npcScript.dialogMisionMostrado = true;
+            if (npcScript.misionNpc.tipoMision == Misions.MisionTipo.HablarConNpc)
+            {
+                jiro.dialogMisionMostrado = true;
+            }
         }
     }
 

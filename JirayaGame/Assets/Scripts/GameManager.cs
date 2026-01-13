@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using UnityEngine.Playables;
+using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
@@ -84,6 +85,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI textoObjetos;
     //panel informativo de tienda desbloqueada timeline
     public GameObject panelTiendaDesbloqueo;
+    public Button btnTienda;
 
     void Awake()
     {
@@ -353,6 +355,7 @@ public class GameManager : MonoBehaviour
 
     public void OnCinematicEndTsunade()
     {
+        EventSystem.current.SetSelectedGameObject(btnTienda.gameObject);
         panelTiendaDesbloqueo.SetActive(true);
     }
 
@@ -392,6 +395,7 @@ public class GameManager : MonoBehaviour
     public void CerrarPanelTienda()
     {
         panelTiendaDesbloqueo.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(null);
     }
 
 }

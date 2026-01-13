@@ -43,6 +43,7 @@ public class Misions : MonoBehaviour
     [HideInInspector]
     public int monedasMax = 15;
     public GameObject objetoKana;
+    private Inventario inventario;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -57,6 +58,7 @@ public class Misions : MonoBehaviour
         {
             return;
         }
+        inventario = playerScript.GetComponent<Inventario>();
     }
 
     // Update is called once per frame
@@ -93,11 +95,12 @@ public class Misions : MonoBehaviour
             {
                 case MisionTipo.HablarConNpc:
                     npcScript.npcIcono.sprite = npcScript.iconoIntro;
-                    GameObject nota = Instantiate(notaPrefab, playerScript.puntoSujecion.position, Quaternion.identity);
+                    GameObject nota = Instantiate(notaPrefab);
                     Objeto objetoNota = nota.GetComponent<Objeto>();
-                    playerScript.objetoSujeto = objetoNota;
-                    objetoNota.Coger(playerScript.puntoSujecion);
+                    /*playerScript.objetoSujeto = objetoNota;
+                    objetoNota.Coger(playerScript.puntoSujecion);*/
                     npcScript.npcIcono.sprite = iconoEntregarNota;
+                    inventario.AñadirObjeto(objetoNota);
                     break;
                 case MisionTipo.BuscarObjeto:
                     npcScript.npcIcono.sprite = iconoMisionKama;

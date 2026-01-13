@@ -537,7 +537,18 @@ public class NpcStates : MonoBehaviour
                 Debug.Log("Este NPC no es el destino");
                 return;
             }
-            Objeto objeto = player.GetComponent<PlayerController>().objetoSujeto;
+            Inventario.InventoryEntry notaExiste = player.GetComponent<PlayerController>().inventario.objetos.Find(e => e.nombre == "NotaMision");
+            if (notaExiste != null){
+                misionNpc.CompletarMision();
+                //dialogMisionMostrado = false;
+                MostrarDialogoFinal();
+                player.GetComponent<PlayerController>().inventario.EliminarObjeto(notaExiste);
+            }
+            else
+            {
+                Debug.Log("No llevas la nota correcta");
+            }
+            /*Objeto objeto = player.GetComponent<PlayerController>().objetoSujeto;
             if (objeto != null && objeto.nombreObjeto == "NotaMision")
             {
                 objeto.Soltar();
@@ -551,14 +562,15 @@ public class NpcStates : MonoBehaviour
             else
             {
                 Debug.Log("No llevas la nota correcta.");
-            }
+            }*/
+
     }
 
     public void MostrarDialogoFinal()
     {
         //dialogFinalMision.SetActive(true);
         misionNpc.MostrarPanelMisionCompletada(new string[] {"Gracias por la nota", "Dicen que orochimaru esta furioso, ten cuidado."});
-        canvasImagen.SetActive(false);
+        canvasImagen.SetActive(false); 
     }
 
 

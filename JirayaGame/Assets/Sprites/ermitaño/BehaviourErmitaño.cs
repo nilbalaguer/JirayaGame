@@ -80,6 +80,7 @@ public class BehaviourErmitaño : MonoBehaviour
                     Timeline.Instance.panelErmitañoMision.SetActive(false);
                     ScreenCinematic.Instance.HideBars();
                     canvasPatrol.SetActive(false);
+                    Timeline.Instance.BarreraErmitaño.SetActive(false);
                 }
                 else if (PlayerinRange() && esErmitañoTienda && (Input.GetKeyDown(KeyCode.X) || Input.GetButtonDown("X")))
                 {
@@ -109,6 +110,7 @@ public class BehaviourErmitaño : MonoBehaviour
                     Timeline.Instance.panelErmitañoMision.SetActive(false);
                     ScreenCinematic.Instance.HideBars();
                     canvasPatrol.SetActive(false);
+                    Timeline.Instance.BarreraErmitaño.SetActive(false);
                 }
                 else
                 {

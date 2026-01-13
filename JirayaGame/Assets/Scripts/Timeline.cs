@@ -12,6 +12,7 @@ public class Timeline : MonoBehaviour
     private bool colisionado = false;
     public bool misionIniciada = false;
     public GameObject panelErmitañoMision;
+    public GameObject BarreraErmitaño;
 
     void Awake()
     {
@@ -67,5 +68,6 @@ public class Timeline : MonoBehaviour
         panelErmitañoMision.SetActive(true);
         ScreenCinematic.Instance.ActivarCinematic();
         ermitañoScript.canvasPatrol.SetActive(true);
+        BarreraErmitaño.SetActive(true);
     }
 }

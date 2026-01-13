@@ -23,6 +23,7 @@ public class BossController : MonoBehaviour
 
     [SerializeField] AudioClip bossMusic;
     private AudioSource audioSource;
+    public bool dificil = true;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -76,7 +77,7 @@ public class BossController : MonoBehaviour
 
         if (dificultad > 0)
         {
-            if (Random.Range(0f, 10f) > 0f)
+            if (!dificil)
             {
                 GameObject tempEnemigo1 = Instantiate(enemigo, spawnEnemigo1.position, Quaternion.identity);
                 Enemigo1Script enemigo1Script = tempEnemigo1.GetComponent<Enemigo1Script>();
@@ -90,7 +91,7 @@ public class BossController : MonoBehaviour
                 enemigo2Script.puntoA = punto2;
                 enemigo2Script.puntoB = spawnEnemigo2;
             }
-            else
+            else if (dificil)
             {
                 GameObject tempEnemigo1 = Instantiate(enemigo2, spawnEnemigo1.position, Quaternion.identity);
                 Enemigo2DistanciaScript enemigo1Script = tempEnemigo1.GetComponent<Enemigo2DistanciaScript>();

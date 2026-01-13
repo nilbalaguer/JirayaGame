@@ -115,6 +115,14 @@ public class GameManager : MonoBehaviour
         {
             IniciarIntro();
         }
+        else
+        {
+            if (npcIntro != null)
+            {
+                npcIntro.NpcIntro = false;
+                npcIntro.introTerminada = true;
+            }
+        }
         monedas = 0;
         //textoMonedas.text = monedas.ToString();
         //tiendaAlerta.SetActive(false);
@@ -122,10 +130,6 @@ public class GameManager : MonoBehaviour
         playerGameObject = GameObject.Find("Player");
 
         player.puedoMoverme = true;
-        if (npcIntro == null)
-        {
-            return;
-        }
 
         if (swapHabilidad)
         {
@@ -282,17 +286,35 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+
         playerGameObject = GameObject.FindGameObjectWithTag("Player");
+        GameObject npcObj = GameObject.FindGameObjectWithTag("NpcInicial");
+        if (npcObj != null)
+        {
+            npcIntro = npcObj.GetComponent<NpcStates>();
+        }
+        else
+        {
+            npcIntro = null;
+        }
 
         if (playerGameObject != null)
         {
+            player = playerGameObject.GetComponent<PlayerController>();
             playerGameObject.transform.position = posicionInicioSiguienteEscena;
+            inventario = playerGameObject.GetComponent<Inventario>();
 
             audioSource = gameObject.GetComponent<AudioSource>();
 
             GameObject parryObj = GameObject.Find("vidaIndicator");
             indicadorVida = parryObj.GetComponent<Image>();
             indicadorVida.fillAmount = vidaPlayer / 10;
+
+            if (introFinalizadaGlobal && npcIntro != null)
+            {
+                npcIntro.NpcIntro = false;
+                npcIntro.introTerminada = true;
+            }
         }
         else
         {

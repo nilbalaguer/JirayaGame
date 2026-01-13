@@ -18,6 +18,8 @@ public class CicloDiaController : MonoBehaviour
     [Range(0,100)]
     public int probabilidadNublado = 30;
     public ParticleSystem particulasLluvia;
+    public AudioSource audioSource;
+    public AudioClip sonidoLluvia;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -57,6 +59,7 @@ public class CicloDiaController : MonoBehaviour
             if (particulasLluvia.isPlaying)
             {
                 particulasLluvia.Stop();
+                audioSource.Stop();
             }
         }
         //Ciclo nublado
@@ -67,6 +70,9 @@ public class CicloDiaController : MonoBehaviour
             if (!particulasLluvia.isPlaying)
             {
                 particulasLluvia.Play();
+                audioSource.clip = sonidoLluvia;
+                audioSource.loop = true;
+                audioSource.Play();
             }
         }
         //Ciclo noche
@@ -77,6 +83,7 @@ public class CicloDiaController : MonoBehaviour
             if (particulasLluvia.isPlaying)
             {
                 particulasLluvia.Stop();
+                audioSource.Stop();
             }
         }
         //Ciclo amanecer
@@ -87,6 +94,7 @@ public class CicloDiaController : MonoBehaviour
             if (particulasLluvia.isPlaying)
             {
                 particulasLluvia.Stop();
+                audioSource.Stop();
             }
 
         }

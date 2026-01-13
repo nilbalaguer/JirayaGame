@@ -58,7 +58,16 @@ public class Inventario : MonoBehaviour
             textoCantidad.gameObject.SetActive(true);
             btnSlots.Add(btnObj);
         }
-        tsunadeScript = GameObject.FindWithTag("Tsunade").GetComponent<tsunade>();
+        GameObject tsunade = GameObject.FindWithTag("Tsunade");
+        if (tsunade != null)
+        {
+            tsunadeScript = tsunade.GetComponent<tsunade>();
+        }
+        else
+        {
+            tsunadeScript = null;
+        }
+        //tsunadeScript = GameObject.FindWithTag("Tsunade").GetComponent<tsunade>();
         usarBoton.SetActive(false);
     }
 

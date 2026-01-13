@@ -15,6 +15,7 @@ public class BossController : MonoBehaviour
     [SerializeField] Transform spawnEnemigo1;
     [SerializeField] Transform spawnEnemigo2;
     [SerializeField] GameObject enemigo;
+    [SerializeField] GameObject enemigo2;
 
     [SerializeField] CabezaSerpiente serpienteScript;
 
@@ -75,17 +76,35 @@ public class BossController : MonoBehaviour
 
         if (dificultad > 0)
         {
-            GameObject tempEnemigo1 = Instantiate(enemigo, spawnEnemigo1.position, Quaternion.identity);
-            Enemigo1Script enemigo1Script = tempEnemigo1.GetComponent<Enemigo1Script>();
+            if (Random.Range(0f, 10f) > 0f)
+            {
+                GameObject tempEnemigo1 = Instantiate(enemigo, spawnEnemigo1.position, Quaternion.identity);
+                Enemigo1Script enemigo1Script = tempEnemigo1.GetComponent<Enemigo1Script>();
 
-            enemigo1Script.puntoA = punto1;
-            enemigo1Script.puntoB = spawnEnemigo1;
+                enemigo1Script.puntoA = punto1;
+                enemigo1Script.puntoB = spawnEnemigo1;
 
-            GameObject tempEnemigo2 = Instantiate(enemigo, spawnEnemigo2.position, Quaternion.identity);
-            Enemigo1Script enemigo2Script = tempEnemigo2.GetComponent<Enemigo1Script>();
+                GameObject tempEnemigo2 = Instantiate(enemigo, spawnEnemigo2.position, Quaternion.identity);
+                Enemigo1Script enemigo2Script = tempEnemigo2.GetComponent<Enemigo1Script>();
 
-            enemigo2Script.puntoA = punto2;
-            enemigo2Script.puntoB = spawnEnemigo2;
+                enemigo2Script.puntoA = punto2;
+                enemigo2Script.puntoB = spawnEnemigo2;
+            }
+            else
+            {
+                GameObject tempEnemigo1 = Instantiate(enemigo2, spawnEnemigo1.position, Quaternion.identity);
+                Enemigo2DistanciaScript enemigo1Script = tempEnemigo1.GetComponent<Enemigo2DistanciaScript>();
+
+                enemigo1Script.puntoA = punto1;
+                enemigo1Script.puntoB = spawnEnemigo1;
+
+                GameObject tempEnemigo2 = Instantiate(enemigo2, spawnEnemigo2.position, Quaternion.identity);
+                Enemigo2DistanciaScript enemigo2Script = tempEnemigo2.GetComponent<Enemigo2DistanciaScript>();
+
+                enemigo2Script.puntoA = punto2;
+                enemigo2Script.puntoB = spawnEnemigo2;
+            }
+            
         }
     }
 

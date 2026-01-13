@@ -48,6 +48,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7b962f34b03e0c439260d7056229546, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  explosion: {fileID: 3567875581976726359, guid: daf82adea84188c489ce1ad7ca71bc38, type: 3}
+  explosionSonido: {fileID: 0}
 --- !u!58 &5953408072911682649
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -125,9 +127,9 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7304896173149572626}
   serializedVersion: 8
-  lengthInSec: 3.6
+  lengthInSec: 3
   simulationSpeed: 1
-  stopAction: 2
+  stopAction: 1
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -1079,13 +1081,22 @@ ParticleSystem:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 1
-          value: 0
-          inSlope: 1
-          outSlope: 1
+          time: 0.51941526
+          value: 0.5474937
+          inSlope: 1.1624945
+          outSlope: 1.1624945
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.33333334
+          inWeight: 0.51919407
+          outWeight: 0.5131089
+        - serializedVersion: 3
+          time: 1
+          value: 0
+          inSlope: 0.35136732
+          outSlope: 0.35136732
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.21369421
           outWeight: 0.33333334
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -4084,14 +4095,14 @@ ParticleSystem:
     sizeAffectsWidth: 1
     sizeAffectsLifetime: 0
     inheritParticleColor: 1
-    generateLightingData: 0
+    generateLightingData: 1
     splitSubEmitterRibbons: 0
     attachRibbonsToTransform: 0
     colorOverLifetime:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 1}
+      maxColor: {r: 1, g: 0, b: 0.9784174, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -4209,7 +4220,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 1}
+      maxColor: {r: 0.4264151, g: 0, b: 0.40195584, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}

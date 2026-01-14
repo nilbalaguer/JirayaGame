@@ -120,12 +120,12 @@ public class ScrollPanel : MonoBehaviour
 
     public void botonNo()
     {
-        //reputacion.RespuestaNegativa();
         animator.SetTrigger("Close");
 
         if (npcScript != null)
         {
-            npcScript.hasTalked = true;
+            //npcScript.hasTalked = true;
+            npcScript.currentState = NpcStates.State.Idle; 
             npcScript = null;
         }
         playerScript.puedoMoverme = true;

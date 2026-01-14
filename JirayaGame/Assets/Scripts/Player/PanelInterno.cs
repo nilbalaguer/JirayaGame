@@ -44,7 +44,7 @@ public class PanelInterno : MonoBehaviour
      void OnEnable()
     {
         paginaActual = 0;
-        textoPanel.gameObject.SetActive(true);
+        //textoPanel.gameObject.SetActive(true);
 
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(btnNext.gameObject);
@@ -60,8 +60,9 @@ public class PanelInterno : MonoBehaviour
     {
         paginas = textos;
         paginaActual = 0;
+        textoPanel.text = "";
+
         gameObject.SetActive(true);
-        ShowPage();
     }
 
     public void ShowPage()

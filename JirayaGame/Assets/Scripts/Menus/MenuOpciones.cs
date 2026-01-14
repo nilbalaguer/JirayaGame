@@ -8,6 +8,7 @@ public class MenuOpciones : MonoBehaviour
 {
     private AudioManager audioManager;
     public Slider musicSlider;
+    public Slider sfxSlider;
 
     public Toggle muteToggle;
     private float savedMusicVolume = 1f;
@@ -20,6 +21,8 @@ public class MenuOpciones : MonoBehaviour
         if (audioManager != null)
         {
             musicSlider.onValueChanged.AddListener(audioManager.SetMusicVolume);
+            sfxSlider.onValueChanged.AddListener(audioManager.SetSFXVolume);
+
             musicSlider.value = audioManager.musicSource.volume;
 
             muteToggle.onValueChanged.AddListener(ToggleMute);

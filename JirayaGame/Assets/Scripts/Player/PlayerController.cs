@@ -566,7 +566,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void BeberPocion(string nombrePocion)
+    public bool BeberPocion(string nombrePocion)
     {
         Debug.Log("Has bebido la poción");
         if (nombrePocion == "Pocion1")
@@ -574,7 +574,7 @@ public class PlayerController : MonoBehaviour
             if (gameManager.vidaPlayer >= 10)
             {
                 Debug.Log("Vida al máximo, no puedes beber esta poción");
-                return;
+                return false;
             }
             gameManager.RecuperarVida(2f);
         }
@@ -587,13 +587,14 @@ public class PlayerController : MonoBehaviour
             if (gameManager.vidaPlayer > 6)
             {
                 Debug.Log("Vida demasiado alta, no puedes beber esta poción");
-                return;
+                return false;
             }
             gameManager.RecuperarVida(4f);
         }
         //Destroy(objetoSujeto.gameObject);
         //objetoSujeto = null;
         mensajePocion.SetActive(false);
+        return true;
     }
 
     //Coger objeto cercano

@@ -400,15 +400,27 @@ public class Inventario : MonoBehaviour
 
     public void Usar()
     {
-        player.BeberPocion(objetoUsable.nombre);
-        //eliminar pocion del inventario
-        EliminarObjeto(objetoUsable);
-        objetoUsable = null;
-        usarBoton.SetActive(false);
-        ActualizarInventario();
+        bool pocionConsumida = player.BeberPocion(objetoUsable.nombre);
+        if (pocionConsumida)
+        {
+            EliminarObjeto(objetoUsable);
+            objetoUsable = null;
+            usarBoton.SetActive(false);
+            ActualizarInventario();
 
-        indiceSeleccionActual = 0;
-        ActualizarVisual();
+            indiceSeleccionActual = 0;
+            ActualizarVisual();
+        }
+        else
+        {
+            PanelInterno.Instance.AbrirPanelInterno(new string[]
+            {
+                "No puedo usar la pocion en este momento",
+                "Tengo demasiada vida."
+            });
+        }
+        //player.BeberPocion(objetoUsable.nombre);
+        //eliminar pocion del inventario
     }
 
     public void CancelarUso()

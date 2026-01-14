@@ -82,7 +82,7 @@ public class panelErmitaño : MonoBehaviour
         {
             animator.SetTrigger("Close");
             hasTalked = true;
-            playerScript.puedoMoverme = true;
+            playerScript.puedoMoverme = false;
             //ermitañoScript.esErmitañoTienda = true;
             //Mostrar cinematica ermitaño tienda
             //forzar mirar a la derecha

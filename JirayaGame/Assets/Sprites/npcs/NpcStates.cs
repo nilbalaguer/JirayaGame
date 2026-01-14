@@ -235,20 +235,23 @@ public class NpcStates : MonoBehaviour
                 }
                 if (!hasTalked)
                 {
-                    if (!esNpcShamizen){
-                        dialogueBox.SetActive(true);
-                        scrollPanel.npcScript = this;
-                        scrollPanel.AsignarTextoMision(this);
-                        player.GetComponent<PlayerController>().puedoMoverme = false;
+                    if (!dialogueBox.activeSelf)
+                    {
+                        if (!esNpcShamizen){
+                            dialogueBox.SetActive(true);
+                            scrollPanel.npcScript = this;
+                            scrollPanel.AsignarTextoMision(this);
+                            player.GetComponent<PlayerController>().puedoMoverme = false;
 
-                        scrollPanel.misionsScript = misionNpc;
-                        scrollPanel.audioSource = GetComponent<AudioSource>();
-                    }
-                    else{
-                        dialogueShamuzen.SetActive(true);
-                        dialogueShamuzen.GetComponent<PanelNpc>().audioSource = GetComponent<AudioSource>();
-                        panelNpcScript.npcScript = this;
-                        player.GetComponent<PlayerController>().puedoMoverme = false;
+                            scrollPanel.misionsScript = misionNpc;
+                            scrollPanel.audioSource = GetComponent<AudioSource>();
+                        }
+                        else{
+                            dialogueShamuzen.SetActive(true);
+                            dialogueShamuzen.GetComponent<PanelNpc>().audioSource = GetComponent<AudioSource>();
+                            panelNpcScript.npcScript = this;
+                            player.GetComponent<PlayerController>().puedoMoverme = false;
+                        }
                     }
                 }
                 else

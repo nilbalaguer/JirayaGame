@@ -20,14 +20,21 @@ public class MenuPausa : MonoBehaviour
         {
             float defaultMusicVolume = 0.3f;
 
-            audioManager.SetMusicVolume(defaultMusicVolume);
+            //audioManager.SetMusicVolume(defaultMusicVolume);
 
             volumeSlider.onValueChanged.AddListener(audioManager.SetMusicVolume);
             //volumeSlider.value = audioManager.musicSource.volume;
-            volumeSlider.value = defaultMusicVolume;
+            //volumeSlider.value = defaultMusicVolume;
 
             sfxVolumeSlider.onValueChanged.AddListener(audioManager.SetSFXVolume);
-            sfxVolumeSlider.value = audioManager.sfxSource.volume;
+
+            float volM, volS;
+            audioManager.mainMixer.GetFloat("MusicaVol", out volM);
+            audioManager.mainMixer.GetFloat("SFXVol", out volS);
+            //sfxVolumeSlider.value = audioManager.sfxSource.volume;
+
+            volumeSlider.value = Mathf.Pow(10, volM / 20);
+            sfxVolumeSlider.value = Mathf.Pow(10, volS / 20);
         }
         else
         {
@@ -43,15 +50,17 @@ public class MenuPausa : MonoBehaviour
         {
             TogglePause();
         }
-
-          if (isPaused && EventSystem.current.currentSelectedGameObject == volumeSlider.gameObject)
+        if (isPaused && EventSystem.current != null && EventSystem.current.currentSelectedGameObject != null)
         {
-            float input = Input.GetAxis("Horizontal"); 
-            volumeSlider.value += input * Time.deltaTime * 10f; 
-        }else if (isPaused && EventSystem.current.currentSelectedGameObject == sfxVolumeSlider.gameObject)
-        {
-            float input = Input.GetAxis("Horizontal"); 
-            sfxVolumeSlider.value += input * Time.deltaTime * 10f; 
+            if (EventSystem.current.currentSelectedGameObject == volumeSlider.gameObject)
+            {
+                float input = Input.GetAxis("Horizontal"); 
+                volumeSlider.value += input * Time.unscaledDeltaTime * 2f; 
+            }else if (EventSystem.current.currentSelectedGameObject == sfxVolumeSlider.gameObject)
+            {
+                float input = Input.GetAxis("Horizontal"); 
+                sfxVolumeSlider.value += input * Time.unscaledDeltaTime * 2f; 
+            }
         }
 
     }

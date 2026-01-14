@@ -80,10 +80,9 @@ public class ShamisenScriptMelodia : MonoBehaviour
         {
             if (gameManager.partiturasNumero == 2)
             {
-                Destroy(puertaDestruir, 2f);
-                particleSystem.Play();
-                shamisenAudioSource.PlayOneShot(sonidoCristal);
                 StartCoroutine(TocarMelodia());
+                StartCoroutine(RomperCristal());
+                
                 Destroy(gameObject, 5f);
             } else
             {
@@ -136,5 +135,15 @@ public class ShamisenScriptMelodia : MonoBehaviour
         {
             touchingPlayer = false;
         }
+    }
+
+    private IEnumerator RomperCristal()
+    {
+        yield return new WaitForSeconds(4f);
+        shamisenAudioSource.PlayOneShot(sonidoCristal);
+        particleSystem.Play();
+        Destroy(puertaDestruir, 2f);
+            
+        
     }
 }

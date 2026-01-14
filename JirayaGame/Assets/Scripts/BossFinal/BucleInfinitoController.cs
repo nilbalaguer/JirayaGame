@@ -12,9 +12,12 @@ public class BucleInfinitoController : MonoBehaviour
     private bool activarSegundoTp = false;
 
     [SerializeField] GameObject fondoNegro;
+    private AudioSource audioSource;
 
     private void Start() {
         player = GameObject.Find("Player");
+
+        audioSource = gameObject.GetComponent<AudioSource>();
     }
 
     void Update()
@@ -26,6 +29,8 @@ public class BucleInfinitoController : MonoBehaviour
             player.transform.position = nuevaPos;
             
             activarSegundoTp = true;
+
+            audioSource.Play();
         }
 
         if (trigger2.IsActive() && activarSegundoTp)

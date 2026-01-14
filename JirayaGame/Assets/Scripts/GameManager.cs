@@ -357,7 +357,7 @@ public class GameManager : MonoBehaviour
     {
         EventSystem.current.SetSelectedGameObject(btnTienda.gameObject);
         panelTiendaDesbloqueo.SetActive(true);
-        player.puedoMoverme = true;
+        player.maxSpeed = 5;
     }
 
     public void RecuperarVida(float cantidad)

@@ -80,9 +80,15 @@ public class BehaviourErmitaño : MonoBehaviour
                     Timeline.Instance.panelErmitañoMision.SetActive(false);
                     ScreenCinematic.Instance.HideBars();
                     canvasPatrol.SetActive(false);
-                    Timeline.Instance.BarreraErmitaño.SetActive(false);
+                    foreach (GameObject barrera in Timeline.Instance.barreras)
+                    {
+                        if (barrera != null)
+                        {
+                            barrera.SetActive(false);
+                        }
+                    }
                 }
-                else if (PlayerinRange() && esErmitañoTienda && (Input.GetKeyDown(KeyCode.X) || Input.GetButtonDown("X")))
+                else if (PlayerinRange() && esErmitañoTienda && (Input.GetKeyDown(KeyCode.X) || Input.GetButtonDown("Submit")))
                 {
                     currentState = State.TalkingShop;
                 }

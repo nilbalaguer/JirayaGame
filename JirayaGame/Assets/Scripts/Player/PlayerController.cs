@@ -288,7 +288,7 @@ public class PlayerController : MonoBehaviour
                     state = "BeberPocion";
                 }
 
-                if (Input.GetKeyDown(KeyCode.X) || Input.GetButtonDown("X"))
+                if (Input.GetKeyDown(KeyCode.X) || Input.GetButtonDown("Y"))
                 {
                     Debug.Log("x pulsada");
                     CogerObjeto();

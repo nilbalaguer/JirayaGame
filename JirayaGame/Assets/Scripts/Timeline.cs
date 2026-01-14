@@ -13,6 +13,7 @@ public class Timeline : MonoBehaviour
     public bool misionIniciada = false;
     public GameObject panelErmitañoMision;
     public GameObject BarreraErmitaño;
+    public GameObject[] barreras;
 
     void Awake()
     {
@@ -68,6 +69,12 @@ public class Timeline : MonoBehaviour
         panelErmitañoMision.SetActive(true);
         ScreenCinematic.Instance.ActivarCinematic();
         ermitañoScript.canvasPatrol.SetActive(true);
-        BarreraErmitaño.SetActive(true);
+        foreach (GameObject barrera in barreras)
+        {
+            if (barrera != null)
+            {
+                barrera.SetActive(true);
+            }
+        }
     }
 }

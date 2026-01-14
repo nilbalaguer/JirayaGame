@@ -288,7 +288,7 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-
+        textoMonedas.text = monedas.ToString();
         playerGameObject = GameObject.FindGameObjectWithTag("Player");
         GameObject npcObj = GameObject.FindGameObjectWithTag("NpcInicial");
         if (npcObj != null)

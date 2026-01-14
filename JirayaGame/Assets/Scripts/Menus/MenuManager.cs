@@ -14,6 +14,7 @@ public class MenuManager : MonoBehaviour
     public void Start()
     {
         EventSystem.current.SetSelectedGameObject(botonInicialMenu);
+        SceneManager.LoadScene("Npc_Menu", LoadSceneMode.Additive);
     }
 
     public void Update()

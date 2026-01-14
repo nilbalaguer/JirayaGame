@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class Cartel : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class Cartel : MonoBehaviour
     private Transform player;
     public TextMeshProUGUI textoCartel;
     public string contenidoCartel;
+    private bool cartelAbierto = false;
+    public Button btnCerrarCartel;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -35,16 +38,18 @@ public class Cartel : MonoBehaviour
             Canvas.SetActive(false);
         }
 
-        if (distance < 2f && Input.GetKeyDown(KeyCode.X))
+        if (distance < 2f && (Input.GetKeyDown(KeyCode.X) || Input.GetButtonDown("Y")))
         {
             Debug.Log("Cartel abierto");
             textoCartel.text = contenidoCartel;
             panelCartel.SetActive(true);
+            cartelAbierto = true;
         }
     }
 
     public void ClosePanel()
     {
         panelCartel.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(btnCerrarCartel.gameObject);
     }
 }

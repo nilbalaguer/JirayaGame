@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class NpcStates : MonoBehaviour
 {
@@ -47,6 +48,9 @@ public class NpcStates : MonoBehaviour
     public string nameNpc;
     
     public bool esNpcShamizen;
+
+    public string dialogMision;
+    public bool playerDetectado = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -85,6 +89,16 @@ public class NpcStates : MonoBehaviour
         {
             dialogueShamuzen.SetActive(false);
         }
+
+        if (dialogMision == null || dialogMision == "")
+        {
+            return;
+        }
+
+        if (introDialog == null)
+        {
+            return;
+        }
     }
 
     // Update is called once per frame
@@ -95,22 +109,6 @@ public class NpcStates : MonoBehaviour
             player = GameObject.FindWithTag("Player");
         }
 
-        // if (!introAsignada && GameManager.Instance != null)
-        // {
-        //     if (NpcIntro)
-        //     {
-        //         currentState = State.Intro;
-        //         introAsignada = true;
-        //     }
-        //     else
-        //     {
-        //         introAsignada = true;
-        //     }
-        // }
-        // if (!introAsignada)
-        // {
-        //     return;
-        // }
         if (!introAsignada)
         {
             if (GameManager.Instance == null) return;
@@ -143,7 +141,7 @@ public class NpcStates : MonoBehaviour
                         currentState = State.Patrol;
                     }
                 }
-                else if (puedeInteractuar && PlayerinRange() && !hasTalked)
+                else if (puedeInteractuar && PlayerinRange() && !hasTalked && (Input.GetButtonDown("Submit") || Input.GetKeyDown(KeyCode.X)))
                 {
                     currentState = State.Alerted;
                 }
@@ -155,9 +153,9 @@ public class NpcStates : MonoBehaviour
                     currentState = State.EndMision;
                 }
                 break;
-
+            //Patrullaje del npc
             case State.Patrol:
-                if (puedeInteractuar && PlayerinRange() && !hasTalked){
+                if (puedeInteractuar && PlayerinRange() && !hasTalked && (Input.GetButtonDown("Submit") || Input.GetKeyDown(KeyCode.X))){
                     currentState = State.Alerted;
                 }else if (EnemyinRange()){
                     currentState = State.Scared;
@@ -237,17 +235,23 @@ public class NpcStates : MonoBehaviour
                 }
                 if (!hasTalked)
                 {
-                    if (!esNpcShamizen){
-                        dialogueBox.SetActive(true);
-                        scrollPanel.npcScript = this;
-                        player.GetComponent<PlayerController>().puedoMoverme = false;
+                    if (!dialogueBox.activeSelf)
+                    {
+                        if (!esNpcShamizen){
+                            dialogueBox.SetActive(true);
+                            scrollPanel.npcScript = this;
+                            scrollPanel.AsignarTextoMision(this);
+                            player.GetComponent<PlayerController>().puedoMoverme = false;
 
-                        scrollPanel.misionsScript = misionNpc;
-                    }
-                    else{
-                        dialogueShamuzen.SetActive(true);
-                        panelNpcScript.npcScript = this;
-                        player.GetComponent<PlayerController>().puedoMoverme = false;
+                            scrollPanel.misionsScript = misionNpc;
+                            scrollPanel.audioSource = GetComponent<AudioSource>();
+                        }
+                        else{
+                            dialogueShamuzen.SetActive(true);
+                            dialogueShamuzen.GetComponent<PanelNpc>().audioSource = GetComponent<AudioSource>();
+                            panelNpcScript.npcScript = this;
+                            player.GetComponent<PlayerController>().puedoMoverme = false;
+                        }
                     }
                 }
                 else
@@ -268,6 +272,7 @@ public class NpcStates : MonoBehaviour
                 break;
             case State.Intro:
                 npcIcono.sprite = iconoIntro;
+                player.GetComponent<PlayerController>().MirarObjetivo();
                 MoveTowardsPlayer();
                 break;
             case State.EndMision:
@@ -304,21 +309,27 @@ public class NpcStates : MonoBehaviour
         }
         void MoveTowardsPlayer()
         {
+        player.GetComponent<PlayerController>().puedoMoverme = false;
         Vector2 playerPos = player.transform.position;
         Vector2 npcPos = transform.position;
         Vector2 directionToPlayer = (playerPos - npcPos).normalized;
+        playerDetectado = PlayerinRange();
 
-        float distanciaParada = 0.7f;
-        float distance = Vector2.Distance(npcPos, playerPos);
-        Vector2 targetPos = playerPos - directionToPlayer * distanciaParada;
-        UpdateSpriteDirection(directionToPlayer);
-        
-        if (distance > distanciaParada)
+        if (!playerDetectado)
         {
-            transform.position = Vector2.MoveTowards(
-            npcPos, targetPos,
-            3f * Time.deltaTime
-            );
+            /*float distanciaParada = 1f;
+            float distance = Vector2.Distance(npcPos, playerPos);
+            Vector2 targetPos = playerPos - directionToPlayer * distanciaParada;*/
+            Vector2 dir = (playerPos - npcPos).normalized;
+            UpdateSpriteDirection(dir);
+            
+            //if (distance > distanciaParada)
+            //{
+                transform.position = Vector2.MoveTowards(
+                npcPos, playerPos,
+                3f * Time.deltaTime
+                );
+            //}
         }
         else
         {
@@ -340,6 +351,7 @@ public class NpcStates : MonoBehaviour
                     }
                 }
             introDialog.SetActive(true);
+            introDialog.GetComponent<PanelNpc>().audioSource = GetComponent<AudioSource>();
 
             rb.simulated = false;
             npcIcono.sprite = iconoNormal;
@@ -381,12 +393,31 @@ public class NpcStates : MonoBehaviour
 
     bool PlayerinRange()
     {
-        float distancia = Vector2.Distance(transform.position, player.transform.position);
+        /*float distancia = Vector2.Distance(transform.position, player.transform.position);
         if (necesitaAlejarse && distancia > 3f)
         {
             necesitaAlejarse = false;
         }
-        return distancia <= rangoPlayer && !necesitaAlejarse;
+        return distancia <= rangoPlayer && !necesitaAlejarse;*/
+
+        Collider2D[] hit = Physics2D.OverlapCircleAll(transform.position, rangoPlayer, LayerMask.GetMask("Player"));
+        if (hit != null && hit.Length > 0 && !necesitaAlejarse)
+        {
+            return true;
+        }
+        
+        if (necesitaAlejarse && hit.Length == 0)
+        {
+            necesitaAlejarse = false;
+        }
+
+        return false;
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, rangoPlayer);
     }
     
     bool EnemyinRange()
@@ -509,7 +540,18 @@ public class NpcStates : MonoBehaviour
                 Debug.Log("Este NPC no es el destino");
                 return;
             }
-            Objeto objeto = player.GetComponent<PlayerController>().objetoSujeto;
+            Inventario.InventoryEntry notaExiste = player.GetComponent<PlayerController>().inventario.objetos.Find(e => e.nombre == "NotaMision");
+            if (notaExiste != null){
+                misionNpc.CompletarMision();
+                //dialogMisionMostrado = false;
+                MostrarDialogoFinal();
+                player.GetComponent<PlayerController>().inventario.EliminarObjeto(notaExiste);
+            }
+            else
+            {
+                Debug.Log("No llevas la nota correcta");
+            }
+            /*Objeto objeto = player.GetComponent<PlayerController>().objetoSujeto;
             if (objeto != null && objeto.nombreObjeto == "NotaMision")
             {
                 objeto.Soltar();
@@ -523,16 +565,15 @@ public class NpcStates : MonoBehaviour
             else
             {
                 Debug.Log("No llevas la nota correcta.");
-            }
+            }*/
+
     }
 
     public void MostrarDialogoFinal()
     {
         //dialogFinalMision.SetActive(true);
-        misionNpc.panelMisionesCompletadas[2].SetActive(true); 
-        panelInfoManager info3 = misionNpc.panelMisionesCompletadas[2].GetComponent<panelInfoManager>();
-        info3.npcScript = this;
-        canvasImagen.SetActive(false);
+        misionNpc.MostrarPanelMisionCompletada(new string[] {"Gracias por la nota", "Dicen que orochimaru esta furioso, ten cuidado."});
+        canvasImagen.SetActive(false); 
     }
 
 

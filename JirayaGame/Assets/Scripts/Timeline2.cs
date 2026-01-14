@@ -10,7 +10,7 @@ public class Timeline2 : MonoBehaviour
     public PlayerController playerScript;
     private BehaviourErmitaño ermitañoScript;
     private Rigidbody2D rigidBody;
-    public Image habilidadRana;
+    //public Image habilidadRana;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Awake()
@@ -28,7 +28,7 @@ public class Timeline2 : MonoBehaviour
         //playerScript = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
         ermitañoScript = GameObject.FindWithTag("Ermitaño").GetComponent<BehaviourErmitaño>();
         rigidBody = playerScript.GetComponent<Rigidbody2D>();
-        habilidadRana.enabled = false;
+        //habilidadRana.enabled = false;
     }
 
     // Update is called once per frame
@@ -68,6 +68,6 @@ public class Timeline2 : MonoBehaviour
         playerScript.maxSpeed = 5;
         playerScript.human = false;
         GameManager.Instance.puedeTransformarse = true;
-        habilidadRana.enabled = true;
+        //habilidadRana.enabled = true;
     }
 }

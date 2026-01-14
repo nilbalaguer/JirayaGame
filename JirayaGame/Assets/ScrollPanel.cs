@@ -1,10 +1,17 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public class ScrollPanel : MonoBehaviour
 {
+    public AudioSource audioSource;
+    public AudioClip blip;
     public GameObject text;
+    public TextMeshProUGUI textPanel;
+    public TextMeshProUGUI nombreNpc;
     public Animator animator;
     public npcReputacion reputacion;
     public bool hasTalked = false;
@@ -15,12 +22,24 @@ public class ScrollPanel : MonoBehaviour
     public Misions misionsScript;
     private tsunade tsunadeScript;
     public GameObject flecha;
+    public float velocidadTypewriter = 0.03f;
+    private Coroutine typeCoroutine;
+    public string textoMision;
+    public int letrasPorSonido = 2; 
+    private int contadorLetras = 0;
+
+    public Button btnDefecto;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Start()
     {
         tsunadeScript = GameObject.FindWithTag("Tsunade").GetComponent<tsunade>();
-        flecha.SetActive(false);   
+        flecha.SetActive(false);
+        if (audioSource == null)
+        {
+            return;
+        }   
     }
 
     void Awake()
@@ -31,10 +50,20 @@ public class ScrollPanel : MonoBehaviour
     void OnEnable()
     {
         text.SetActive(false);
+        if (btnDefecto != null)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(btnDefecto.gameObject);
+        }
     }
     public void ShowText()
     {
         text.SetActive(true);
+        if (typeCoroutine != null)
+        {
+            StopCoroutine(typeCoroutine);
+        }
+        typeCoroutine = StartCoroutine(TypeText(textoMision));   
     }
 
     public void ClosePanel()
@@ -65,8 +94,11 @@ public class ScrollPanel : MonoBehaviour
             npcScript.hasTalked = true;
             npcScript = null;
         }
-        misionsScript.MostrarMision();
         playerScript.puedoMoverme = true;
+
+        //Sobreescribir mision activa si ya existe una 
+        misionsScript.ActivarMision();
+
         if (misionsScript.tipoMision == Misions.MisionTipo.HablarConNpc)
         {
             GameObject npcDest = GameObject.Find(misionsScript.npcDestino);
@@ -88,15 +120,23 @@ public class ScrollPanel : MonoBehaviour
 
     public void botonNo()
     {
-        //reputacion.RespuestaNegativa();
         animator.SetTrigger("Close");
 
         if (npcScript != null)
         {
-            npcScript.hasTalked = true;
+            //npcScript.hasTalked = true;
+            npcScript.currentState = NpcStates.State.Idle; 
             npcScript = null;
         }
         playerScript.puedoMoverme = true;
+    }
+
+    //Asignar texto de la mision correspondiente
+    public void AsignarTextoMision(NpcStates npc)
+    {
+        npcScript = npc;
+        textoMision = npc.dialogMision;
+        nombreNpc.text = npc.nameNpc;
     }
 
     //Botones panel tsunade
@@ -127,5 +167,35 @@ public class ScrollPanel : MonoBehaviour
         playerScript.ultimoDialogo = Time.time;
         playerScript.puedoMoverme = true;
         tsunadeScript.entregado = false;
+    }
+
+    public void PlayBlip()
+    {
+        audioSource.pitch = Random.Range(0.9f, 1.2f);
+        audioSource.PlayOneShot(blip);
+    }
+
+    //Efecto de typwriter para el texto del panel
+    IEnumerator TypeText(string text)
+    {
+        textPanel.text = "";
+        contadorLetras = 0;
+
+        foreach (char letter in text.ToCharArray())
+        {
+            textPanel.text += letter;
+
+            if (letter != ' ' && letter != '\n')
+            {
+                contadorLetras++;
+
+                if (contadorLetras % letrasPorSonido == 0)
+                {
+                    PlayBlip();
+                }
+            }
+
+            yield return new WaitForSeconds(velocidadTypewriter);
+        }
     }
 }

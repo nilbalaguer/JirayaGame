@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
+    public AudioMixer mainMixer;
     public static AudioManager Instance;
     public Sound[] musicSounds,sfxSounds;
     public AudioSource musicSource,sfxSource;
@@ -88,11 +90,11 @@ public class AudioManager : MonoBehaviour
 
         public void SetMusicVolume(float volume)
     {
-        musicSource.volume = volume;
+        mainMixer.SetFloat("MusicaVol", Mathf.Log10(volume) * 20);
     }
 
         public void SetSFXVolume(float volume)
     {
-        sfxSource.volume = volume;
+        mainMixer.SetFloat("SFXVol", Mathf.Log10(volume) * 20);
     }
 }

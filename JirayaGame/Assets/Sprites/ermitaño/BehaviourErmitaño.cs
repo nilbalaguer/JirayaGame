@@ -27,6 +27,7 @@ public class BehaviourErmitaño : MonoBehaviour
     private GameObject enemy;
 
     public GameObject[] enemies;
+    public GameObject canvasPatrol;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -44,6 +45,12 @@ public class BehaviourErmitaño : MonoBehaviour
         }*/
         CanvasTienda.SetActive(false);
         enemy = GameObject.FindWithTag("Enemy");
+        canvasPatrol.SetActive(false);
+
+        if (esErmitañoTienda)
+        {
+            canvasPatrol = null;
+        }
     }
 
     // Update is called once per frame
@@ -70,6 +77,10 @@ public class BehaviourErmitaño : MonoBehaviour
                 {
                     //currentState = State.Talking;
                     currentState = State.Chasing;
+                    Timeline.Instance.panelErmitañoMision.SetActive(false);
+                    ScreenCinematic.Instance.HideBars();
+                    canvasPatrol.SetActive(false);
+                    Timeline.Instance.BarreraErmitaño.SetActive(false);
                 }
                 else if (PlayerinRange() && esErmitañoTienda && (Input.GetKeyDown(KeyCode.X) || Input.GetButtonDown("X")))
                 {
@@ -89,12 +100,17 @@ public class BehaviourErmitaño : MonoBehaviour
                 if (esErmitañoTienda || !puedeMoverse)
                 {
                     currentState = State.Idle;
+                    canvasPatrol.SetActive(false);
                     break;
                 }
                 if (PlayerinRange() && !panelScript.hasTalked && EnemigosMuertos())
                 {
                     //currentState = State.Talking;
                     currentState = State.Chasing;
+                    Timeline.Instance.panelErmitañoMision.SetActive(false);
+                    ScreenCinematic.Instance.HideBars();
+                    canvasPatrol.SetActive(false);
+                    Timeline.Instance.BarreraErmitaño.SetActive(false);
                 }
                 else
                 {
@@ -148,6 +164,7 @@ public class BehaviourErmitaño : MonoBehaviour
                 if (!panelScript.hasTalked)
                 {
                     panelDialogo.SetActive(true);
+                    panelDialogo.GetComponent<panelErmitaño>().audioSource = GetComponent<AudioSource>();
                     player.GetComponent<PlayerController>().puedoMoverme = false;
                 }
                 break;

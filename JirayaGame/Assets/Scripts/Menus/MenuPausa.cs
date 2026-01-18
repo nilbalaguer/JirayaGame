@@ -87,5 +87,6 @@ public class MenuPausa : MonoBehaviour
     public void IrAlMenu()
     {
         SceneManager.LoadScene("Menu"); 
+        Time.timeScale = 1; 
     }
 }

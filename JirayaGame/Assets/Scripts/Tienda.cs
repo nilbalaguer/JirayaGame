@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class Tienda : MonoBehaviour
 {
@@ -28,12 +29,22 @@ public class Tienda : MonoBehaviour
         btnSlots.Add(btnObj);
 
         MostrarObjetosTienda();
+        PosicionarPrimerObjetoXbox();
     }
 
     // Update is called once per frame
     void Update()
     {
 
+    }
+
+    public void PosicionarPrimerObjetoXbox()
+    {
+        if (btnSlots.Count > 0 && btnSlots[0] != null)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(btnSlots[0]);
+        }
     }
 
     public void MostrarObjetosTienda()

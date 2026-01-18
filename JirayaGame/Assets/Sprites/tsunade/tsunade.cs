@@ -4,6 +4,7 @@ using TMPro;
 
 public class tsunade : MonoBehaviour
 {
+    private SpriteRenderer spriteRenderer;
     private Animator anim;
     public enum State {Idle, Talking};
     public State currentState;
@@ -31,6 +32,7 @@ public class tsunade : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         player = GameObject.FindWithTag("Player");
         panelDialogo.SetActive(false);
         anim = GetComponent<Animator>();
@@ -66,7 +68,7 @@ public class tsunade : MonoBehaviour
                 Vector2 directionToPlayer = player.transform.position - transform.position;
                 if (Mathf.Abs(directionToPlayer.x) > Mathf.Abs(directionToPlayer.y))
                 {
-                    transform.localScale = new Vector3(directionToPlayer.x < 0 ? -3 : 3, 3, 3);
+                    spriteRenderer.flipX = directionToPlayer.x < 0;
                     anim.SetInteger("state", 0);
                 }
                 else
@@ -86,7 +88,7 @@ public class tsunade : MonoBehaviour
                 Vector2 dirToPlayer = player.transform.position - transform.position;
                 if (Mathf.Abs(dirToPlayer.x) > Mathf.Abs(dirToPlayer.y))    
                 {
-                    transform.localScale = new Vector3(dirToPlayer.x < 0 ? -3 : 3, 3, 3);
+                    spriteRenderer.flipX = dirToPlayer.x < 0;
                     anim.SetInteger("state", 1);
                 }
                 else

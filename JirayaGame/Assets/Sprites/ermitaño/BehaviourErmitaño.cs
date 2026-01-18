@@ -90,7 +90,16 @@ public class BehaviourErmitaño : MonoBehaviour
                 }
                 else if (PlayerinRange() && esErmitañoTienda && (Input.GetKeyDown(KeyCode.X) || Input.GetButtonDown("Submit")))
                 {
-                    currentState = State.TalkingShop;
+                    if (currentState == State.TalkingShop)
+                    {
+                        CerrarTienda();
+                        return;
+                    }
+                    else
+                    {
+                        currentState = State.TalkingShop;
+                        return;
+                    }
                 }
                 
                 break;
@@ -187,6 +196,7 @@ public class BehaviourErmitaño : MonoBehaviour
                 if (!panelTienda.activeSelf)
                 {
                     panelTienda.SetActive(true);
+                    panelTienda.GetComponent<Tienda>().PosicionarPrimerObjetoXbox();
                 }
                 break;
             case State.Chasing:

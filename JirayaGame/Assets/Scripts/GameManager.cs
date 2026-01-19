@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
     [Header("Sonidos")]
     [SerializeField] AudioClip deathSound;
     [SerializeField] AudioClip enemyDeathSound;
+    [SerializeField] AudioClip musicaCombate;
     private AudioSource audioSource;
     //Vida
     public float vidaPlayer;
@@ -424,6 +425,16 @@ public class GameManager : MonoBehaviour
     {
         panelTiendaDesbloqueo.SetActive(false);
         EventSystem.current.SetSelectedGameObject(null);
+    }
+
+    public void TocarCancionCombate()
+    {
+        audioSource.clip = musicaCombate;
+        if (!audioSource.isPlaying)
+        {
+            audioSource.Play();
+        }
+        
     }
 
 }

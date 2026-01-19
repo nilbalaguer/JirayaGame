@@ -89,6 +89,7 @@ public class Enemigo2DistanciaScript : MonoBehaviour
             
             target = playerGameObject.transform;
             desiredSpeed = maxSpeed;
+            gameManager.TocarCancionCombate();
         }
         else if (distanceToPlayer > 7f || distanceToPlayer < 6.5f)
         {

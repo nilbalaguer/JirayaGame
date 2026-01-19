@@ -90,6 +90,7 @@ public class Enemigo1Script : MonoBehaviour
             
             target = playerGameObject.transform;
             desiredSpeed = maxSpeed;
+            gameManager.TocarCancionCombate();
         }
         else
         {

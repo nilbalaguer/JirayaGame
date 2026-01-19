@@ -8,6 +8,7 @@ public class ShamisenScriptMelodia : MonoBehaviour
     [SerializeField] GameObject puertaDestruir;
     [SerializeField] AudioClip sonidoCristal;
     [SerializeField] ParticleSystem particleSystem;
+    private GameObject triggerShamisen; 
 
     // Diccionario de notas semitonos desde La4
     private Dictionary<string, int> noteOffsets = new Dictionary<string, int>()
@@ -64,6 +65,7 @@ public class ShamisenScriptMelodia : MonoBehaviour
     void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        triggerShamisen = GetComponentInChildren<TriggerShamisen>().gameObject;
 
     }
 
@@ -78,16 +80,23 @@ public class ShamisenScriptMelodia : MonoBehaviour
         {
             if (gameManager.partiturasNumero == 2)
             {
-                Destroy(puertaDestruir, 2f);
-                particleSystem.Play();
-                shamisenAudioSource.PlayOneShot(sonidoCristal);
                 StartCoroutine(TocarMelodia());
+                StartCoroutine(RomperCristal());
+                
                 Destroy(gameObject, 5f);
             } else
             {
                 Debug.Log("Te faltan las partituras! Poner un mensaje en pantalla de esto");
             }
             
+        }
+
+        if (gameManager.partiturasNumero == 2)
+        {
+            triggerShamisen.SetActive(false);
+        } else
+        {
+            triggerShamisen.SetActive(true);
         }
     }
 
@@ -126,5 +135,15 @@ public class ShamisenScriptMelodia : MonoBehaviour
         {
             touchingPlayer = false;
         }
+    }
+
+    private IEnumerator RomperCristal()
+    {
+        yield return new WaitForSeconds(4f);
+        shamisenAudioSource.PlayOneShot(sonidoCristal);
+        particleSystem.Play();
+        Destroy(puertaDestruir, 2f);
+            
+        
     }
 }

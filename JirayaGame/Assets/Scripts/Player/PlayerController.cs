@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     private float cooldownMele = 0;
     private float cooldownTonge = 0.375f;
     [SerializeField] float cooldownForMele = 0.5f;
-    private int lastMove;
+    public int lastMove;
 
     [Header("Vida i Habilidades")]
 
@@ -288,21 +288,21 @@ public class PlayerController : MonoBehaviour
                     state = "BeberPocion";
                 }
 
-                if (Input.GetKeyDown(KeyCode.X) || Input.GetButtonDown("X"))
+                if (Input.GetKeyDown(KeyCode.X) || Input.GetButtonDown("Y"))
                 {
                     Debug.Log("x pulsada");
                     CogerObjeto();
                 }
 
-                //si el objeto esta cogido puedo lanzarlo o guardarlo en el inventario
+                //si el objeto esta cogido puedo lanzarlo
                 if ((Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("B")) && objetoSujeto != null)
                 {
                     LanzarObjeto();
                 }
-                else if ((Input.GetKeyDown(KeyCode.G) || Input.GetButtonDown("Y")) && objetoSujeto != null)
+                /*else if ((Input.GetKeyDown(KeyCode.G) || Input.GetButtonDown("Y")) && objetoSujeto != null)
                 {
                     GuardarObjeto();
-                }
+                }*/
                 //Soltar el objeto en caso de no necesitarlo
                 else if (Input.GetKeyDown(KeyCode.Z) && objetoSujeto != null)
                 {
@@ -350,14 +350,6 @@ public class PlayerController : MonoBehaviour
                         objectPicked = null;
                     }
 
-                    if (human)
-                    {
-                        Timeline2.Instance.habilidadRana.sprite = iconoRana2;
-                    }
-                    else
-                    {
-                        Timeline2.Instance.habilidadRana.sprite = iconoRana1;
-                    }
                 }
 
                 if (Input.GetButtonDown("Jump") || Input.GetButtonDown("A")) //mando A
@@ -548,6 +540,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void MirarObjetivo()
+    {
+        animator.SetTrigger("MirarIzquierda");
+    }
+
     private void MostrarMensajePocion()
     {
         if (objetoSujeto != null && (objetoSujeto.nombreObjeto == "Pocion1" || objetoSujeto.nombreObjeto == "Pocion2" || objetoSujeto.nombreObjeto == "Pocion3"))
@@ -561,34 +558,36 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void BeberPocion()
+    //Funcion booleana para beber la pocion y obtener su ventaja correspondiente si se cumple una condicion
+    public bool BeberPocion(string nombrePocion)
     {
         Debug.Log("Has bebido la poción");
-        if (objetoSujeto.nombreObjeto == "Pocion1")
+        if (nombrePocion == "Pocion1")
         {
             if (gameManager.vidaPlayer >= 10)
             {
                 Debug.Log("Vida al máximo, no puedes beber esta poción");
-                return;
+                return false;
             }
             gameManager.RecuperarVida(2f);
         }
-        else if (objetoSujeto.nombreObjeto == "Pocion2")
+        else if (nombrePocion == "Pocion2")
         {
             gameManager.AumentarVelocidad(3f);
         }
-        else if (objetoSujeto.nombreObjeto == "Pocion3")
+        else if (nombrePocion == "Pocion3")
         {
             if (gameManager.vidaPlayer > 6)
             {
                 Debug.Log("Vida demasiado alta, no puedes beber esta poción");
-                return;
+                return false;
             }
             gameManager.RecuperarVida(4f);
         }
-        Destroy(objetoSujeto.gameObject);
-        objetoSujeto = null;
+        //Destroy(objetoSujeto.gameObject);
+        //objetoSujeto = null;
         mensajePocion.SetActive(false);
+        return true;
     }
 
     //Coger objeto cercano
@@ -600,15 +599,6 @@ public class PlayerController : MonoBehaviour
             float rangoDeteccion = 2f;
             if (distancia <= rangoDeteccion)
             {
-                /*objetoSujeto = objetoCercano;
-                objetoSujeto.Coger(puntoSujecion);
-    
-                CanvasInfo.SetActive(true);
-                Transform light = objetoSujeto.transform.Find("Light");
-                if (light != null)
-                {
-                    light.gameObject.SetActive(false);
-                }*/
                 inventario.AñadirObjeto(objetoCercano);
                 if ((objetoCercano.nombreObjeto == "PergaminoSagrado" || objetoCercano.nombreObjeto == "CollarShizune" || objetoCercano.nombreObjeto == "Flor")
                 && objetoCercano.yaRecogido == false)
@@ -636,7 +626,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //Lanzar objeto sujeto
+    //Lanzar objeto sujeto (shurikens)
     public void LanzarObjeto()
     {
             if (objetoSujeto == null)
@@ -651,14 +641,14 @@ public class PlayerController : MonoBehaviour
         objetoLanzado.gameObject.SetActive(true);
         objetoLanzado.Lanzar(direccion, fuerzaLanzamiento);
 
-        // Consumir 1 del inventario
+        //Consumir 1 del inventario
         Inventario.InventoryEntry entrada =
             inventario.objetos.Find(e => e.nombre == objetoLanzado.nombreObjeto);
 
         if (entrada != null)
             inventario.EliminarObjeto(entrada);
 
-        // Equipar siguiente si queda alguno
+        //Equipar siguiente si queda alguno
         Invoke(nameof(EquiparSiguienteShuriken), 0.01f);
     }
 
@@ -1003,6 +993,15 @@ public class PlayerController : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public void OnCinematicTsunadeEnd()
+    {
+        PanelInterno.Instance.AbrirPanelInterno(new string[]
+        {
+            "Parece que tengo que encontrar objetos para tsunade.",
+            "Sera mejor que la ayude si quiero obtener recompensas."
+        });
     }
 
 }

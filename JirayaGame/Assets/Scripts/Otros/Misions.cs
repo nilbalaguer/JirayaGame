@@ -13,6 +13,7 @@ public class Misions : MonoBehaviour
     }
     public MisionTipo tipoMision;
     public TextMeshProUGUI texto;
+    public TextMeshProUGUI nombreNpc;
     public Sprite[] npcIconos;
     public Image panelIconoNpc;
     public GameObject panelMision;
@@ -29,18 +30,20 @@ public class Misions : MonoBehaviour
     private Objeto objetoRecompensa;
     //public StatesMachine playerScript;
     public PlayerController playerScript;
-    public GameObject[] panelMisionesCompletadas;
+    public GameObject panelMisionCompletada;
     public string npcDestino;
     public GameObject notaPrefab;
     [HideInInspector]
     public bool panelCompletadoMostrado = false;
     public Sprite iconoMisionKama;
+    public Sprite iconoEntregarNota;
     public int objetivoMonedas;
     [HideInInspector]
     public int monedasMin = 5;
     [HideInInspector]
     public int monedasMax = 15;
     public GameObject objetoKana;
+    private Inventario inventario;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -49,12 +52,13 @@ public class Misions : MonoBehaviour
         panelMision.SetActive(false);
         //playerScript = GameObject.Find("player").GetComponent<StatesMachine>();
         playerScript = GameObject.Find("Player").GetComponent<PlayerController>();
-        foreach (GameObject panel in panelMisionesCompletadas)
-        {
-            if (panel != null)
-                panel.SetActive(false);
-        }
+        panelMisionCompletada.SetActive(false);
         objetoKana.SetActive(false);
+        if (iconoEntregarNota == null)
+        {
+            return;
+        }
+        inventario = playerScript.GetComponent<Inventario>();
     }
 
     // Update is called once per frame
@@ -74,22 +78,29 @@ public class Misions : MonoBehaviour
         {
             misionActiva = true;
             texto.text = textoMision;
+            nombreNpc.text = npcScript.nameNpc;
             //npcScript.npcIcono.sprite = npcScript.iconoIntro;
 
-            if (npcScript.nameNpc == "campesino1"){
+            if (npcScript.nameNpc == "Goro" || npcScript.nameNpc == "Saburo"){
                 panelIconoNpc.sprite = npcIconos[0];
-            }else if (npcScript.nameNpc == "campesino2"){
+            }else if (npcScript.nameNpc == "Kichiro"){
                 panelIconoNpc.sprite = npcIconos[1];
+            }else if (npcScript.nameNpc == "Jiro"){
+                panelIconoNpc.sprite = npcIconos[2];
+            }else if (npcScript.nameNpc == "Taro"){
+                panelIconoNpc.sprite = npcIconos[3];
             }
 
             switch (tipoMision)
             {
                 case MisionTipo.HablarConNpc:
                     npcScript.npcIcono.sprite = npcScript.iconoIntro;
-                    GameObject nota = Instantiate(notaPrefab, playerScript.puntoSujecion.position, Quaternion.identity);
+                    GameObject nota = Instantiate(notaPrefab);
                     Objeto objetoNota = nota.GetComponent<Objeto>();
-                    playerScript.objetoSujeto = objetoNota;
-                    objetoNota.Coger(playerScript.puntoSujecion);
+                    /*playerScript.objetoSujeto = objetoNota;
+                    objetoNota.Coger(playerScript.puntoSujecion);*/
+                    npcScript.npcIcono.sprite = iconoEntregarNota;
+                    inventario.AñadirObjeto(objetoNota);
                     break;
                 case MisionTipo.BuscarObjeto:
                     npcScript.npcIcono.sprite = iconoMisionKama;
@@ -102,6 +113,20 @@ public class Misions : MonoBehaviour
                     break;
             }
             npcScript.canvasImagen.SetActive(true);
+        }
+    }
+
+    public void MostrarPanelMisionCompletada(string[] textoCompletado)
+    {
+        panelMisionCompletada.SetActive(true);
+        panelInfoManager info = panelMisionCompletada.GetComponent<panelInfoManager>();
+        info.npcScript = npcScript;
+        info.paginas = textoCompletado;
+        info.audioSource = npcScript.GetComponent<AudioSource>();
+        info.nombreNpc.text = npcScript.nameNpc;
+        if (tipoMision == MisionTipo.HablarConNpc)
+        {
+            info.nombreNpc.text = "Jiro";
         }
     }
 
@@ -118,16 +143,13 @@ public class Misions : MonoBehaviour
             {
                 case MisionTipo.RecolectarMoneda:
                     GameManager.Instance.monedas += 10;
-                    panelMisionesCompletadas[0].SetActive(true); 
-                    panelInfoManager info = panelMisionesCompletadas[0].GetComponent<panelInfoManager>();
-                    info.npcScript = npcScript;
+                    GameManager.Instance.textoMonedas.text = GameManager.Instance.monedas.ToString();
+                    MostrarPanelMisionCompletada(new string[] {"¡Gracias por traerme las monedas!", "Aquí tienes tu recompensa."});
                     break;
                 case MisionTipo.BuscarObjeto:
                     GameManager.Instance.monedas += 20;
                     GameManager.Instance.textoMonedas.text = GameManager.Instance.monedas.ToString();
-                    panelMisionesCompletadas[1].SetActive(true); 
-                    panelInfoManager info2 = panelMisionesCompletadas[1].GetComponent<panelInfoManager>();
-                    info2.npcScript = npcScript;
+                    MostrarPanelMisionCompletada(new string[] {"¡Porfin podre cortar mi arroz!", "Te lo agradezco mucho."});
                     break;
                 case MisionTipo.HablarConNpc:
                     GameManager.Instance.monedas += 15;
@@ -157,6 +179,29 @@ public class Misions : MonoBehaviour
         objetoRecompensa.Coger(playerScript.puntoSujecion);*/
         //Invoke ("DesactivarPanel", 1f);
         panelMision.SetActive(false);
+    }
+
+    public void CancelarMision()
+    {
+        misionActiva = false;
+        panelMision.SetActive(false);
+
+        if (npcScript != null)
+        {
+            npcScript.canvasImagen.SetActive(false);
+            npcScript.misionNpc = null;
+        }
+    }
+
+    public void ActivarMision()
+    {
+        if (misiones != null && misiones != this)
+        {
+            misiones.CancelarMision();
+        }
+        misiones = this;
+        misionActiva = true;
+        MostrarMision();
     }
 
     public void DesactivarPanel()

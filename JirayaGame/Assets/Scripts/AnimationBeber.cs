@@ -17,6 +17,6 @@ public class AnimationBeber : MonoBehaviour
 
     public void BeberPocion()
     {
-        player.BeberPocion();
+        //player.BeberPocion();
     }
 }

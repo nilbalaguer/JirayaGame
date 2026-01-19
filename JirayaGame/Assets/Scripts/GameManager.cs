@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using UnityEngine.Playables;
+using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class GameManager : MonoBehaviour
     public bool puedeTransformarse = false;
     public enum Estado { Normal, Intro };
     public Estado estadoActual = Estado.Normal;
+    public bool introFinalizadaGlobal = false;
     public Inventario inventario;
     //public StatesMachine player;
     public PlayerController player;
@@ -81,6 +83,9 @@ public class GameManager : MonoBehaviour
     public int objetosTotales = 6;
     public int objetosRecogidos = 0;
     public TextMeshProUGUI textoObjetos;
+    //panel informativo de tienda desbloqueada timeline
+    public GameObject panelTiendaDesbloqueo;
+    public Button btnTienda;
 
     void Awake()
     {
@@ -108,8 +113,18 @@ public class GameManager : MonoBehaviour
         audioSource = gameObject.GetComponent<AudioSource>();
         playerGameObject = GameObject.Find("Player");
 
-
-        IniciarIntro();
+        if (!introFinalizadaGlobal)
+        {
+            IniciarIntro();
+        }
+        else
+        {
+            if (npcIntro != null)
+            {
+                npcIntro.NpcIntro = false;
+                npcIntro.introTerminada = true;
+            }
+        }
         monedas = 0;
         //textoMonedas.text = monedas.ToString();
         //tiendaAlerta.SetActive(false);
@@ -117,10 +132,6 @@ public class GameManager : MonoBehaviour
         playerGameObject = GameObject.Find("Player");
 
         player.puedoMoverme = true;
-        if (npcIntro == null)
-        {
-            return;
-        }
 
         if (swapHabilidad)
         {
@@ -166,8 +177,8 @@ public class GameManager : MonoBehaviour
         player.puedoMoverme = false;
 
         npcIntro.NpcIntro = true;
-        npcIntro.introAsignada = false;   // << IMPORTANTE
-        npcIntro.introTerminada = false;  // << IMPORTANTE
+        npcIntro.introAsignada = false;   
+        npcIntro.introTerminada = false;  
         npcIntro.currentState = NpcStates.State.Intro;
         npcIntroActual = npcIntro;
     }
@@ -178,6 +189,7 @@ public class GameManager : MonoBehaviour
         if (npc == npcIntroActual)
         {
             npcIntroActual.introTerminada = true;
+            introFinalizadaGlobal = true;
         }
     }
     
@@ -276,17 +288,35 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        textoMonedas.text = monedas.ToString();
         playerGameObject = GameObject.FindGameObjectWithTag("Player");
+        GameObject npcObj = GameObject.FindGameObjectWithTag("NpcInicial");
+        if (npcObj != null)
+        {
+            npcIntro = npcObj.GetComponent<NpcStates>();
+        }
+        else
+        {
+            npcIntro = null;
+        }
 
         if (playerGameObject != null)
         {
+            player = playerGameObject.GetComponent<PlayerController>();
             playerGameObject.transform.position = posicionInicioSiguienteEscena;
+            inventario = playerGameObject.GetComponent<Inventario>();
 
             audioSource = gameObject.GetComponent<AudioSource>();
 
             GameObject parryObj = GameObject.Find("vidaIndicator");
             indicadorVida = parryObj.GetComponent<Image>();
             indicadorVida.fillAmount = vidaPlayer / 10;
+
+            if (introFinalizadaGlobal && npcIntro != null)
+            {
+                npcIntro.NpcIntro = false;
+                npcIntro.introTerminada = true;
+            }
         }
         else
         {
@@ -323,6 +353,13 @@ public class GameManager : MonoBehaviour
         timelineErmitañoTienda.Play();
     }
 
+    public void OnCinematicEndTsunade()
+    {
+        EventSystem.current.SetSelectedGameObject(btnTienda.gameObject);
+        panelTiendaDesbloqueo.SetActive(true);
+        player.maxSpeed = 5;
+    }
+
     public void RecuperarVida(float cantidad)
     {
         vidaPlayer += cantidad;
@@ -355,4 +392,11 @@ public class GameManager : MonoBehaviour
     {
         textoObjetos.text = "Objetos encontrados: " + objetosRecogidos + "/" + objetosTotales;
     }
+
+    public void CerrarPanelTienda()
+    {
+        panelTiendaDesbloqueo.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(null);
+    }
+
 }

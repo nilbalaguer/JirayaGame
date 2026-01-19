@@ -288,9 +288,8 @@ public class PlayerController : MonoBehaviour
                     state = "BeberPocion";
                 }
 
-                if (Input.GetKeyDown(KeyCode.X) || Input.GetButtonDown("Y"))
+                if (Input.GetKeyDown(KeyCode.X) || Input.GetButtonDown("A"))
                 {
-                    Debug.Log("x pulsada");
                     CogerObjeto();
                 }
 
@@ -357,7 +356,7 @@ public class PlayerController : MonoBehaviour
                     saltarSapo();
                 }
 
-                if (Input.GetButton("Fire2") || Input.GetButton("LB") && staminaParry > 0 && human)
+                if ( Input.GetButton("LB") && staminaParry > 0 && human)
                 {
                     state = "Parry";
                 }

@@ -337,7 +337,7 @@ public class PlayerController : MonoBehaviour
 
                 }
 
-                if ((Input.GetButtonDown("Fire3") || Input.GetButtonDown("Y")) && GameManager.Instance.puedeTransformarse) //mando Y
+                if ((Input.GetButtonDown("Fire3") || Input.GetButtonDown("Y")) && GameManager.Instance.puedeTransformarse && forceX == 0f && forceY == 0f) //mando Y
                 {
                     human = !human;
 

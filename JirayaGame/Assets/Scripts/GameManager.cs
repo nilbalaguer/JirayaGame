@@ -111,7 +111,7 @@ public class GameManager : MonoBehaviour
     {
         //textoVida = GameObject.Find("TextoVida").GetComponent<TextMeshProUGUI>();
         audioSource = gameObject.GetComponent<AudioSource>();
-        playerGameObject = GameObject.Find("Player");
+        // playerGameObject = GameObject.Find("Player");
 
         if (!introFinalizadaGlobal)
         {
@@ -128,8 +128,6 @@ public class GameManager : MonoBehaviour
         monedas = 0;
         //textoMonedas.text = monedas.ToString();
         //tiendaAlerta.SetActive(false);
-
-        playerGameObject = GameObject.Find("Player");
 
         player.puedoMoverme = true;
 
@@ -288,7 +286,15 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        textoMonedas.text = monedas.ToString();
+        try
+        {
+            textoMonedas.text = monedas.ToString();
+        }
+        catch (System.Exception)
+        {
+            
+            Debug.Log("Holis");
+        }
         playerGameObject = GameObject.FindGameObjectWithTag("Player");
         GameObject npcObj = GameObject.FindGameObjectWithTag("NpcInicial");
         if (npcObj != null)
@@ -300,6 +306,7 @@ public class GameManager : MonoBehaviour
             npcIntro = null;
         }
 
+        Debug.Log("Antes de while");
         if (playerGameObject != null)
         {
             player = playerGameObject.GetComponent<PlayerController>();
@@ -320,7 +327,27 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("No se encontró el jugador en la nueva escena.");
+            while (playerGameObject == null)
+            {
+                playerGameObject = GameObject.FindGameObjectWithTag("Player");
+
+                Debug.Log("Iteracion");
+                player = playerGameObject.GetComponent<PlayerController>();
+                playerGameObject.transform.position = posicionInicioSiguienteEscena;
+                inventario = playerGameObject.GetComponent<Inventario>();
+
+                audioSource = gameObject.GetComponent<AudioSource>();
+
+                GameObject parryObj = GameObject.Find("vidaIndicator");
+                indicadorVida = parryObj.GetComponent<Image>();
+                indicadorVida.fillAmount = vidaPlayer / 10;
+
+                if (introFinalizadaGlobal && npcIntro != null)
+                {
+                    npcIntro.NpcIntro = false;
+                    npcIntro.introTerminada = true;
+                }
+            }
         }
     }
 

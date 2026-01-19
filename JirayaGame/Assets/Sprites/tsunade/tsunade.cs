@@ -124,7 +124,7 @@ public class tsunade : MonoBehaviour
                 Vector2 dirToPlayer = player.transform.position - transform.position;
                 if (Mathf.Abs(dirToPlayer.x) > Mathf.Abs(dirToPlayer.y))    
                 {
-                    transform.localScale = new Vector3(dirToPlayer.x < 0 ? -3 : 3, 3, 3);
+                    spriteRenderer.flipX = dirToPlayer.x < 0;
                     anim.SetInteger("state", 1);
                 }
                 else

@@ -21,7 +21,6 @@ public class ScrollPanel : MonoBehaviour
     public NpcStates npcScript;
     public Misions misionsScript;
     private tsunade tsunadeScript;
-    public GameObject flecha;
     public float velocidadTypewriter = 0.03f;
     private Coroutine typeCoroutine;
     public string textoMision;
@@ -29,23 +28,22 @@ public class ScrollPanel : MonoBehaviour
     private int contadorLetras = 0;
 
     public Button btnDefecto;
+    //public GameObject textoInfo;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Start()
     {
         tsunadeScript = GameObject.FindWithTag("Tsunade").GetComponent<tsunade>();
-        flecha.SetActive(false);
         if (audioSource == null)
         {
             return;
-        }   
+        } 
     }
 
     void Awake()
     {
-        animator = GetComponent<Animator>();
-        flecha.SetActive(false); 
+        animator = GetComponent<Animator>(); 
     }
     void OnEnable()
     {
@@ -155,7 +153,7 @@ public class ScrollPanel : MonoBehaviour
         {
             animator.SetTrigger("Close");
             entregarObjeto = false;
-            flecha.SetActive(true);
+            //Mostrar texto informativo
         }
         //tsunadeScript.entregado = true;
     }

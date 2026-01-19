@@ -137,7 +137,8 @@ public class Inventario : MonoBehaviour
         {
             Image img = btn.GetComponent<Image>();
             img.color = new Color(img.color.r, img.color.g, img.color.b, 0f);
-            btn.GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
+            Transform cursor = btn.transform.Find("Flecha");
+            cursor.gameObject.SetActive(false);
         }
     }
     void MostrarVisualInicial()
@@ -146,14 +147,12 @@ public class Inventario : MonoBehaviour
         {
             GameObject btn = btnSlots[i];
             Image img = btn.GetComponent<Image>();
-            RectTransform rt = btn.GetComponent<RectTransform>();
             Transform cursor = btn.transform.Find("Flecha");
 
             if (i < objetos.Count)
             {
                 // Mostrar todos los objetos
                 img.color = new Color(img.color.r, img.color.g, img.color.b, 0.5f);
-                rt.localScale = new Vector3(1,1,1);
 
                 if (cursor != null)
                 {
@@ -164,7 +163,6 @@ public class Inventario : MonoBehaviour
             {
 
                 img.color = new Color(img.color.r, img.color.g, img.color.b, 0f);
-                rt.localScale = new Vector3(1,1,1);
 
                 if (cursor != null)
                 {
@@ -183,12 +181,10 @@ public class Inventario : MonoBehaviour
         {
             GameObject btn = btnSlots[i];
             Image img = btn.GetComponent<Image>();
-            RectTransform rt = btn.GetComponent<RectTransform>();
             Transform cursor = btn.transform.Find("Flecha");
             if (i == indiceSeleccionActual)
             {
                 img.color = new Color(img.color.r, img.color.g, img.color.b, 1f);
-                rt.localScale = new Vector3(2,2,2);
                 if (cursor != null)
                 {
                     cursor.gameObject.SetActive(true);
@@ -197,7 +193,6 @@ public class Inventario : MonoBehaviour
             else
             {
                 img.color = new Color(img.color.r, img.color.g, img.color.b, 0.5f);
-                rt.localScale = new Vector3(1,1,1);
                 if (cursor != null)
                 {
                     cursor.gameObject.SetActive(false);
@@ -303,6 +298,16 @@ public class Inventario : MonoBehaviour
                     //EliminarObjeto(existe);
                 }
             }
+
+            //Si la cantidad del objeto existente es mayor a 10 no se añade mas
+            if (existe.cantidad >= 10)
+            {
+                PanelInterno.Instance.AbrirPanelInterno(new string[]
+                {
+                    "Ya tengo 10 unidades de este objeto, no puedo añadir más."
+                });
+                return;
+            }
         }
         ActualizarInventario();
     }
@@ -362,16 +367,14 @@ public class Inventario : MonoBehaviour
 
                         EliminarObjeto(captured);
 
-                        //tsunadeScript.MostrarDialogo();
-
                         modoEntrega = false;
-                        panelTsunade.flecha.SetActive(false);
 
                         return;
                     }
                     GameObject go = Instantiate(captured.prefab);
                     Objeto objInst = go.GetComponent<Objeto>();
                     go.transform.localScale = captured.escalaOriginal;
+                    //Si es pocion se puede usar, aparece boton usar 
                     if (objInst != null && objInst.tipo == Objeto.TipoObjeto.Recompensa)
                     {
                         //player.EquiparObjeto(objInst);

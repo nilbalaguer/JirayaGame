@@ -86,6 +86,7 @@ public class GameManager : MonoBehaviour
     //panel informativo de tienda desbloqueada timeline
     public GameObject panelTiendaDesbloqueo;
     public Button btnTienda;
+    public BehaviourErmitaño ermitañoTienda;
 
     void Awake()
     {
@@ -109,6 +110,7 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        ermitañoTienda = GameObject.FindGameObjectWithTag("ErmitañoTienda").GetComponent<BehaviourErmitaño>();
         //textoVida = GameObject.Find("TextoVida").GetComponent<TextMeshProUGUI>();
         audioSource = gameObject.GetComponent<AudioSource>();
         playerGameObject = GameObject.Find("Player");
@@ -233,6 +235,7 @@ public class GameManager : MonoBehaviour
             GameObject ObjInstanciado = Instantiate(objetoComprado.gameObject);
             objetoCompradoNuevo = ObjInstanciado.GetComponent<Objeto>();
             inventario.AñadirObjeto(objetoCompradoNuevo);
+            ermitañoTienda.CerrarTienda();
         }
         else
         {
@@ -288,6 +291,7 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        ermitañoTienda = GameObject.FindGameObjectWithTag("ErmitañoTienda").GetComponent<BehaviourErmitaño>();
         textoMonedas.text = monedas.ToString();
         playerGameObject = GameObject.FindGameObjectWithTag("Player");
         GameObject npcObj = GameObject.FindGameObjectWithTag("NpcInicial");

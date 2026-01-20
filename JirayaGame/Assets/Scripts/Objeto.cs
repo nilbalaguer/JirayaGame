@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Objeto : MonoBehaviour
 {
+    public ObjetoData objetoData;
     //public Transform puntoSujeccion;
     //private GameObject objetoSujeto;
     [HideInInspector] public bool estaSujeto = false;

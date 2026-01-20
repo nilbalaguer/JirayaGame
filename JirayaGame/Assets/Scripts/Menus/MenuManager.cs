@@ -32,6 +32,7 @@ public class MenuManager : MonoBehaviour
     {
         //GraphicsSettings.renderPipelineAsset = Resources.Load<RenderPipelineAsset>("UniversalRenderPipelineAsset");
         SceneManager.LoadScene("SceneRaul"); 
+        Time.timeScale = 1;
     }
 
     public void AbrirOpciones()

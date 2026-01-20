@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public class panelInfoManager : MonoBehaviour
 {
@@ -47,6 +48,8 @@ public class panelInfoManager : MonoBehaviour
     {
         paginaActual = 0;
         textoPanel.gameObject.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(btnNext.gameObject);
     }
 
     public void ShowPage()

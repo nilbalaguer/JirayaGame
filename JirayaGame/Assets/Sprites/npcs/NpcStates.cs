@@ -4,6 +4,7 @@ using TMPro;
 
 public class NpcStates : MonoBehaviour
 {
+    private SpriteRenderer spriteRenderer;
     public Rigidbody2D rb;
     private Animator anim;
 
@@ -56,6 +57,7 @@ public class NpcStates : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         currentState = State.Idle;
         
         /*if (NpcIntro)
@@ -219,7 +221,8 @@ public class NpcStates : MonoBehaviour
                 Vector2 directionToPlayer = (player.transform.position - transform.position).normalized;
                 if (Mathf.Abs(directionToPlayer.x) > Mathf.Abs(directionToPlayer.y))
                 {
-                    transform.localScale = new Vector3(directionToPlayer.x < 0 ? -3 : 3, 3, 3);
+                    //transform.localScale = new Vector3(directionToPlayer.x < 0 ? -3 : 3, 3, 3);
+                    spriteRenderer.flipX = directionToPlayer.x < 0;
                     anim.SetInteger("state", 7);
                 }
                 else
@@ -280,7 +283,7 @@ public class NpcStates : MonoBehaviour
                 directionToPlayer = (player.transform.position - transform.position).normalized;
                 if (Mathf.Abs(directionToPlayer.x) > Mathf.Abs(directionToPlayer.y))
                 {
-                    transform.localScale = new Vector3(directionToPlayer.x < 0 ? -3 : 3, 3, 3);
+                    spriteRenderer.flipX = directionToPlayer.x < 0;
                     anim.SetInteger("state", 7);
                 }
                 else
@@ -336,7 +339,8 @@ public class NpcStates : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
             if (Mathf.Abs(directionToPlayer.x) > Mathf.Abs(directionToPlayer.y))
                 {
-                    transform.localScale = new Vector3(directionToPlayer.x < 0 ? -3 : 3, 3, 3);
+                    //transform.localScale = new Vector3(directionToPlayer.x < 0 ? -3 : 3, 3, 3);
+                    spriteRenderer.flipX = directionToPlayer.x < 0;
                     anim.SetInteger("state", 7);
                 }
                 else
@@ -379,7 +383,7 @@ public class NpcStates : MonoBehaviour
         if (absX > absY)
         {
             anim.SetInteger("state", 1);
-            transform.localScale = new Vector3(dir.x < 0 ? -3 : 3, 3, 3);
+            spriteRenderer.flipX = dir.x < 0;
         }
         else
         {
@@ -448,8 +452,8 @@ public class NpcStates : MonoBehaviour
     public bool ObjetoMisionExiste()
     {
         foreach (var entry in player.GetComponent<PlayerController>().inventario.objetos){
-            if (entry.nombre == "ObjetoCampesino" || 
-            entry.nombre == "NotaMision")
+            if (entry.item.nombre == "ObjetoCampesino" || 
+            entry.item.nombre == "NotaMision")
             {
                 return true;
             }
@@ -508,7 +512,7 @@ public class NpcStates : MonoBehaviour
     public void MisionObjeto()
     {
         //Objeto objeto = player.GetComponent<PlayerController>().objetoSujeto;
-        Inventario.InventoryEntry entry = player.GetComponent<PlayerController>().inventario.objetos.Find(e => e.nombre == "ObjetoCampesino");
+        Inventario.InventoryEntry entry = player.GetComponent<PlayerController>().inventario.objetos.Find(e => e.item.nombre == "ObjetoCampesino");
         
         if (entry != null)
         {
@@ -540,7 +544,7 @@ public class NpcStates : MonoBehaviour
                 Debug.Log("Este NPC no es el destino");
                 return;
             }
-            Inventario.InventoryEntry notaExiste = player.GetComponent<PlayerController>().inventario.objetos.Find(e => e.nombre == "NotaMision");
+            Inventario.InventoryEntry notaExiste = player.GetComponent<PlayerController>().inventario.objetos.Find(e => e.item.nombre == "NotaMision");
             if (notaExiste != null){
                 misionNpc.CompletarMision();
                 //dialogMisionMostrado = false;

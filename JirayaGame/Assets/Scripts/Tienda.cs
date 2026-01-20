@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class Tienda : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class Tienda : MonoBehaviour
 
     public GameObject btnPrefab;
     public Transform btnContenedorBotones;
+    public Button btnCerrarTienda;
+    public BehaviourErmitaño ermitañoTienda;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -28,12 +31,30 @@ public class Tienda : MonoBehaviour
         btnSlots.Add(btnObj);
 
         MostrarObjetosTienda();
+        PosicionarPrimerObjetoXbox();
     }
 
     // Update is called once per frame
     void Update()
     {
 
+    }
+
+    public void PosicionarPrimerObjetoXbox()
+    {
+        if (btnSlots.Count > 0 && btnSlots[0] != null)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(btnSlots[0]);
+
+            //Posicionar boton cerrar Tienda
+            if ((Input.GetButtonDown("B") || Input.GetKeyDown(KeyCode.X)) && ermitañoTienda.tiendaAbierta)
+            {
+                Debug.Log("Posicionando boton cerrar tienda");
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(btnCerrarTienda.gameObject);
+            }
+        }
     }
 
     public void MostrarObjetosTienda()

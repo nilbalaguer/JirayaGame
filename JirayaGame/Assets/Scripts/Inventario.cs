@@ -10,15 +10,12 @@ public class Inventario : MonoBehaviour
     [System.Serializable]
     public class InventoryEntry
     {
-        public GameObject prefab;
-        public string nombre;
-        public Sprite icono;
+        public ObjetoData item;
         public int cantidad = 1;
-        public Objeto.TipoObjeto tipo;
-        public Vector3 escalaOriginal;
     }
 
-    public List<InventoryEntry> objetos = new List<InventoryEntry>();
+    //public List<InventoryEntry> objetos = new List<InventoryEntry>();
+    public List<InventoryEntry> objetos;
     private List<GameObject> btnSlots = new List<GameObject>();
     public int capacidadMaxima = 5;
 
@@ -46,6 +43,7 @@ public class Inventario : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        objetos = GameManager.Instance.inventarioGlobal;
         for (int i = 0; i < capacidadMaxima; i++)
         {
             GameObject btnObj = Instantiate(btnPrefab, btnContenedorBotones);
@@ -69,6 +67,7 @@ public class Inventario : MonoBehaviour
         }
         //tsunadeScript = GameObject.FindWithTag("Tsunade").GetComponent<tsunade>();
         usarBoton.SetActive(false);
+        ActualizarInventario();
     }
 
     // Update is called once per frame
@@ -137,7 +136,8 @@ public class Inventario : MonoBehaviour
         {
             Image img = btn.GetComponent<Image>();
             img.color = new Color(img.color.r, img.color.g, img.color.b, 0f);
-            btn.GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
+            Transform cursor = btn.transform.Find("Flecha");
+            cursor.gameObject.SetActive(false);
         }
     }
     void MostrarVisualInicial()
@@ -146,14 +146,12 @@ public class Inventario : MonoBehaviour
         {
             GameObject btn = btnSlots[i];
             Image img = btn.GetComponent<Image>();
-            RectTransform rt = btn.GetComponent<RectTransform>();
             Transform cursor = btn.transform.Find("Flecha");
 
             if (i < objetos.Count)
             {
                 // Mostrar todos los objetos
                 img.color = new Color(img.color.r, img.color.g, img.color.b, 0.5f);
-                rt.localScale = new Vector3(1,1,1);
 
                 if (cursor != null)
                 {
@@ -164,7 +162,6 @@ public class Inventario : MonoBehaviour
             {
 
                 img.color = new Color(img.color.r, img.color.g, img.color.b, 0f);
-                rt.localScale = new Vector3(1,1,1);
 
                 if (cursor != null)
                 {
@@ -183,12 +180,10 @@ public class Inventario : MonoBehaviour
         {
             GameObject btn = btnSlots[i];
             Image img = btn.GetComponent<Image>();
-            RectTransform rt = btn.GetComponent<RectTransform>();
             Transform cursor = btn.transform.Find("Flecha");
             if (i == indiceSeleccionActual)
             {
                 img.color = new Color(img.color.r, img.color.g, img.color.b, 1f);
-                rt.localScale = new Vector3(2,2,2);
                 if (cursor != null)
                 {
                     cursor.gameObject.SetActive(true);
@@ -197,7 +192,6 @@ public class Inventario : MonoBehaviour
             else
             {
                 img.color = new Color(img.color.r, img.color.g, img.color.b, 0.5f);
-                rt.localScale = new Vector3(1,1,1);
                 if (cursor != null)
                 {
                     cursor.gameObject.SetActive(false);
@@ -225,9 +219,9 @@ public class Inventario : MonoBehaviour
         if (indiceSeleccionActual >= 0 && indiceSeleccionActual < objetos.Count)
         {
             InventoryEntry entry = objetos[indiceSeleccionActual];
-            GameObject go = Instantiate(entry.prefab);
+            GameObject go = Instantiate(entry.item.prefab);
             Objeto objInst = go.GetComponent<Objeto>();
-            go.transform.localScale = entry.escalaOriginal;
+            go.transform.localScale = entry.item.escalaOriginal;
             if (objInst != null && objInst.tipo == Objeto.TipoObjeto.Recompensa)
             {
                 //player.EquiparObjeto(objInst);
@@ -240,7 +234,7 @@ public class Inventario : MonoBehaviour
                 usarBoton.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(usarBoton);
             }else{
-                player.SoltarObjetoInventario(objInst);
+                player.SoltarObjetoInventario(entry.item);
                 EliminarObjeto(entry);
             }
             ActualizarInventario();
@@ -251,27 +245,29 @@ public class Inventario : MonoBehaviour
     //Funcionamiento inventario
     public void AñadirObjeto(Objeto objeto)
     {
-        InventoryEntry existe = objetos.Find(e => e.nombre == objeto.nombreObjeto);
+        InventoryEntry existe = objetos.Find(e => e.item.nombre == objeto.objetoData.nombre);
 
         if (existe == null)
         {
             if (objetos.Count < capacidadMaxima)
             {
                 InventoryEntry entry = new InventoryEntry();
-                entry.prefab = objeto.gameObject;
+                /*entry.prefab = objeto.gameObject;
                 entry.nombre = objeto.nombreObjeto;
                 entry.icono = objeto.icono;
                 entry.tipo = objeto.tipo;
                 entry.cantidad = objeto.cantidad > 0 ? objeto.cantidad : 1;
-                entry.escalaOriginal = objeto.transform.localScale;
+                entry.escalaOriginal = objeto.transform.localScale;*/
+                entry.item = objeto.objetoData;
+                entry.cantidad = objeto.cantidad > 0 ? objeto.cantidad : 1;
                 objetos.Add(entry);
 
                 // Auto-equip si no tiene nada equipado y el shuriken es el objeto añadido
-                if (player.objetoSujeto == null && entry.nombre == "Shuriken")
+                if (player.objetoSujeto == null && entry.item.nombre == "Shuriken")
                 {
-                    GameObject nueva = Instantiate(entry.prefab);
+                    GameObject nueva = Instantiate(entry.item.prefab);
                     Objeto nuevoObj = nueva.GetComponent<Objeto>();
-                    nueva.transform.localScale = entry.escalaOriginal;
+                    nueva.transform.localScale = entry.item.escalaOriginal;
                     if (nuevoObj != null)
                     {
                         player.EquiparObjeto(nuevoObj);
@@ -292,16 +288,62 @@ public class Inventario : MonoBehaviour
         {
             existe.cantidad++;
 
-            if (player.objetoSujeto == null && existe.nombre == "Shuriken")
+            if (player.objetoSujeto == null && existe.item.nombre == "Shuriken")
             {
-                GameObject nuevaExist = Instantiate(existe.prefab);
+                GameObject nuevaExist = Instantiate(existe.item.prefab);
                 Objeto nuevoDesdeExist = nuevaExist.GetComponent<Objeto>();
-                nuevaExist.transform.localScale = existe.escalaOriginal;
+                nuevaExist.transform.localScale = existe.item.escalaOriginal;
                 if (nuevoDesdeExist != null)
                 {
                     player.EquiparObjeto(nuevoDesdeExist);
                     //EliminarObjeto(existe);
                 }
+            }
+
+            //Si la cantidad del objeto existente es mayor a 10 no se añade mas
+            if (existe.cantidad >= 10)
+            {
+                PanelInterno.Instance.AbrirPanelInterno(new string[]
+                {
+                    "Ya tengo 10 unidades de este objeto, no puedo guardar más."
+                });
+                return;
+            }
+        }
+        ActualizarInventario();
+    }
+
+    //Nueva funcion para añadir objeto mediante el scriptable object creado
+    public void AñadirObjeto(ObjetoData objetoData)
+    {
+        InventoryEntry existe = objetos.Find(e => e.item.nombre == objetoData.nombre);
+
+        if (existe == null)
+        {
+            if (objetos.Count < capacidadMaxima)
+            {
+                InventoryEntry entry = new InventoryEntry();
+                entry.item = objetoData;
+                entry.cantidad = 1;
+                objetos.Add(entry);
+            }
+            else
+            {
+                Debug.Log("Capacidad maxima alcanzada, no se pudo añadir un nuevo objeto.");
+            }
+        }
+        else
+        {
+            existe.cantidad++;
+
+            //Si hay mas de 3 unidades no se añade mas
+            if (existe.cantidad >= 3)
+            {
+                PanelInterno.Instance.AbrirPanelInterno(new string[]
+                {
+                    "Ya tengo 3 unidades, no puedo guardar más."
+                });
+                return;
             }
         }
         ActualizarInventario();
@@ -331,7 +373,7 @@ public class Inventario : MonoBehaviour
             if (i < objetos.Count)
             {
                 InventoryEntry entry = objetos[i];
-                img.sprite = entry.icono;
+                img.sprite = entry.item.icono;
                 img.enabled = true;
                 btnComp.interactable = true;
                 if (entry.cantidad > 1)
@@ -352,7 +394,7 @@ public class Inventario : MonoBehaviour
                     {
                         NavegarEntregaXbox();
                         //modo entrega para tsunade
-                        GameObject objeto = Instantiate(captured.prefab);
+                        GameObject objeto = Instantiate(captured.item.prefab);
                         Objeto objInstanciado = objeto.GetComponent<Objeto>();
                         tsunadeScript.objetoRecibido = objInstanciado;
                         
@@ -362,16 +404,14 @@ public class Inventario : MonoBehaviour
 
                         EliminarObjeto(captured);
 
-                        //tsunadeScript.MostrarDialogo();
-
                         modoEntrega = false;
-                        panelTsunade.flecha.SetActive(false);
 
                         return;
                     }
-                    GameObject go = Instantiate(captured.prefab);
+                    GameObject go = Instantiate(captured.item.prefab);
                     Objeto objInst = go.GetComponent<Objeto>();
-                    go.transform.localScale = captured.escalaOriginal;
+                    go.transform.localScale = captured.item.escalaOriginal;
+                    //Si es pocion se puede usar, aparece boton usar 
                     if (objInst != null && objInst.tipo == Objeto.TipoObjeto.Recompensa)
                     {
                         //player.EquiparObjeto(objInst);
@@ -383,7 +423,7 @@ public class Inventario : MonoBehaviour
                     }
                     else
                     {
-                        player.SoltarObjetoInventario(objInst);
+                        player.SoltarObjetoInventario(captured.item);
                         EliminarObjeto(captured);
                     }
                 });
@@ -400,7 +440,7 @@ public class Inventario : MonoBehaviour
 
     public void Usar()
     {
-        bool pocionConsumida = player.BeberPocion(objetoUsable.nombre);
+        bool pocionConsumida = player.BeberPocion(objetoUsable.item.nombre);
         if (pocionConsumida)
         {
             EliminarObjeto(objetoUsable);
@@ -419,8 +459,8 @@ public class Inventario : MonoBehaviour
                 "Tengo demasiada vida."
             });
         }
-        //player.BeberPocion(objetoUsable.nombre);
-        //eliminar pocion del inventario
+        //player.BeberPocion(objetoUsable.item.nombre);
+        //eliminar pocion del inventario    
     }
 
     public void CancelarUso()
@@ -448,7 +488,7 @@ public class Inventario : MonoBehaviour
     public void EliminarObjeto(Objeto objeto)
     {
         if (objeto == null) return;
-        InventoryEntry entry = objetos.Find(e => e.nombre == objeto.nombreObjeto);
+        InventoryEntry entry = objetos.Find(e => e.item.nombre == objeto.objetoData.nombre);
         if (entry != null)
         {
             EliminarObjeto(entry);
@@ -466,9 +506,9 @@ public class Inventario : MonoBehaviour
 
         foreach (var entry in objetos)
         {
-            if (entry.tipo == Objeto.TipoObjeto.PergaminoSagrado ||
-                entry.tipo == Objeto.TipoObjeto.Flor ||
-                entry.tipo == Objeto.TipoObjeto.CollarShizune)
+            if (entry.item.tipo == Objeto.TipoObjeto.PergaminoSagrado ||
+                entry.item.tipo == Objeto.TipoObjeto.Flor ||
+                entry.item.tipo == Objeto.TipoObjeto.CollarShizune)
             {
                 entregables.Add(entry);
             }
@@ -515,7 +555,7 @@ public class Inventario : MonoBehaviour
     {
         InventoryEntry entry = objetos[indiceSeleccionActual];
 
-        GameObject objeto = Instantiate(entry.prefab);
+        GameObject objeto = Instantiate(entry.item.prefab);
         Objeto objInstanciado = objeto.GetComponent<Objeto>();
         tsunadeScript.objetoRecibido = objInstanciado;
 

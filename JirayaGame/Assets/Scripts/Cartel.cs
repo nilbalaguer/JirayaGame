@@ -44,12 +44,13 @@ public class Cartel : MonoBehaviour
             textoCartel.text = contenidoCartel;
             panelCartel.SetActive(true);
             cartelAbierto = true;
+            EventSystem.current.SetSelectedGameObject(btnCerrarCartel.gameObject);
         }
     }
 
     public void ClosePanel()
     {
         panelCartel.SetActive(false);
-        EventSystem.current.SetSelectedGameObject(btnCerrarCartel.gameObject);
+        EventSystem.current.SetSelectedGameObject(null);
     }
 }

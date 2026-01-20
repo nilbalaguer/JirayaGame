@@ -14,6 +14,9 @@ public class Timeline : MonoBehaviour
     public GameObject panelErmitañoMision;
     public GameObject BarreraErmitaño;
     public GameObject[] barreras;
+    public AudioSource musicaFondo;
+    public AudioClip musicaMisionErmitaño;
+    public AudioClip musicaNormal;
 
     void Awake()
     {
@@ -76,5 +79,8 @@ public class Timeline : MonoBehaviour
                 barrera.SetActive(true);
             }
         }
+
+        musicaFondo.clip = musicaMisionErmitaño;
+        musicaFondo.Play();
     }
 }

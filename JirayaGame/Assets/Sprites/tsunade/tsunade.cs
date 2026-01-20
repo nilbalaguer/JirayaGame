@@ -4,6 +4,7 @@ using TMPro;
 
 public class tsunade : MonoBehaviour
 {
+    private SpriteRenderer spriteRenderer;
     private Animator anim;
     public enum State {Idle, Talking};
     public State currentState;
@@ -13,7 +14,8 @@ public class tsunade : MonoBehaviour
     public GameObject panelDialogo;
     public GameObject tsunadePanel2;
 
-    public GameObject[] recompensas;
+    //array objeto data
+    public ObjetoData[] recompensas;
     //public StatesMachine playerScript;
     public PlayerController playerScript;
     //private Objeto objetoSujeto;
@@ -31,6 +33,7 @@ public class tsunade : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         player = GameObject.FindWithTag("Player");
         panelDialogo.SetActive(false);
         anim = GetComponent<Animator>();
@@ -66,7 +69,7 @@ public class tsunade : MonoBehaviour
                 Vector2 directionToPlayer = player.transform.position - transform.position;
                 if (Mathf.Abs(directionToPlayer.x) > Mathf.Abs(directionToPlayer.y))
                 {
-                    transform.localScale = new Vector3(directionToPlayer.x < 0 ? -3 : 3, 3, 3);
+                    spriteRenderer.flipX = directionToPlayer.x < 0;
                     anim.SetInteger("state", 0);
                 }
                 else
@@ -86,7 +89,7 @@ public class tsunade : MonoBehaviour
                 Vector2 dirToPlayer = player.transform.position - transform.position;
                 if (Mathf.Abs(dirToPlayer.x) > Mathf.Abs(dirToPlayer.y))    
                 {
-                    transform.localScale = new Vector3(dirToPlayer.x < 0 ? -3 : 3, 3, 3);
+                    spriteRenderer.flipX = dirToPlayer.x < 0;
                     anim.SetInteger("state", 1);
                 }
                 else
@@ -122,7 +125,7 @@ public class tsunade : MonoBehaviour
                 Vector2 dirToPlayer = player.transform.position - transform.position;
                 if (Mathf.Abs(dirToPlayer.x) > Mathf.Abs(dirToPlayer.y))    
                 {
-                    transform.localScale = new Vector3(dirToPlayer.x < 0 ? -3 : 3, 3, 3);
+                    spriteRenderer.flipX = dirToPlayer.x < 0;
                     anim.SetInteger("state", 1);
                 }
                 else
@@ -185,24 +188,25 @@ public class tsunade : MonoBehaviour
 
     public void EntregarRecompensa()
     {
+        ObjetoData recompensaRecibida = null;
 
         switch (objetoRecibido.tipo)
         {
             case Objeto.TipoObjeto.PergaminoSagrado:
-                prefabRecompensa = recompensas[0];
+                recompensaRecibida = recompensas[0];
                 break;
             case Objeto.TipoObjeto.CollarShizune:
-                prefabRecompensa = recompensas[1];
+                recompensaRecibida = recompensas[1];
                 break;
             case Objeto.TipoObjeto.Flor:
-                prefabRecompensa = recompensas[2];
+                recompensaRecibida = recompensas[2];
                 break;
         }
-        GameObject recompensaInstanciada = Instantiate(prefabRecompensa);
+        /*GameObject recompensaInstanciada = Instantiate(recompensaRecibida.prefab);
         objetoRecompensa = recompensaInstanciada.GetComponent<Objeto>();
-        objetoRecompensa.esRecompensa = true;
+        objetoRecompensa.esRecompensa = true;*/
 
-        playerScript.inventario.AñadirObjeto(objetoRecompensa);
+        playerScript.inventario.AñadirObjeto(recompensaRecibida);
         recompensaEntregadaRecientemente = true;
 
         //Destroy(recompensaInstanciada);

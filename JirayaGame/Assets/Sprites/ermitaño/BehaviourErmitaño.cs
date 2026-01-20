@@ -1,5 +1,6 @@
 using UnityEngine;
-
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 public class BehaviourErmitaño : MonoBehaviour
 {
     private Animator anim;
@@ -28,6 +29,8 @@ public class BehaviourErmitaño : MonoBehaviour
 
     public GameObject[] enemies;
     public GameObject canvasPatrol;
+    [HideInInspector]
+    public bool tiendaAbierta = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -87,6 +90,9 @@ public class BehaviourErmitaño : MonoBehaviour
                             barrera.SetActive(false);
                         }
                     }
+
+                    Timeline.Instance.musicaFondo.clip = Timeline.Instance.musicaNormal;
+                    Timeline.Instance.musicaFondo.Play();
                 }
                 else if (PlayerinRange() && esErmitañoTienda && (Input.GetKeyDown(KeyCode.X) || Input.GetButtonDown("Submit")))
                 {
@@ -123,6 +129,9 @@ public class BehaviourErmitaño : MonoBehaviour
                             barrera.SetActive(false);
                         }
                     }
+
+                    Timeline.Instance.musicaFondo.clip = Timeline.Instance.musicaNormal;
+                    Timeline.Instance.musicaFondo.Play();
                 }
                 else
                 {
@@ -187,6 +196,14 @@ public class BehaviourErmitaño : MonoBehaviour
                 if (!panelTienda.activeSelf)
                 {
                     panelTienda.SetActive(true);
+                    panelTienda.GetComponent<Tienda>().PosicionarPrimerObjetoXbox();
+                    tiendaAbierta = true;
+
+                    /*if (Input.GetKeyDown(KeyCode.J) || Input.GetButtonDown("B"))
+                    {
+                        EventSystem.current.SetSelectedGameObject(null);
+                        EventSystem.current.SetSelectedGameObject(btnCerrarTienda.gameObject);
+                    }*/
                 }
                 break;
             case State.Chasing:
@@ -281,6 +298,7 @@ public class BehaviourErmitaño : MonoBehaviour
     {
         panelTienda.SetActive(false);
         currentState = State.Idle;
+        EventSystem.current.SetSelectedGameObject(null);
     }
 
     bool EnemyinRange()

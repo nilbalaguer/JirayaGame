@@ -600,16 +600,12 @@ public class PlayerController : MonoBehaviour
             if (distancia <= rangoDeteccion)
             {
                 inventario.AñadirObjeto(objetoCercano.objetoData);
-                if ((objetoCercano.nombreObjeto == "PergaminoSagrado" || objetoCercano.nombreObjeto == "CollarShizune" || objetoCercano.nombreObjeto == "Flor")
-                && objetoCercano.yaRecogido == false)
+                if (objetoCercano.nombreObjeto == "PergaminoSagrado" || objetoCercano.nombreObjeto == "CollarShizune" || objetoCercano.nombreObjeto == "Flor")
                 {
-                    GameManager.Instance.objetosRecogidos += 1;
-                    GameManager.Instance.ActualizarContadorObjetos();
-                    objetoCercano.yaRecogido = true;
-                    if (!timelineMostrado)
+                    if (!GameManager.Instance.timelineTsunadeMostrado)
                     {
                         GameManager.Instance.ReproducirTimelineTsunade();
-                        timelineMostrado = true;
+                        GameManager.Instance.timelineTsunadeMostrado = true;
                     }
                     objetoCercano.gameObject.SetActive(false);
                 }
@@ -729,6 +725,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+    //Soltar objeto desde inventario
     public void SoltarObjetoInventario(ObjetoData obj)
     {
         if (obj == null)

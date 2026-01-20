@@ -305,7 +305,7 @@ public class Inventario : MonoBehaviour
             {
                 PanelInterno.Instance.AbrirPanelInterno(new string[]
                 {
-                    "Ya tengo 10 unidades de este objeto, no puedo añadir más."
+                    "Ya tengo 10 unidades de este objeto, no puedo guardar más."
                 });
                 return;
             }
@@ -313,7 +313,7 @@ public class Inventario : MonoBehaviour
         ActualizarInventario();
     }
 
-    //Añadir recompensas pocion a inventario
+    //Nueva funcion para añadir objeto mediante el scriptable object creado
     public void AñadirObjeto(ObjetoData objetoData)
     {
         InventoryEntry existe = objetos.Find(e => e.item.nombre == objetoData.nombre);
@@ -329,19 +329,19 @@ public class Inventario : MonoBehaviour
             }
             else
             {
-                Debug.Log("Capacidad maxima alcanzada, no se pudo añadir nueva entrada.");
+                Debug.Log("Capacidad maxima alcanzada, no se pudo añadir un nuevo objeto.");
             }
         }
         else
         {
             existe.cantidad++;
 
-            //Si hay mas de 3 pociones no se añade mas
+            //Si hay mas de 3 unidades no se añade mas
             if (existe.cantidad >= 3)
             {
                 PanelInterno.Instance.AbrirPanelInterno(new string[]
                 {
-                    "Ya tengo 3 unidades, no puedo añadir más."
+                    "Ya tengo 3 unidades, no puedo guardar más."
                 });
                 return;
             }

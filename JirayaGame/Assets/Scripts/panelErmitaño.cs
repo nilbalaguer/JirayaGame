@@ -27,6 +27,7 @@ public class panelErmitaño : MonoBehaviour
     private Coroutine typeCoroutine;
     public int letrasPorSonido = 2; 
     private int contadorLetras = 0;
+    public bool timelineMostrado = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -88,7 +89,11 @@ public class panelErmitaño : MonoBehaviour
             //forzar mirar a la derecha
             ermitañoScript.enabled = false;
             ermitañoScript.transform.localScale = new Vector3(3, 3, 3);
-            GameManager.Instance.ReproducirTimelineErmitañoTienda();
+            if (!GameManager.Instance.timelineTiendaMostrado)
+            {
+                GameManager.Instance.ReproducirTimelineErmitañoTienda();
+                GameManager.Instance.timelineTiendaMostrado = true;
+            }
         }
     }
 

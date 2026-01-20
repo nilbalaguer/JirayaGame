@@ -80,9 +80,11 @@ public class GameManager : MonoBehaviour
 
     //Cinematica ermitaño para introducir tienda
     public PlayableDirector timelineErmitañoTienda;
+    [HideInInspector]
+    public bool timelineTsunadeMostrado = false;
+    [HideInInspector]
+    public bool timelineTiendaMostrado = false;
     public int objetosTotales = 6;
-    public int objetosRecogidos = 0;
-    public TextMeshProUGUI textoObjetos;
     //panel informativo de tienda desbloqueada timeline
     public GameObject panelTiendaDesbloqueo;
     public Button btnTienda;
@@ -107,15 +109,52 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        
+        GameObject txtMonedas = GameObject.FindGameObjectWithTag("Monedas");
+        if (txtMonedas != null)
+        {
+            textoMonedas = txtMonedas.GetComponent<TextMeshProUGUI>();
+        }
+        playerGameObject = GameObject.Find("Player");
+        player = playerGameObject.GetComponent<PlayerController>();
+        inventario = player.GetComponent<Inventario>();
+        GameObject npcObj = GameObject.FindGameObjectWithTag("NpcInicial");
+        if (npcObj != null)
+        {
+            npcIntro = npcObj.GetComponent<NpcStates>();
+        }
+        else
+        {
+            npcIntro = null;
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        ermitañoTienda = GameObject.FindGameObjectWithTag("ErmitañoTienda").GetComponent<BehaviourErmitaño>();
+        GameObject txtMonedas = GameObject.FindGameObjectWithTag("Monedas");
+        if (txtMonedas != null)
+        {
+            textoMonedas = txtMonedas.GetComponent<TextMeshProUGUI>();
+        }
+        GameObject ermitaño = GameObject.FindGameObjectWithTag("ErmitañoTienda");
+        if (ermitaño != null)
+        {
+            ermitañoTienda = ermitaño.GetComponent<BehaviourErmitaño>();
+        }
+        
         //textoVida = GameObject.Find("TextoVida").GetComponent<TextMeshProUGUI>();
         audioSource = gameObject.GetComponent<AudioSource>();
         playerGameObject = GameObject.Find("Player");
+        GameObject npcObj = GameObject.FindGameObjectWithTag("NpcInicial");
+        if (npcObj != null)
+        {
+            npcIntro = npcObj.GetComponent<NpcStates>();
+        }
+        else
+        {
+            npcIntro = null;
+        }
 
         if (!introFinalizadaGlobal)
         {
@@ -134,6 +173,7 @@ public class GameManager : MonoBehaviour
         //tiendaAlerta.SetActive(false);
 
         playerGameObject = GameObject.Find("Player");
+        player = playerGameObject.GetComponent<PlayerController>();
 
         player.puedoMoverme = true;
 
@@ -293,9 +333,22 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        ermitañoTienda = GameObject.FindGameObjectWithTag("ErmitañoTienda").GetComponent<BehaviourErmitaño>();
+        if (timelineTsunade == null)
+        {
+            timelineTsunade = GameObject.Find("TimelineTsunade1").GetComponent<PlayableDirector>();
+        }
+        GameObject txtMonedas = GameObject.FindGameObjectWithTag("Monedas");
+        if (txtMonedas != null)
+        {
+            textoMonedas = txtMonedas.GetComponent<TextMeshProUGUI>();
+        }
         textoMonedas.text = monedas.ToString();
-        playerGameObject = GameObject.FindGameObjectWithTag("Player");
+        GameObject ermitaño = GameObject.FindGameObjectWithTag("ErmitañoTienda");
+        if (ermitaño != null)
+        {
+            ermitañoTienda = ermitaño.GetComponent<BehaviourErmitaño>();
+        }
+        playerGameObject = GameObject.Find("Player");
         GameObject npcObj = GameObject.FindGameObjectWithTag("NpcInicial");
         if (npcObj != null)
         {
@@ -310,7 +363,7 @@ public class GameManager : MonoBehaviour
         {
             player = playerGameObject.GetComponent<PlayerController>();
             playerGameObject.transform.position = posicionInicioSiguienteEscena;
-            inventario = playerGameObject.GetComponent<Inventario>();
+            inventario = player.GetComponent<Inventario>();
 
             audioSource = gameObject.GetComponent<AudioSource>();
 
@@ -393,10 +446,6 @@ public class GameManager : MonoBehaviour
         RecuperarVida(10);
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-    public void ActualizarContadorObjetos()
-    {
-        textoObjetos.text = "Objetos encontrados: " + objetosRecogidos + "/" + objetosTotales;
     }
 
     public void CerrarPanelTienda()

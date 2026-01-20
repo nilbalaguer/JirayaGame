@@ -246,11 +246,11 @@ public class StatesMachine : MonoBehaviour
         
         string nombre = objetoLanzado != null ? objetoLanzado.nombreObjeto : null;
 
-        Inventario.InventoryEntry entrada = inventario.objetos.Find(e => e.nombre == nombre);
+        Inventario.InventoryEntry entrada = inventario.objetos.Find(e => e.item.nombre == nombre);
     if (entrada != null && entrada.cantidad > 0)
         {
 
-            GameObject nuevaGO = Instantiate(entrada.prefab, puntoSujecion.position, puntoSujecion.rotation);
+            GameObject nuevaGO = Instantiate(entrada.item.prefab, puntoSujecion.position, puntoSujecion.rotation);
             Objeto nuevoObjeto = nuevaGO.GetComponent<Objeto>();
             if (nuevoObjeto != null)
             {

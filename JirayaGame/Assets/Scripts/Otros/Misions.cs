@@ -32,7 +32,7 @@ public class Misions : MonoBehaviour
     public PlayerController playerScript;
     public GameObject panelMisionCompletada;
     public string npcDestino;
-    public GameObject notaPrefab;
+    public ObjetoData notaPrefab;
     [HideInInspector]
     public bool panelCompletadoMostrado = false;
     public Sprite iconoMisionKama;
@@ -95,12 +95,10 @@ public class Misions : MonoBehaviour
             {
                 case MisionTipo.HablarConNpc:
                     npcScript.npcIcono.sprite = npcScript.iconoIntro;
-                    GameObject nota = Instantiate(notaPrefab);
-                    Objeto objetoNota = nota.GetComponent<Objeto>();
                     /*playerScript.objetoSujeto = objetoNota;
                     objetoNota.Coger(playerScript.puntoSujecion);*/
                     npcScript.npcIcono.sprite = iconoEntregarNota;
-                    inventario.AñadirObjeto(objetoNota);
+                    inventario.AñadirObjeto(notaPrefab);
                     break;
                 case MisionTipo.BuscarObjeto:
                     npcScript.npcIcono.sprite = iconoMisionKama;

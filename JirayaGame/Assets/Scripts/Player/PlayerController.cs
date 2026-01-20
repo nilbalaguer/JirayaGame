@@ -599,7 +599,7 @@ public class PlayerController : MonoBehaviour
             float rangoDeteccion = 2f;
             if (distancia <= rangoDeteccion)
             {
-                inventario.AñadirObjeto(objetoCercano);
+                inventario.AñadirObjeto(objetoCercano.objetoData);
                 if ((objetoCercano.nombreObjeto == "PergaminoSagrado" || objetoCercano.nombreObjeto == "CollarShizune" || objetoCercano.nombreObjeto == "Flor")
                 && objetoCercano.yaRecogido == false)
                 {
@@ -643,7 +643,7 @@ public class PlayerController : MonoBehaviour
 
         //Consumir 1 del inventario
         Inventario.InventoryEntry entrada =
-            inventario.objetos.Find(e => e.nombre == objetoLanzado.nombreObjeto);
+            inventario.objetos.Find(e => e.item.nombre == objetoLanzado.nombreObjeto);
 
         if (entrada != null)
             inventario.EliminarObjeto(entrada);
@@ -659,14 +659,14 @@ public class PlayerController : MonoBehaviour
             return;
 
         Inventario.InventoryEntry entrada =
-            inventario.objetos.Find(e => e.nombre == "Shuriken");
+            inventario.objetos.Find(e => e.item.nombre == "Shuriken");
 
         if (entrada == null)
             return;
 
-        GameObject nueva = Instantiate(entrada.prefab, puntoSujecion.position, puntoSujecion.rotation);
+        GameObject nueva = Instantiate(entrada.item.prefab, puntoSujecion.position, puntoSujecion.rotation);
         Objeto nuevoObj = nueva.GetComponent<Objeto>();
-        nueva.transform.localScale = entrada.escalaOriginal;
+        nueva.transform.localScale = entrada.item.escalaOriginal;
 
         if (nuevoObj != null)
             EquiparObjeto(nuevoObj);
@@ -729,15 +729,20 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void SoltarObjetoInventario(Objeto obj)
+    public void SoltarObjetoInventario(ObjetoData obj)
     {
         if (obj == null)
         {
             return;
         }
 
-        obj.SoltarInventario(transform.position);
-        Transform light = obj.transform.Find("Light");
+        GameObject objetoSoltado = Instantiate(obj.prefab, transform.position, Quaternion.identity);
+        Objeto objeto = objetoSoltado.GetComponent<Objeto>();
+        objeto.objetoData = obj;
+
+        objeto.SoltarInventario(transform.position);
+
+        Transform light = objeto.transform.Find("Light");
         if (light != null)
         {
             light.gameObject.SetActive(true);
@@ -970,7 +975,7 @@ public class PlayerController : MonoBehaviour
     public void AceptarEntregaDirecta(Inventario.InventoryEntry entry)
     {
         tsunade tsunadeScript = GameObject.FindWithTag("Tsunade").GetComponent<tsunade>();
-        GameObject objeto = Instantiate(entry.prefab);
+        GameObject objeto = Instantiate(entry.item.prefab);
         Objeto objInstanciado = objeto.GetComponent<Objeto>();
         tsunadeScript.objetoRecibido = objInstanciado;
 
@@ -985,9 +990,9 @@ public class PlayerController : MonoBehaviour
     public bool ObjetoTsunadeExiste()
     {
         foreach (var entry in inventario.objetos){
-            if (entry.tipo == Objeto.TipoObjeto.PergaminoSagrado || 
-            entry.tipo == Objeto.TipoObjeto.Flor || 
-            entry.tipo == Objeto.TipoObjeto.CollarShizune)
+            if (entry.item.tipo == Objeto.TipoObjeto.PergaminoSagrado || 
+            entry.item.tipo == Objeto.TipoObjeto.Flor || 
+            entry.item.tipo == Objeto.TipoObjeto.CollarShizune)
             {
                 return true;
             }

@@ -14,7 +14,8 @@ public class tsunade : MonoBehaviour
     public GameObject panelDialogo;
     public GameObject tsunadePanel2;
 
-    public GameObject[] recompensas;
+    //array objeto data
+    public ObjetoData[] recompensas;
     //public StatesMachine playerScript;
     public PlayerController playerScript;
     //private Objeto objetoSujeto;
@@ -187,24 +188,25 @@ public class tsunade : MonoBehaviour
 
     public void EntregarRecompensa()
     {
+        ObjetoData recompensaRecibida = null;
 
         switch (objetoRecibido.tipo)
         {
             case Objeto.TipoObjeto.PergaminoSagrado:
-                prefabRecompensa = recompensas[0];
+                recompensaRecibida = recompensas[0];
                 break;
             case Objeto.TipoObjeto.CollarShizune:
-                prefabRecompensa = recompensas[1];
+                recompensaRecibida = recompensas[1];
                 break;
             case Objeto.TipoObjeto.Flor:
-                prefabRecompensa = recompensas[2];
+                recompensaRecibida = recompensas[2];
                 break;
         }
-        GameObject recompensaInstanciada = Instantiate(prefabRecompensa);
+        /*GameObject recompensaInstanciada = Instantiate(recompensaRecibida.prefab);
         objetoRecompensa = recompensaInstanciada.GetComponent<Objeto>();
-        objetoRecompensa.esRecompensa = true;
+        objetoRecompensa.esRecompensa = true;*/
 
-        playerScript.inventario.AñadirObjeto(objetoRecompensa);
+        playerScript.inventario.AñadirObjeto(recompensaRecibida);
         recompensaEntregadaRecientemente = true;
 
         //Destroy(recompensaInstanciada);

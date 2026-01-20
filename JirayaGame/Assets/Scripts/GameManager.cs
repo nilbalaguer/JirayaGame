@@ -88,6 +88,8 @@ public class GameManager : MonoBehaviour
     public Button btnTienda;
     public BehaviourErmitaño ermitañoTienda;
 
+    public List<Inventario.InventoryEntry> inventarioGlobal = new();
+
     void Awake()
     {
         if (Instance == null)

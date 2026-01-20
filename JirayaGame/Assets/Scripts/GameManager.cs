@@ -437,4 +437,9 @@ public class GameManager : MonoBehaviour
         
     }
 
+    public void PararCancionCombate()
+    {
+        audioSource.Stop();
+    }
+
 }

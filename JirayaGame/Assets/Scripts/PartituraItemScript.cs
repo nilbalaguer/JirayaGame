@@ -3,6 +3,7 @@ using UnityEngine;
 public class PartituraItemScript : MonoBehaviour
 {
     private GameManager gameManager;
+    public PanelInterno panelInterno;
 
     [Tooltip("Clave usada para activar i desactivar puerta")]
     public string claveTPdesactivar;
@@ -24,6 +25,8 @@ public class PartituraItemScript : MonoBehaviour
         {
             gameManager.ObtenerPartitura();
             gameManager.DesabilitarTP(claveTPdesactivar);
+            string[] temporal = {"Parece que he conseguido una parte de la partitura", "Tengo que probar de tocarlo en el instrumento"};
+            panelInterno.AbrirPanelInterno(temporal);
             Destroy(gameObject);
         }
     }

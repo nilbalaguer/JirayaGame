@@ -336,7 +336,7 @@ public class PlayerController : MonoBehaviour
 
                 }
 
-                if ((Input.GetButtonDown("Fire3") || Input.GetButtonDown("Y")) && GameManager.Instance.puedeTransformarse) //mando Y
+                if ((Input.GetButtonDown("Fire3") || Input.GetButtonDown("Y")) && GameManager.Instance.puedeTransformarse && forceX == 0f && forceY == 0f) //mando Y
                 {
                     human = !human;
 
@@ -745,6 +745,13 @@ public class PlayerController : MonoBehaviour
         CanvasInfo.SetActive(false);
     }
 
+    private void OnTriggerStay2D(Collider2D other) {
+        if (other.CompareTag("Enemy"))
+        {
+            GameManager.Instance.TocarCancionCombate();
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("intObject") && toatTongeTonge.enabled)
@@ -816,6 +823,11 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Saliste del rango de Tsunade");
             tsunadeCerca = false;
+        }
+
+        if (other.CompareTag("Enemy"))
+        {
+            GameManager.Instance.PararCancionCombate();
         }
     }
 

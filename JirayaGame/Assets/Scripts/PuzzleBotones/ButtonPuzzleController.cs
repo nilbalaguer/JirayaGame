@@ -9,6 +9,7 @@ public class ButtonPuzzleController : MonoBehaviour
     [SerializeField] FloorButonScript boton5;
 
     [SerializeField] GameObject partituraPrefab;
+    [SerializeField] PanelInterno panelInterno;
 
     private bool exploded = false;
 
@@ -29,6 +30,7 @@ public class ButtonPuzzleController : MonoBehaviour
             GameObject tempPartitura = Instantiate(partituraPrefab, transform.position, Quaternion.identity);
             PartituraItemScript tempPartituraItemScript = tempPartitura.GetComponent<PartituraItemScript>();
             tempPartituraItemScript.claveTPdesactivar = "mazzmorraBotones";
+            tempPartituraItemScript.panelInterno = panelInterno;
             particleSystem.Play();
             audioSource.Play();
             Destroy(gameObject, 2f);

@@ -45,18 +45,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53f82d86948ca4d438847f410fba26a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  puedeTransformarse: 0
   estadoActual: 0
+  introFinalizadaGlobal: 0
   inventario: {fileID: 0}
   player: {fileID: 0}
   npcIntro: {fileID: 0}
   textoMonedas: {fileID: 0}
   monedas: 0
+  swapHabilidad: 0
+  habilidadSwapIcono: {fileID: 0}
+  monedaPrefab: {fileID: 0}
   deathSound: {fileID: 8300000, guid: bb3e3a455af832148a3210d29a321064, type: 3}
-  enemyDeathSound: {fileID: 8300000, guid: 13555539834851b41b905e1d98481783, type: 3}
+  enemyDeathSound: {fileID: 8300000, guid: 1d149bd152bc2184e8e53d9fda78742c, type: 3}
+  musicaCombate: {fileID: 8300000, guid: 2a4faed5d76c7554ebf4f85609a560d4, type: 3}
   vidaPlayer: 10
+  tiempoDeJuego: 0
   sangrePrefab: {fileID: 3483324481639542212, guid: ca8b5a3da5e8e3f41b693545ce23e017, type: 3}
   partiturasNumero: 0
   tiendaAlerta: {fileID: 0}
+  timelineTsunade: {fileID: 0}
+  "timelineErmita\xF1oTienda": {fileID: 0}
+  objetosTotales: 6
+  objetosRecogidos: 0
+  textoObjetos: {fileID: 0}
+  panelTiendaDesbloqueo: {fileID: 0}
+  btnTienda: {fileID: 0}
 --- !u!82 &651056812892176692
 AudioSource:
   m_ObjectHideFlags: 0

@@ -23,6 +23,7 @@ public class PuzzleEspejoScript : MonoBehaviour
 
     [Header("Prefab")]
     [SerializeField] GameObject partituraPrefab;
+    [SerializeField] PanelInterno panelInterno;
 
     //Fase final
     private float contdown = 0;
@@ -91,6 +92,7 @@ public class PuzzleEspejoScript : MonoBehaviour
                 GameObject tempPartitura = Instantiate(partituraPrefab, transform.position, Quaternion.identity);
                 PartituraItemScript tempPartituraItemScript = tempPartitura.GetComponent<PartituraItemScript>();
                 tempPartituraItemScript.claveTPdesactivar = "mazzmorraEspjeos";
+                tempPartituraItemScript.panelInterno = panelInterno;
                 audioSource.Stop();
                 audioSource.pitch = 1;
                 audioSource.PlayOneShot(explosionFinal);

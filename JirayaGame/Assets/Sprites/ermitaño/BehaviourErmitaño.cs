@@ -48,7 +48,14 @@ public class BehaviourErmitaño : MonoBehaviour
         }*/
         CanvasTienda.SetActive(false);
         enemy = GameObject.FindWithTag("Enemy");
-        canvasPatrol.SetActive(false);
+        if (canvasPatrol != null)
+        {
+            canvasPatrol.SetActive(false);
+        }
+        else
+        {
+            canvasPatrol = null;
+        }
 
         if (esErmitañoTienda)
         {

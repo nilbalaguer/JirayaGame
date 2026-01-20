@@ -79,7 +79,8 @@ public class Inventario : MonoBehaviour
         //if (Input.GetButtonDown("Fire2"))
         if (Input.GetButtonDown("RB"))
         {
-            if (!navegacionActiva)
+            //Si hay objetos en el inventario no activar la navegacion
+            if (!navegacionActiva && objetos.Count > 0)
             {
                 navegacionActiva = true;
                 indiceSeleccionActual = 0;

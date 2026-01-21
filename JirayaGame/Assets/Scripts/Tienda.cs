@@ -6,8 +6,8 @@ using UnityEngine.EventSystems;
 
 public class Tienda : MonoBehaviour
 {
-    public List<Objeto> objetos = new List<Objeto>();
-    public Objeto[] objetosTienda;
+    public List<ObjetoData> objetos = new List<ObjetoData>();
+    public ObjetoData[] objetosTienda;
     private List<GameObject> btnSlots = new List<GameObject>();
 
     public GameObject btnPrefab;
@@ -68,7 +68,7 @@ public class Tienda : MonoBehaviour
 
             if (i < objetos.Count)
             {
-                Objeto obj = objetos[i];
+                ObjetoData obj = objetos[i];
                 img.sprite = obj.icono;
                 img.enabled = true;
                 btnComp.interactable = true;
@@ -76,7 +76,7 @@ public class Tienda : MonoBehaviour
 
                 btnComp.onClick.RemoveAllListeners();
 
-                Objeto objetoCapturado = obj;
+                ObjetoData objetoCapturado = obj;
                 btnComp.onClick.AddListener(() =>
                 {
                     GameManager.Instance.ComprarObjetos(objetoCapturado);

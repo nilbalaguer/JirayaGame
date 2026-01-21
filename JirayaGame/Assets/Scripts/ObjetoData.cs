@@ -7,5 +7,6 @@ public class ObjetoData : ScriptableObject
     public GameObject prefab;
     public Sprite icono;
     public Objeto.TipoObjeto tipo;
+    public int precioTienda = 10;
     public Vector3 escalaOriginal;
 }

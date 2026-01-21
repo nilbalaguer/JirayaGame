@@ -264,7 +264,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ComprarObjetos(Objeto objetoComprado)
+    public void ComprarObjetos(ObjetoData objetoComprado)
     {
         int precio = objetoComprado.precioTienda;
 
@@ -274,9 +274,9 @@ public class GameManager : MonoBehaviour
             textoMonedas.text = monedas.ToString();
             Debug.Log("Objeto comprado");
             //player.EquiparObjeto(objetoComprado);
-            GameObject ObjInstanciado = Instantiate(objetoComprado.gameObject);
-            objetoCompradoNuevo = ObjInstanciado.GetComponent<Objeto>();
-            inventario.AñadirObjeto(objetoCompradoNuevo);
+            //GameObject ObjInstanciado = Instantiate(objetoComprado.gameObject);
+            //objetoCompradoNuevo = ObjInstanciado.GetComponent<Objeto>();
+            inventario.AñadirObjeto(objetoComprado);
             ermitañoTienda.CerrarTienda();
         }
         else

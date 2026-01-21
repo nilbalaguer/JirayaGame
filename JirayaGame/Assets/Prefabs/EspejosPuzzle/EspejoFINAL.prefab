@@ -188,8 +188,8 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
+      key0: {r: 0, g: 1, b: 0.7280469, a: 1}
+      key1: {r: 0.4716981, g: 0.23762904, b: 0.44614255, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -213,7 +213,7 @@ LineRenderer:
       atime6: 0
       atime7: 0
       m_Mode: 0
-      m_ColorSpace: -1
+      m_ColorSpace: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 0
@@ -251,6 +251,7 @@ MonoBehaviour:
   RightSprite: {fileID: 1086095183384291599, guid: d07990d4cb5ebe94d9dfc934c662d5b8, type: 3}
   LeftSprite: {fileID: -1284467124904113075, guid: 73ea86dcd2c094e45ad9b627ded0d644, type: 3}
   partituraPrefab: {fileID: 3738801817292522799, guid: c3e759c0e74e40f48ab9b17a84d7ac9a, type: 3}
+  panelInterno: {fileID: 0}
   explosionFinal: {fileID: 8300000, guid: 957714c64bdac774f9870082271ccec7, type: 3}
 --- !u!82 &2844041361561275026
 AudioSource:

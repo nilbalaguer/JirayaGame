@@ -58,7 +58,7 @@ public class CicloDiaController : MonoBehaviour
             }
             if (particulasLluvia.isPlaying)
             {
-                particulasLluvia.Stop();
+                particulasLluvia.Stop(true, ParticleSystemStopBehavior.StopEmitting);
                 audioSource.Stop();
             }
         }
@@ -82,7 +82,7 @@ public class CicloDiaController : MonoBehaviour
             cicloSiguiente = 3;
             if (particulasLluvia.isPlaying)
             {
-                particulasLluvia.Stop();
+                particulasLluvia.Stop(true, ParticleSystemStopBehavior.StopEmitting);
                 audioSource.Stop();
             }
         }
@@ -93,7 +93,7 @@ public class CicloDiaController : MonoBehaviour
             cicloSiguiente = 0;
             if (particulasLluvia.isPlaying)
             {
-                particulasLluvia.Stop();
+                particulasLluvia.Stop(true, ParticleSystemStopBehavior.StopEmitting);
                 audioSource.Stop();
             }
 

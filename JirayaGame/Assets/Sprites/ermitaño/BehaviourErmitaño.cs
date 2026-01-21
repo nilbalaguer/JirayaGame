@@ -205,6 +205,7 @@ public class BehaviourErmitaño : MonoBehaviour
                     panelTienda.SetActive(true);
                     panelTienda.GetComponent<Tienda>().PosicionarPrimerObjetoXbox();
                     tiendaAbierta = true;
+                    GameManager.Instance.inputDesactivado = true;
 
                     /*if (Input.GetKeyDown(KeyCode.J) || Input.GetButtonDown("B"))
                     {
@@ -305,6 +306,7 @@ public class BehaviourErmitaño : MonoBehaviour
     {
         panelTienda.SetActive(false);
         currentState = State.Idle;
+        GameManager.Instance.inputDesactivado = false;
         EventSystem.current.SetSelectedGameObject(null);
     }
 

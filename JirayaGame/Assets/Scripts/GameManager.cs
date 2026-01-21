@@ -91,6 +91,7 @@ public class GameManager : MonoBehaviour
     public BehaviourErmitaño ermitañoTienda;
 
     public List<Inventario.InventoryEntry> inventarioGlobal = new();
+    public bool inputDesactivado = false;
 
     void Awake()
     {
@@ -414,8 +415,6 @@ public class GameManager : MonoBehaviour
 
     public void OnCinematicEndTsunade()
     {
-        EventSystem.current.SetSelectedGameObject(btnTienda.gameObject);
-        panelTiendaDesbloqueo.SetActive(true);
         player.maxSpeed = 5;
     }
 

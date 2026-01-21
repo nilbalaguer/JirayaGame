@@ -255,6 +255,7 @@ public class NpcStates : MonoBehaviour
                             panelNpcScript.npcScript = this;
                             player.GetComponent<PlayerController>().puedoMoverme = false;
                         }
+                        GameManager.Instance.inputDesactivado = true;
                     }
                 }
                 else

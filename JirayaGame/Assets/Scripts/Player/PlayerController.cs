@@ -210,6 +210,15 @@ public class PlayerController : MonoBehaviour
         float forceX = Input.GetAxis("Horizontal");
         float forceY = Input.GetAxis("Vertical");
 
+        if (forceX > 0)
+        {
+            lastMove = 3;
+        }
+        else if (forceX < 0)
+        {
+            lastMove = 4;
+        }
+
         if (forceY > 0)
         {
             lastMove = 1;
@@ -217,14 +226,6 @@ public class PlayerController : MonoBehaviour
         else if (forceY < 0)
         {
             lastMove = 2;
-        }
-        else if (forceX > 0)
-        {
-            lastMove = 3;
-        }
-        else if (forceX < 0)
-        {
-            lastMove = 4;
         }
 
         Vector2 movimiento = new Vector2(forceX, forceY) * maxSpeed;
@@ -257,22 +258,28 @@ public class PlayerController : MonoBehaviour
             case "MoveUp":
             case "MoveDown":
 
-                if (rigidBody.linearVelocity.x > 0)
+                if (Mathf.Abs(rigidBody.linearVelocity.x) > Mathf.Abs(rigidBody.linearVelocity.y))
                 {
-                    state = "MoveRight";
-                }
-                else if (rigidBody.linearVelocity.x < 0)
-                {
-                    state = "MoveLeft";
+                    if (rigidBody.linearVelocity.x > 0)
+                    {
+                        state = "MoveRight";
+                    }
+                    else if (rigidBody.linearVelocity.x < 0)
+                    {
+                        state = "MoveLeft";
+                    }
                 }
 
-                if (rigidBody.linearVelocity.y > 0)
+                if (Mathf.Abs(rigidBody.linearVelocity.x) < Mathf.Abs(rigidBody.linearVelocity.y))
                 {
-                    state = "MoveUp";
-                }
-                else if (rigidBody.linearVelocity.y < 0)
-                {
-                    state = "MoveDown";
+                    if (rigidBody.linearVelocity.y > 0)
+                    {
+                        state = "MoveUp";
+                    }
+                    else if (rigidBody.linearVelocity.y < 0)
+                    {
+                        state = "MoveDown";
+                    }
                 }
 
                 if (rigidBody.linearVelocity.x == 0 && rigidBody.linearVelocity.y == 0 && state != "Attack")

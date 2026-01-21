@@ -211,7 +211,7 @@ MonoBehaviour:
   m_LightType: 3
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
-  m_Color: {r: 1, g: 0.745283, b: 0.95424247, a: 1}
+  m_Color: {r: 0.4433962, g: 0.9834645, b: 1, a: 1}
   m_Intensity: 2
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
@@ -236,7 +236,7 @@ MonoBehaviour:
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
-  m_PointLightOuterRadius: 5
+  m_PointLightOuterRadius: 2.72
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
@@ -550,7 +550,7 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 0, b: 0.9958687, a: 1}
+      key0: {r: 0, g: 1, b: 0.7280469, a: 1}
       key1: {r: 0.4716981, g: 0.23762904, b: 0.44614255, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -613,6 +613,7 @@ MonoBehaviour:
   RightSprite: {fileID: 1086095183384291599, guid: d07990d4cb5ebe94d9dfc934c662d5b8, type: 3}
   LeftSprite: {fileID: -1284467124904113075, guid: 73ea86dcd2c094e45ad9b627ded0d644, type: 3}
   partituraPrefab: {fileID: 0}
+  panelInterno: {fileID: 0}
   explosionFinal: {fileID: 0}
 --- !u!114 &8837065352883354427
 MonoBehaviour:

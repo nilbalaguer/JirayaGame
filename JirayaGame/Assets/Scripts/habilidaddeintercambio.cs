@@ -27,7 +27,7 @@ public class habilidaddeintercambio : MonoBehaviour
     void Update()
     {
         
-        if ((Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.JoystickButton0)) && gameManager.swapHabilidad == true)
+        if ((Input.GetKey(KeyCode.E) || Input.GetButton("B")) && gameManager.swapHabilidad == true)
         {
             prefabHitboxRadius.enabled = true;
 
@@ -39,7 +39,7 @@ public class habilidaddeintercambio : MonoBehaviour
         }
 
 
-        if ((Input.GetKeyUp(KeyCode.E) || Input.GetKeyUp(KeyCode.JoystickButton0)) && selectedObject != null && gameManager.swapHabilidad == true)
+        if ((Input.GetKeyUp(KeyCode.E) || Input.GetButtonUp("B")) && selectedObject != null && gameManager.swapHabilidad == true)
         {
             SwapPositionsWithSelected();
             prefabHitboxRadius.enabled = false;
@@ -47,7 +47,7 @@ public class habilidaddeintercambio : MonoBehaviour
 
 
 
-        } else if (Input.GetKeyUp(KeyCode.E) || Input.GetKeyUp(KeyCode.JoystickButton0))
+        } else if (Input.GetKeyUp(KeyCode.E) || Input.GetButtonUp("B"))
         {
             prefabHitboxRadius.enabled = false;
 

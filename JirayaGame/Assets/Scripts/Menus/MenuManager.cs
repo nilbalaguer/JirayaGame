@@ -6,6 +6,7 @@ public class MenuManager : MonoBehaviour
 {
     public GameObject panelOpciones;
     public GameObject panelControles;
+    public GameObject panelMenu;
 
     public GameObject botonInicialMenu;
     public GameObject botonInicialOpciones;
@@ -37,24 +38,28 @@ public class MenuManager : MonoBehaviour
 
     public void AbrirOpciones()
     {
+        panelMenu.SetActive(false);
         panelOpciones.SetActive(true); 
         EventSystem.current.SetSelectedGameObject(botonInicialOpciones);
     }
 
     public void CerrarOpciones()
     {
+        panelMenu.SetActive(true);
         panelOpciones.SetActive(false);
         EventSystem.current.SetSelectedGameObject(botonInicialMenu); 
     }
 
     public void AbrirControles()
     {
+        panelMenu.SetActive(false);
         panelControles.SetActive(true);
         EventSystem.current.SetSelectedGameObject(botonInicialControles); 
     }
 
     public void CerrarControles()
     {
+        panelMenu.SetActive(true);
         panelControles.SetActive(false); 
         EventSystem.current.SetSelectedGameObject(botonInicialMenu);
     }

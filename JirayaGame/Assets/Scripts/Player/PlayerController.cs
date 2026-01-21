@@ -137,6 +137,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.Instance.inputDesactivado)
+        {
+            return;
+        }
+        
         //Sistema Katana para el cooldown i para activar i desactivar el katana collider solo por 0.1 segundos
         if (cooldownMele > 0)
         {

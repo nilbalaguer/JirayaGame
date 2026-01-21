@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c858e09bb4a90df468c716baa8713e0f
+guid: 5070d9c548c5f094b9df204dd4acd38a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4345462867533152315
-    second: shuriken_0
+      213: -4071774360054307419
+    second: water4_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,12 +46,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -100,23 +100,45 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: shuriken_0
+      name: water4_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 18
-        height: 18
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 5cf39049b80d1b3c0800000000000000
-      internalID: -4345462867533152315
+      spriteID: 37ea0c61383b6f14d87cbb6a9762034b
+      internalID: -4071774360054307419
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: water4_1
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71cfea8b39b12e04c91232c2d7f738dd
+      internalID: 353679113
       vertices: []
       indices: 
       edges: []
@@ -125,7 +147,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 5e3084ec14c69d145949938396fc96cf
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +157,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      shuriken_0: -4345462867533152315
+      water4_0: -4071774360054307419
+      water4_1: 353679113
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

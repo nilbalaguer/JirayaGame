@@ -114,6 +114,7 @@ public class ScrollPanel : MonoBehaviour
                 Debug.Log("No se encontró el NPC destino");
             }
         }
+        GameManager.Instance.inputDesactivado = false;
     }
 
     public void botonNo()
@@ -127,6 +128,7 @@ public class ScrollPanel : MonoBehaviour
             npcScript = null;
         }
         playerScript.puedoMoverme = true;
+        GameManager.Instance.inputDesactivado = false;
     }
 
     //Asignar texto de la mision correspondiente

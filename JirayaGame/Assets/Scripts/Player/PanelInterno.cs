@@ -18,6 +18,7 @@ public class PanelInterno : MonoBehaviour
     private Coroutine typeCoroutine;
     public int letrasPorSonido = 2; 
     private int contadorLetras = 0;
+    private PlayerController player;
 
     void Awake()
     {
@@ -30,6 +31,8 @@ public class PanelInterno : MonoBehaviour
 
         animator = GetComponent<Animator>();
         gameObject.SetActive(false);
+        GameObject playerScript = GameObject.Find("Player");
+        player = playerScript.GetComponent<PlayerController>(); 
 
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -63,6 +66,7 @@ public class PanelInterno : MonoBehaviour
         textoPanel.text = "";
 
         gameObject.SetActive(true);
+        
     }
 
     public void ShowPage()
@@ -84,6 +88,7 @@ public class PanelInterno : MonoBehaviour
         else
         {
             animator.SetTrigger("Close");
+            player.maxSpeed = 5;
         }
     }
 

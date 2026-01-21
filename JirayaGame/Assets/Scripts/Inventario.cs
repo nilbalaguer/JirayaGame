@@ -79,7 +79,8 @@ public class Inventario : MonoBehaviour
         //if (Input.GetButtonDown("Fire2"))
         if (Input.GetButtonDown("RB"))
         {
-            if (!navegacionActiva)
+            //Si hay objetos en el inventario no activar la navegacion
+            if (!navegacionActiva && objetos.Count > 0)
             {
                 navegacionActiva = true;
                 indiceSeleccionActual = 0;
@@ -135,7 +136,7 @@ public class Inventario : MonoBehaviour
         foreach (GameObject btn in btnSlots)
         {
             Image img = btn.GetComponent<Image>();
-            img.color = new Color(img.color.r, img.color.g, img.color.b, 0f);
+            //img.color = new Color(img.color.r, img.color.g, img.color.b, 0f);
             Transform cursor = btn.transform.Find("Flecha");
             cursor.gameObject.SetActive(false);
         }
@@ -151,7 +152,8 @@ public class Inventario : MonoBehaviour
             if (i < objetos.Count)
             {
                 // Mostrar todos los objetos
-                img.color = new Color(img.color.r, img.color.g, img.color.b, 0.5f);
+                img.enabled = true;
+                img.color = new Color(1f, 1f, 1f, 0.5f);
 
                 if (cursor != null)
                 {
@@ -161,7 +163,7 @@ public class Inventario : MonoBehaviour
             else
             {
 
-                img.color = new Color(img.color.r, img.color.g, img.color.b, 0f);
+                img.enabled = false;
 
                 if (cursor != null)
                 {
@@ -183,7 +185,7 @@ public class Inventario : MonoBehaviour
             Transform cursor = btn.transform.Find("Flecha");
             if (i == indiceSeleccionActual)
             {
-                img.color = new Color(img.color.r, img.color.g, img.color.b, 1f);
+                img.color = new Color(1f, 1f, 1f, 1f);
                 if (cursor != null)
                 {
                     cursor.gameObject.SetActive(true);
@@ -191,7 +193,7 @@ public class Inventario : MonoBehaviour
             }
             else
             {
-                img.color = new Color(img.color.r, img.color.g, img.color.b, 0.5f);
+                img.color = new Color(1f, 1f, 1f, 0.6f);
                 if (cursor != null)
                 {
                     cursor.gameObject.SetActive(false);
@@ -326,6 +328,23 @@ public class Inventario : MonoBehaviour
                 entry.item = objetoData;
                 entry.cantidad = 1;
                 objetos.Add(entry);
+
+                // Auto-equip si no tiene nada equipado y el shuriken es el objeto añadido
+                if (player.objetoSujeto == null && objetoData.nombre == "Shuriken")
+                {
+                    GameObject nueva = Instantiate(objetoData.prefab);
+                    Objeto nuevoObj = nueva.GetComponent<Objeto>();
+                    nueva.transform.localScale = objetoData.escalaOriginal;
+                    if (nuevoObj != null)
+                    {
+                        player.EquiparObjeto(nuevoObj);
+                        //EliminarObjeto(entry);
+                    }
+                    else
+                    {
+                        Debug.Log("No se pudo instanciar objeto para equipar.");
+                    }
+                }
             }
             else
             {
@@ -335,6 +354,17 @@ public class Inventario : MonoBehaviour
         else
         {
             existe.cantidad++;
+            if (player.objetoSujeto == null && existe.item.nombre == "Shuriken")
+            {
+                GameObject nuevaExist = Instantiate(existe.item.prefab);
+                Objeto nuevoDesdeExist = nuevaExist.GetComponent<Objeto>();
+                nuevaExist.transform.localScale = existe.item.escalaOriginal;
+                if (nuevoDesdeExist != null)
+                {
+                    player.EquiparObjeto(nuevoDesdeExist);
+                    //EliminarObjeto(existe);
+                }
+            }
 
             //Si hay mas de 3 unidades no se añade mas
             if (existe.cantidad >= 3)

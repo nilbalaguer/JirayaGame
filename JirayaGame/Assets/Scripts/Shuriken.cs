@@ -27,6 +27,9 @@ public class Shuriken : MonoBehaviour
             }
 
             Destroy(gameObject);
+        }else if (other.CompareTag("pared"))
+        {
+            Destroy(gameObject);
         }
     }
 }

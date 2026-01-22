@@ -709,7 +709,7 @@ public class PlayerController : MonoBehaviour
 
         objetoSujeto.Coger(puntoSujecion);
         objetoSujeto.transform.localScale = Vector3.one;
-        CanvasInfo.SetActive(true);
+        CanvasInfo.SetActive(false);
     }
 
     //Soltar objeto

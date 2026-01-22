@@ -346,30 +346,39 @@ public class GameManager : MonoBehaviour
             Debug.Log("Holis");
         }
         playerGameObject = GameObject.FindGameObjectWithTag("Player");
-        if (timelineTsunade == null)
+
+        try
         {
-            timelineTsunade = GameObject.Find("TimelineTsunade1").GetComponent<PlayableDirector>();
+            if (timelineTsunade == null)
+            {
+                timelineTsunade = GameObject.Find("TimelineTsunade1").GetComponent<PlayableDirector>();
+            }
+            GameObject txtMonedas = GameObject.FindGameObjectWithTag("Monedas");
+            if (txtMonedas != null)
+            {
+                textoMonedas = txtMonedas.GetComponent<TextMeshProUGUI>();
+            }
+            textoMonedas.text = monedas.ToString();
+            GameObject ermitaño = GameObject.FindGameObjectWithTag("ErmitañoTienda");
+            if (ermitaño != null)
+            {
+                ermitañoTienda = ermitaño.GetComponent<BehaviourErmitaño>();
+            }
+            playerGameObject = GameObject.Find("Player");
+            GameObject npcObj = GameObject.FindGameObjectWithTag("NpcInicial");
+            if (npcObj != null)
+            {
+                npcIntro = npcObj.GetComponent<NpcStates>();
+            }
+            else
+            {
+                npcIntro = null;
+            }
         }
-        GameObject txtMonedas = GameObject.FindGameObjectWithTag("Monedas");
-        if (txtMonedas != null)
+        catch (System.Exception)
         {
-            textoMonedas = txtMonedas.GetComponent<TextMeshProUGUI>();
-        }
-        textoMonedas.text = monedas.ToString();
-        GameObject ermitaño = GameObject.FindGameObjectWithTag("ErmitañoTienda");
-        if (ermitaño != null)
-        {
-            ermitañoTienda = ermitaño.GetComponent<BehaviourErmitaño>();
-        }
-        playerGameObject = GameObject.Find("Player");
-        GameObject npcObj = GameObject.FindGameObjectWithTag("NpcInicial");
-        if (npcObj != null)
-        {
-            npcIntro = npcObj.GetComponent<NpcStates>();
-        }
-        else
-        {
-            npcIntro = null;
+            
+            Debug.Log("Holis2");
         }
 
         Debug.Log("Antes de while");

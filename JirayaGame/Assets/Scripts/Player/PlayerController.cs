@@ -368,7 +368,7 @@ public class PlayerController : MonoBehaviour
                     saltarSapo();
                 }
 
-                if ( Input.GetButton("LB") && staminaParry > 0 && human)
+                if (Input.GetButton("Fire2") || Input.GetButton("LB") && staminaParry > 0 && human)
                 {
                     state = "Parry";
                 }

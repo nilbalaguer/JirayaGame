@@ -648,6 +648,7 @@ public class PlayerController : MonoBehaviour
         if (entrada != null)
         {
             GameManager.Instance.puedeAtacar = true;
+            CanvasInfo.SetActive(false);
             inventario.EliminarObjeto(entrada);
         }
 
@@ -711,7 +712,7 @@ public class PlayerController : MonoBehaviour
 
         objetoSujeto.Coger(puntoSujecion);
         objetoSujeto.transform.localScale = Vector3.one;
-        CanvasInfo.SetActive(false);
+        CanvasInfo.SetActive(true);
     }
 
     //Soltar objeto

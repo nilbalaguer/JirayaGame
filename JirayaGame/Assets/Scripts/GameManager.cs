@@ -396,7 +396,6 @@ public class GameManager : MonoBehaviour
                 ermitañoTienda = ermitaño.GetComponent<BehaviourErmitaño>();
             }
             playerGameObject = GameObject.Find("Player");
-            GameObject npcObj = GameObject.FindGameObjectWithTag("NpcInicial");
             if (npcObj != null)
             {
                 npcIntro = npcObj.GetComponent<NpcStates>();
@@ -421,7 +420,6 @@ public class GameManager : MonoBehaviour
 
             audioSource = gameObject.GetComponent<AudioSource>();
 
-            GameObject parryObj = GameObject.Find("vidaIndicator");
             indicadorVida = parryObj.GetComponent<Image>();
             indicadorVida.fillAmount = vidaPlayer / 10;
 
@@ -444,7 +442,7 @@ public class GameManager : MonoBehaviour
 
                 audioSource = gameObject.GetComponent<AudioSource>();
 
-                GameObject parryObj = GameObject.Find("vidaIndicator");
+                // GameObject parryObj = GameObject.Find("vidaIndicator");
                 indicadorVida = parryObj.GetComponent<Image>();
                 indicadorVida.fillAmount = vidaPlayer / 10;
 

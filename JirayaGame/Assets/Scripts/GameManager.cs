@@ -96,6 +96,7 @@ public class GameManager : MonoBehaviour
 
     public List<Inventario.InventoryEntry> inventarioGlobal = new();
     public bool inputDesactivado = false;
+    public Dictionary<string, bool> npcHablados = new Dictionary<string, bool>();
 
     void Awake()
     {
@@ -115,15 +116,6 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         
-        GameObject txtMonedas = GameObject.FindGameObjectWithTag("Monedas");
-        if (txtMonedas != null)
-        {
-            textoMonedas = txtMonedas.GetComponent<TextMeshProUGUI>();
-        }
-        textoMonedas.text = monedas.ToString();
-        playerGameObject = GameObject.Find("Player");
-        player = playerGameObject.GetComponent<PlayerController>();
-        inventario = player.GetComponent<Inventario>();
         GameObject npcObj = GameObject.FindGameObjectWithTag("NpcInicial");
         if (npcObj != null)
         {
@@ -176,12 +168,12 @@ public class GameManager : MonoBehaviour
                 npcIntro.introTerminada = true;
             }
         }
-        monedas = 0;
         //textoMonedas.text = monedas.ToString();
         //tiendaAlerta.SetActive(false);
-
-        playerGameObject = GameObject.Find("Player");
-        player = playerGameObject.GetComponent<PlayerController>();
+        if (playerGameObject != null)
+        {
+            player = playerGameObject.GetComponent<PlayerController>();
+        }
 
         player.puedoMoverme = true;
 
@@ -341,6 +333,39 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        playerGameObject = GameObject.Find("Player");
+        if (playerGameObject != null)
+        {
+            player = playerGameObject.GetComponent<PlayerController>();
+            inventario = playerGameObject.GetComponent<Inventario>();
+            playerGameObject.transform.position = posicionInicioSiguienteEscena;
+        }else
+        {
+            Debug.Log("No se encontró el objeto Player en la escena cargada.");
+        }
+
+        audioSource = gameObject.GetComponent<AudioSource>();
+
+        GameObject parryObj = GameObject.Find("vidaIndicator");
+        indicadorVida = parryObj.GetComponent<Image>();
+        indicadorVida.fillAmount = vidaPlayer / 10;
+
+        GameObject npcObj = GameObject.FindGameObjectWithTag("NpcInicial");
+        if (npcObj != null)
+        {
+            npcIntro = npcObj.GetComponent<NpcStates>();
+        }
+        else
+        {
+            npcIntro = null;
+        }
+
+        if (introFinalizadaGlobal && npcIntro != null)
+        {
+            npcIntro.NpcIntro = false;
+            npcIntro.introTerminada = true;
+        }
+
         if (timelineTsunade == null)
         {
             timelineTsunade = GameObject.Find("TimelineTsunade1").GetComponent<PlayableDirector>();
@@ -355,39 +380,6 @@ public class GameManager : MonoBehaviour
         if (ermitaño != null)
         {
             ermitañoTienda = ermitaño.GetComponent<BehaviourErmitaño>();
-        }
-        playerGameObject = GameObject.Find("Player");
-        GameObject npcObj = GameObject.FindGameObjectWithTag("NpcInicial");
-        if (npcObj != null)
-        {
-            npcIntro = npcObj.GetComponent<NpcStates>();
-        }
-        else
-        {
-            npcIntro = null;
-        }
-
-        if (playerGameObject != null)
-        {
-            player = playerGameObject.GetComponent<PlayerController>();
-            playerGameObject.transform.position = posicionInicioSiguienteEscena;
-            inventario = player.GetComponent<Inventario>();
-
-            audioSource = gameObject.GetComponent<AudioSource>();
-
-            GameObject parryObj = GameObject.Find("vidaIndicator");
-            indicadorVida = parryObj.GetComponent<Image>();
-            indicadorVida.fillAmount = vidaPlayer / 10;
-
-            if (introFinalizadaGlobal && npcIntro != null)
-            {
-                npcIntro.NpcIntro = false;
-                npcIntro.introTerminada = true;
-            }
-        }
-        else
-        {
-            Debug.LogWarning("No se encontró el jugador en la nueva escena.");
         }
     }
 
@@ -458,6 +450,23 @@ public class GameManager : MonoBehaviour
     {
         panelTiendaDesbloqueo.SetActive(false);
         EventSystem.current.SetSelectedGameObject(null);
+    }
+
+    public void GuardarNPCHablado(string npcName)
+    {
+        if (!npcHablados.ContainsKey(npcName))
+        {
+            npcHablados.Add(npcName, true);
+        }
+        else
+        {
+            npcHablados[npcName] = true;
+        }
+    }
+
+    public bool NpcHablado (string npcName)
+    {
+        return npcHablados.ContainsKey(npcName) && npcHablados[npcName];
     }
 
 }

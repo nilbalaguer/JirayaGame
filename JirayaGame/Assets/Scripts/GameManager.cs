@@ -97,6 +97,7 @@ public class GameManager : MonoBehaviour
     public List<Inventario.InventoryEntry> inventarioGlobal = new();
     public bool inputDesactivado = false;
     public Dictionary<string, bool> npcHablados = new Dictionary<string, bool>();
+    public bool puedeAtacar = true;
 
     void Awake()
     {
@@ -277,6 +278,7 @@ public class GameManager : MonoBehaviour
             //GameObject ObjInstanciado = Instantiate(objetoComprado.gameObject);
             //objetoCompradoNuevo = ObjInstanciado.GetComponent<Objeto>();
             inventario.AñadirObjeto(objetoComprado);
+            puedeAtacar = false;
             ermitañoTienda.CerrarTienda();
         }
         else

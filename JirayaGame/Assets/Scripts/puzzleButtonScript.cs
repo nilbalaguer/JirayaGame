@@ -20,6 +20,10 @@ public class puzzleButtonScript : MonoBehaviour
             ++objetosdentro;
             objetivo.SetActive(true);
             deathAreaPuente.enabled = false;
+            if (other.CompareTag("intObject"))
+            {
+                other.gameObject.transform.position = transform.position;
+            }
         }
         
     }

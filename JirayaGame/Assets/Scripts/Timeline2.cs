@@ -48,7 +48,7 @@ public class Timeline2 : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player") && !played)
+        if (collision.CompareTag("Player") && !played && !GameManager.Instance.timelineSapoMostrado)
         {
             colisionado = true;
             //playerScript.puedoMoverme = false;
@@ -68,6 +68,7 @@ public class Timeline2 : MonoBehaviour
         playerScript.maxSpeed = 5;
         playerScript.human = false;
         GameManager.Instance.puedeTransformarse = true;
+        GameManager.Instance.timelineSapoMostrado = true;
         //habilidadRana.enabled = true;
     }
 }

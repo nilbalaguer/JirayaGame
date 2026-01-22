@@ -84,6 +84,10 @@ public class GameManager : MonoBehaviour
     public bool timelineTsunadeMostrado = false;
     [HideInInspector]
     public bool timelineTiendaMostrado = false;
+    [HideInInspector]
+    public bool timelineMisionErmitañoMostrado = false;
+    [HideInInspector]
+    public bool timelineSapoMostrado = false;
     public int objetosTotales = 6;
     //panel informativo de tienda desbloqueada timeline
     public GameObject panelTiendaDesbloqueo;
@@ -116,6 +120,7 @@ public class GameManager : MonoBehaviour
         {
             textoMonedas = txtMonedas.GetComponent<TextMeshProUGUI>();
         }
+        textoMonedas.text = monedas.ToString();
         playerGameObject = GameObject.Find("Player");
         player = playerGameObject.GetComponent<PlayerController>();
         inventario = player.GetComponent<Inventario>();
@@ -138,6 +143,8 @@ public class GameManager : MonoBehaviour
         {
             textoMonedas = txtMonedas.GetComponent<TextMeshProUGUI>();
         }
+        textoMonedas.text = monedas.ToString();
+        
         GameObject ermitaño = GameObject.FindGameObjectWithTag("ErmitañoTienda");
         if (ermitaño != null)
         {

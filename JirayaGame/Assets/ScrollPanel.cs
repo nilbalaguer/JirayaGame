@@ -89,6 +89,7 @@ public class ScrollPanel : MonoBehaviour
 
         if (npcScript != null)
         {
+            GameManager.Instance.GuardarNPCHablado(npcScript.nameNpc);
             npcScript.hasTalked = true;
             npcScript = null;
         }

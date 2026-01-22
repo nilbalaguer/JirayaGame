@@ -55,7 +55,7 @@ public class Timeline : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player") && !played)
+        if (collision.CompareTag("Player") && !played && !GameManager.Instance.timelineMisionErmitañoMostrado)
         {
             colisionado = true;
             played = true;
@@ -82,5 +82,6 @@ public class Timeline : MonoBehaviour
 
         musicaFondo.clip = musicaMisionErmitaño;
         musicaFondo.Play();
+        GameManager.Instance.timelineMisionErmitañoMostrado = true;
     }
 }

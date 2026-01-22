@@ -85,6 +85,10 @@ public class GameManager : MonoBehaviour
     public bool timelineTsunadeMostrado = false;
     [HideInInspector]
     public bool timelineTiendaMostrado = false;
+    [HideInInspector]
+    public bool timelineMisionErmitañoMostrado = false;
+    [HideInInspector]
+    public bool timelineSapoMostrado = false;
     public int objetosTotales = 6;
     //panel informativo de tienda desbloqueada timeline
     public GameObject panelTiendaDesbloqueo;
@@ -93,6 +97,8 @@ public class GameManager : MonoBehaviour
 
     public List<Inventario.InventoryEntry> inventarioGlobal = new();
     public bool inputDesactivado = false;
+    public Dictionary<string, bool> npcHablados = new Dictionary<string, bool>();
+    public bool puedeAtacar = true;
 
     void Awake()
     {
@@ -112,14 +118,6 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         
-        GameObject txtMonedas = GameObject.FindGameObjectWithTag("Monedas");
-        if (txtMonedas != null)
-        {
-            textoMonedas = txtMonedas.GetComponent<TextMeshProUGUI>();
-        }
-        playerGameObject = GameObject.Find("Player");
-        player = playerGameObject.GetComponent<PlayerController>();
-        inventario = player.GetComponent<Inventario>();
         GameObject npcObj = GameObject.FindGameObjectWithTag("NpcInicial");
         if (npcObj != null)
         {
@@ -139,6 +137,8 @@ public class GameManager : MonoBehaviour
         {
             textoMonedas = txtMonedas.GetComponent<TextMeshProUGUI>();
         }
+        textoMonedas.text = monedas.ToString();
+        
         GameObject ermitaño = GameObject.FindGameObjectWithTag("ErmitañoTienda");
         if (ermitaño != null)
         {
@@ -171,12 +171,12 @@ public class GameManager : MonoBehaviour
                 npcIntro.introTerminada = true;
             }
         }
-        monedas = 0;
         //textoMonedas.text = monedas.ToString();
         //tiendaAlerta.SetActive(false);
-
-        playerGameObject = GameObject.Find("Player");
-        player = playerGameObject.GetComponent<PlayerController>();
+        if (playerGameObject != null)
+        {
+            player = playerGameObject.GetComponent<PlayerController>();
+        }
 
         player.puedoMoverme = true;
 
@@ -280,6 +280,7 @@ public class GameManager : MonoBehaviour
             //GameObject ObjInstanciado = Instantiate(objetoComprado.gameObject);
             //objetoCompradoNuevo = ObjInstanciado.GetComponent<Objeto>();
             inventario.AñadirObjeto(objetoComprado);
+            puedeAtacar = false;
             ermitañoTienda.CerrarTienda();
         }
         else
@@ -336,19 +337,49 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        try
+        playerGameObject = GameObject.Find("Player");
+        if (playerGameObject != null)
         {
-            textoMonedas.text = monedas.ToString();
-        }
-        catch (System.Exception)
+            player = playerGameObject.GetComponent<PlayerController>();
+            inventario = playerGameObject.GetComponent<Inventario>();
+            playerGameObject.transform.position = posicionInicioSiguienteEscena;
+        }else
         {
-            
-            Debug.Log("Holis");
+            Debug.Log("No se encontró el objeto Player en la escena cargada.");
         }
+
+        audioSource = gameObject.GetComponent<AudioSource>();
+
+        GameObject parryObj = GameObject.Find("vidaIndicator");
+        indicadorVida = parryObj.GetComponent<Image>();
+        indicadorVida.fillAmount = vidaPlayer / 10;
+
+        
         playerGameObject = GameObject.FindGameObjectWithTag("Player");
 
         try
         {
+            GameObject npcObj = GameObject.FindGameObjectWithTag("NpcInicial");
+            if (npcObj != null)
+            {
+                npcIntro = npcObj.GetComponent<NpcStates>();
+            }
+            else
+            {
+                npcIntro = null;
+            }
+
+            if (introFinalizadaGlobal && npcIntro != null)
+            {
+                npcIntro.NpcIntro = false;
+                npcIntro.introTerminada = true;
+            }
+
+            if (timelineTsunade == null)
+            {
+                textoMonedas.text = monedas.ToString();
+            }
+
             if (timelineTsunade == null)
             {
                 timelineTsunade = GameObject.Find("TimelineTsunade1").GetComponent<PlayableDirector>();
@@ -508,6 +539,22 @@ public class GameManager : MonoBehaviour
     public void PararCancionCombate()
     {
         audioSource.Stop();
+    }
+    public void GuardarNPCHablado(string npcName)
+    {
+        if (!npcHablados.ContainsKey(npcName))
+        {
+            npcHablados.Add(npcName, true);
+        }
+        else
+        {
+            npcHablados[npcName] = true;
+        }
+    }
+
+    public bool NpcHablado (string npcName)
+    {
+        return npcHablados.ContainsKey(npcName) && npcHablados[npcName];
     }
 
 }

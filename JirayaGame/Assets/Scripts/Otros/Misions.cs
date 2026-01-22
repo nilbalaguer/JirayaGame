@@ -142,12 +142,12 @@ public class Misions : MonoBehaviour
                 case MisionTipo.RecolectarMoneda:
                     GameManager.Instance.monedas += 10;
                     GameManager.Instance.textoMonedas.text = GameManager.Instance.monedas.ToString();
-                    MostrarPanelMisionCompletada(new string[] {"¡Gracias por traerme las monedas!", "Aquí tienes tu recompensa."});
+                    MostrarPanelMisionCompletada(new string[] {"Gracias por traerme las monedas", "Aquí tienes tu recompensa."});
                     break;
                 case MisionTipo.BuscarObjeto:
                     GameManager.Instance.monedas += 20;
                     GameManager.Instance.textoMonedas.text = GameManager.Instance.monedas.ToString();
-                    MostrarPanelMisionCompletada(new string[] {"¡Porfin podre cortar mi arroz!", "Te lo agradezco mucho."});
+                    MostrarPanelMisionCompletada(new string[] {"Porfin podre cortar mi arroz", "Te lo agradezco mucho."});
                     break;
                 case MisionTipo.HablarConNpc:
                     GameManager.Instance.monedas += 15;

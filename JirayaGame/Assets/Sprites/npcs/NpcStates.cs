@@ -55,6 +55,12 @@ public class NpcStates : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (GameManager.Instance.NpcHablado(nameNpc))
+        {
+            hasTalked = true;
+            canvasImagen.SetActive(false);
+        }
+        
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();

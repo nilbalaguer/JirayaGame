@@ -310,10 +310,6 @@ public class PlayerController : MonoBehaviour
                 {
                     LanzarObjeto();
                 }
-                /*else if ((Input.GetKeyDown(KeyCode.G) || Input.GetButtonDown("Y")) && objetoSujeto != null)
-                {
-                    GuardarObjeto();
-                }*/
                 //Soltar el objeto en caso de no necesitarlo
                 else if (Input.GetKeyDown(KeyCode.Z) && objetoSujeto != null)
                 {
@@ -333,19 +329,22 @@ public class PlayerController : MonoBehaviour
                 //Beber pocion si la tiene equipada y mostrar mensaje HUD
                 MostrarMensajePocion();
 
-                if (Input.GetButtonDown("Fire1") && cooldownMele <= 0) //mando X
+                if (GameManager.Instance.puedeAtacar)
                 {
-                    if (objectPicked != null)
+                    if (Input.GetButtonDown("Fire1") && cooldownMele <= 0) //mando X
                     {
-                        BoxCollider2D tempBoxCollider = objectPicked.GetComponent<BoxCollider2D>();
-                        tempBoxCollider.enabled = true;
-                        objectPicked = null;
-                    }
-                    else
-                    {
-                        state = "Attack";
-                    }
+                        if (objectPicked != null)
+                        {
+                            BoxCollider2D tempBoxCollider = objectPicked.GetComponent<BoxCollider2D>();
+                            tempBoxCollider.enabled = true;
+                            objectPicked = null;
+                        }
+                        else
+                        {
+                            state = "Attack";
+                        }
 
+                    }
                 }
 
                 if ((Input.GetButtonDown("Fire3") || Input.GetButtonDown("Y")) && GameManager.Instance.puedeTransformarse && forceX == 0f && forceY == 0f) //mando Y
@@ -653,7 +652,11 @@ public class PlayerController : MonoBehaviour
             inventario.objetos.Find(e => e.item.nombre == objetoLanzado.nombreObjeto);
 
         if (entrada != null)
+        {
+            GameManager.Instance.puedeAtacar = true;
+            CanvasInfo.SetActive(false);
             inventario.EliminarObjeto(entrada);
+        }
 
         //Equipar siguiente si queda alguno
         Invoke(nameof(EquiparSiguienteShuriken), 0.01f);

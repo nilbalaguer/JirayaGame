@@ -254,6 +254,7 @@ public class NpcStates : MonoBehaviour
 
                             scrollPanel.misionsScript = misionNpc;
                             scrollPanel.audioSource = GetComponent<AudioSource>();
+                            GameManager.Instance.inputDesactivado = true;
                         }
                         else{
                             dialogueShamuzen.SetActive(true);
@@ -261,7 +262,6 @@ public class NpcStates : MonoBehaviour
                             panelNpcScript.npcScript = this;
                             player.GetComponent<PlayerController>().puedoMoverme = false;
                         }
-                        GameManager.Instance.inputDesactivado = true;
                     }
                 }
                 else

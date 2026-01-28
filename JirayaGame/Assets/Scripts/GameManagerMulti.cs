@@ -1,0 +1,558 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro;
+using System.Collections.Generic;
+using UnityEngine.Playables;
+using UnityEngine.EventSystems;
+
+public class GameManagerMulti : MonoBehaviour
+{
+    public static GameManagerMulti Instance;
+    public bool puedeTransformarse = false;
+    public enum Estado { Normal, Intro };
+    public Estado estadoActual = Estado.Normal;
+    public bool introFinalizadaGlobal = false;
+    public Inventario inventario;
+    //public StatesMachine player;
+    public PlayerController player;
+    private Objeto objetoCompradoNuevo;
+
+    public NpcStates npcIntro;
+    private NpcStates npcIntroActual;
+    public TextMeshProUGUI textoMonedas;
+    public int monedas = 0;
+
+    public bool swapHabilidad = false;
+    public GameObject habilidadSwapIcono;  
+
+    public GameObject monedaPrefab;
+
+    private string ubicacion = "overworld";
+
+    //HUD
+
+    //Sonidos
+    [Header("Sonidos")]
+    [SerializeField] AudioClip deathSound;
+    [SerializeField] AudioClip enemyDeathSound;
+    [SerializeField] AudioClip musicaCombate;
+    private AudioSource audioSource;
+    //Vida
+    public float vidaPlayer;
+
+    //Player
+    private GameObject playerGameObject;
+
+    //Estadisticas
+    public float tiempoDeJuego = 0f;
+
+    [Header("Sprites")]
+    [SerializeField] GameObject sangrePrefab;
+
+    //Partituras obtendias
+    public int partiturasNumero = 0;
+
+    public GameObject tiendaAlerta;
+
+    //HUD
+    //private TextMeshProUGUI textoVida;
+
+    //Sonidos
+    [Header("Sonidos")]
+    //Vida
+
+    //Player
+
+    //Estadisticas
+    // private int enemiesKilled = 0;
+
+    [Header("Sprites")]
+
+    //Partituras obtendias
+    private Vector2 posicionInicioSiguienteEscena;
+    private Image indicadorVida;
+
+    //Controlar Que Puertas estan activadas
+    public Dictionary<string, bool> estadosTP = new Dictionary<string, bool>();
+
+    //Cinematica de tsunade al coger primer objeto entregable
+    public PlayableDirector timelineTsunade;
+
+    //Cinematica ermitaño para introducir tienda
+    public PlayableDirector timelineErmitañoTienda;
+    [HideInInspector]
+    public bool timelineTsunadeMostrado = false;
+    [HideInInspector]
+    public bool timelineTiendaMostrado = false;
+    [HideInInspector]
+    public bool timelineMisionErmitañoMostrado = false;
+    [HideInInspector]
+    public bool timelineSapoMostrado = false;
+    public int objetosTotales = 6;
+    //panel informativo de tienda desbloqueada timeline
+    public GameObject panelTiendaDesbloqueo;
+    public Button btnTienda;
+    public BehaviourErmitaño ermitañoTienda;
+
+    public List<Inventario.InventoryEntry> inventarioGlobal = new();
+    public bool inputDesactivado = false;
+    public Dictionary<string, bool> npcHablados = new Dictionary<string, bool>();
+    public bool puedeAtacar = true;
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
+
+            estadosTP["mazzmorraEspjeos"] = true;
+            estadosTP["mazzmorraBotones"] = true;
+            estadosTP["mazmorraHabilidad"] = true;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        
+        GameObject npcObj = GameObject.FindGameObjectWithTag("NpcInicial");
+        if (npcObj != null)
+        {
+            npcIntro = npcObj.GetComponent<NpcStates>();
+        }
+        else
+        {
+            npcIntro = null;
+        }
+    }
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        GameObject txtMonedas = GameObject.FindGameObjectWithTag("Monedas");
+        if (txtMonedas != null)
+        {
+            textoMonedas = txtMonedas.GetComponent<TextMeshProUGUI>();
+        }
+        textoMonedas.text = monedas.ToString();
+        
+        GameObject ermitaño = GameObject.FindGameObjectWithTag("ErmitañoTienda");
+        if (ermitaño != null)
+        {
+            ermitañoTienda = ermitaño.GetComponent<BehaviourErmitaño>();
+        }
+        
+        //textoVida = GameObject.Find("TextoVida").GetComponent<TextMeshProUGUI>();
+        audioSource = gameObject.GetComponent<AudioSource>();
+        // playerGameObject = GameObject.Find("Player");
+        playerGameObject = GameObject.Find("Player");
+        GameObject npcObj = GameObject.FindGameObjectWithTag("NpcInicial");
+        if (npcObj != null)
+        {
+            npcIntro = npcObj.GetComponent<NpcStates>();
+        }
+        else
+        {
+            npcIntro = null;
+        }
+
+        if (!introFinalizadaGlobal)
+        {
+            IniciarIntro();
+        }
+        else
+        {
+            if (npcIntro != null)
+            {
+                npcIntro.NpcIntro = false;
+                npcIntro.introTerminada = true;
+            }
+        }
+        //textoMonedas.text = monedas.ToString();
+        //tiendaAlerta.SetActive(false);
+        if (playerGameObject != null)
+        {
+            player = playerGameObject.GetComponent<PlayerController>();
+        }
+
+        player.puedoMoverme = true;
+
+        if (swapHabilidad)
+        {
+            habilidadSwapIcono.SetActive(true);
+        }
+        else
+        {
+            habilidadSwapIcono.SetActive(false);
+        }
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+        if (npcIntro == null)
+        {
+            estadoActual = Estado.Normal;
+        }
+
+        if (estadoActual == Estado.Intro && npcIntroActual != null)
+        {
+            if (npcIntroActual.introTerminada)
+            {
+                estadoActual = Estado.Normal;
+                player.puedoMoverme = true;
+                npcIntroActual = null;
+            }
+        }
+
+        tiempoDeJuego += Time.deltaTime;
+    }
+
+    public void IniciarIntro()
+    {
+        if (npcIntro == null)
+        {
+            return;
+        }
+
+        estadoActual = Estado.Intro;
+        player.puedoMoverme = false;
+
+        npcIntro.NpcIntro = true;
+        npcIntro.introAsignada = false;   
+        npcIntro.introTerminada = false;  
+        npcIntro.currentState = NpcStates.State.Intro;
+        npcIntroActual = npcIntro;
+    }
+
+
+    public void FinalizarIntro(NpcStates npc)
+    {
+        if (npc == npcIntroActual)
+        {
+            npcIntroActual.introTerminada = true;
+            introFinalizadaGlobal = true;
+        }
+    }
+    
+     public void PlayerDie()
+    {
+        audioSource.PlayOneShot(deathSound);
+        Transform playerTransform = playerGameObject.transform;
+        Instantiate(sangrePrefab, playerTransform.position, Quaternion.identity);
+
+        Time.timeScale = 0f;
+
+        Reintentar();
+    }
+
+    public void ObtenerPartitura()
+    {
+        partiturasNumero += 1;
+
+    }
+
+
+    public void RecolectarMonedas()
+    {
+        monedas += 1;
+        if (textoMonedas != null)
+        {
+            textoMonedas.text = monedas.ToString();
+        }
+    }
+
+    public void ComprarObjetos(ObjetoData objetoComprado)
+    {
+        int precio = objetoComprado.precioTienda;
+
+        if (monedas >= precio)
+        {
+            monedas -= precio;
+            textoMonedas.text = monedas.ToString();
+            Debug.Log("Objeto comprado");
+            //player.EquiparObjeto(objetoComprado);
+            //GameObject ObjInstanciado = Instantiate(objetoComprado.gameObject);
+            //objetoCompradoNuevo = ObjInstanciado.GetComponent<Objeto>();
+            inventario.AñadirObjeto(objetoComprado);
+            puedeAtacar = false;
+            ermitañoTienda.CerrarTienda();
+        }
+        else
+        {
+            Debug.Log("No tienes suficientes monedas para comprar este objeto");
+            tiendaAlerta.SetActive(true);
+            Invoke("DesactivartiendaAlerta", 1f);
+        }
+    }
+
+    private void DesactivartiendaAlerta()
+    {
+        tiendaAlerta.SetActive(false);
+    }
+
+    public void PantallaDerrota()
+    {
+        //Si la vida del player es 0 se muestra esta pantalla
+    }
+
+    public void ReducirVida(int reduccion)
+    {
+        vidaPlayer -= reduccion;
+
+        indicadorVida.fillAmount = vidaPlayer / 10;
+
+        if (vidaPlayer <= 0)
+        {
+            PlayerDie();
+        }
+    }
+
+    public void AumentarVida(int incrementacion)
+    {
+        vidaPlayer += incrementacion;
+
+    }
+
+    public void ChangeUbication(string ubi)
+    {
+        ubicacion = ubi;
+    }
+
+    public void PlayDeathSound()
+    {
+        audioSource.PlayOneShot(enemyDeathSound);
+    }
+
+    public void CambiarEscena(string escenaObjetivo, Vector2 posicionObjetivo)
+    {
+        posicionInicioSiguienteEscena = posicionObjetivo;
+        SceneManager.LoadScene(escenaObjetivo);
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        playerGameObject = GameObject.Find("Player");
+        if (playerGameObject != null)
+        {
+            player = playerGameObject.GetComponent<PlayerController>();
+            inventario = playerGameObject.GetComponent<Inventario>();
+            playerGameObject.transform.position = posicionInicioSiguienteEscena;
+        }else
+        {
+            Debug.Log("No se encontró el objeto Player en la escena cargada.");
+        }
+
+        audioSource = gameObject.GetComponent<AudioSource>();
+
+        GameObject parryObj = GameObject.Find("vidaIndicator");
+        indicadorVida = parryObj.GetComponent<Image>();
+        indicadorVida.fillAmount = vidaPlayer / 10;
+
+        
+        playerGameObject = GameObject.FindGameObjectWithTag("Player");
+
+        try
+        {
+            GameObject npcObj = GameObject.FindGameObjectWithTag("NpcInicial");
+            if (npcObj != null)
+            {
+                npcIntro = npcObj.GetComponent<NpcStates>();
+            }
+            else
+            {
+                npcIntro = null;
+            }
+
+            if (introFinalizadaGlobal && npcIntro != null)
+            {
+                npcIntro.NpcIntro = false;
+                npcIntro.introTerminada = true;
+            }
+
+            if (timelineTsunade == null)
+            {
+                textoMonedas.text = monedas.ToString();
+            }
+
+            if (timelineTsunade == null)
+            {
+                timelineTsunade = GameObject.Find("TimelineTsunade1").GetComponent<PlayableDirector>();
+            }
+            GameObject txtMonedas = GameObject.FindGameObjectWithTag("Monedas");
+            if (txtMonedas != null)
+            {
+                textoMonedas = txtMonedas.GetComponent<TextMeshProUGUI>();
+            }
+            textoMonedas.text = monedas.ToString();
+            GameObject ermitaño = GameObject.FindGameObjectWithTag("ErmitañoTienda");
+            if (ermitaño != null)
+            {
+                ermitañoTienda = ermitaño.GetComponent<BehaviourErmitaño>();
+            }
+            playerGameObject = GameObject.Find("Player");
+            if (npcObj != null)
+            {
+                npcIntro = npcObj.GetComponent<NpcStates>();
+            }
+            else
+            {
+                npcIntro = null;
+            }
+        }
+        catch (System.Exception)
+        {
+            
+            Debug.Log("Holis2");
+        }
+
+        Debug.Log("Antes de while");
+        if (playerGameObject != null)
+        {
+            player = playerGameObject.GetComponent<PlayerController>();
+            playerGameObject.transform.position = posicionInicioSiguienteEscena;
+            inventario = player.GetComponent<Inventario>();
+
+            audioSource = gameObject.GetComponent<AudioSource>();
+
+            indicadorVida = parryObj.GetComponent<Image>();
+            indicadorVida.fillAmount = vidaPlayer / 10;
+
+            if (introFinalizadaGlobal && npcIntro != null)
+            {
+                npcIntro.NpcIntro = false;
+                npcIntro.introTerminada = true;
+            }
+        }
+        else
+        {
+            while (playerGameObject == null)
+            {
+                playerGameObject = GameObject.FindGameObjectWithTag("Player");
+
+                Debug.Log("Iteracion");
+                player = playerGameObject.GetComponent<PlayerController>();
+                playerGameObject.transform.position = posicionInicioSiguienteEscena;
+                inventario = playerGameObject.GetComponent<Inventario>();
+
+                audioSource = gameObject.GetComponent<AudioSource>();
+
+                // GameObject parryObj = GameObject.Find("vidaIndicator");
+                indicadorVida = parryObj.GetComponent<Image>();
+                indicadorVida.fillAmount = vidaPlayer / 10;
+
+                if (introFinalizadaGlobal && npcIntro != null)
+                {
+                    npcIntro.NpcIntro = false;
+                    npcIntro.introTerminada = true;
+                }
+            }
+        }
+    }
+
+    public bool EstaTpHabilitado(string claveTP)
+    {
+        if (string.IsNullOrEmpty(claveTP)) return true; // si no se asigna una clave, dejar pasar
+        if (estadosTP.TryGetValue(claveTP, out bool estado))
+        {
+            return estado;
+        }
+        else
+        {
+            Debug.LogWarning($"No se encontró la clave '{claveTP}' en el diccionario de TPs.");
+            return false;
+        }
+    }
+
+    public void DesabilitarTP(string claveTP)
+    {
+        estadosTP[claveTP] = false;
+    }
+
+    public void ReproducirTimelineTsunade()
+    {
+        timelineTsunade.Play();
+    }
+
+    public void ReproducirTimelineErmitañoTienda()
+    {
+        timelineErmitañoTienda.Play();
+    }
+
+    public void OnCinematicEndTsunade()
+    {
+        player.maxSpeed = 5;
+    }
+
+    public void RecuperarVida(float cantidad)
+    {
+        vidaPlayer += cantidad;
+        if (vidaPlayer > 10f)
+        {
+            vidaPlayer = 10f;
+        }
+        indicadorVida.fillAmount = vidaPlayer / 10;
+    }
+
+    public void AumentarVelocidad(float cantidad)
+    {
+        player.maxSpeed += cantidad;
+        //temporalmnente aumentar la velocidad del player usando timedeltaTime
+        Invoke("RestablecerVelocidad", 5f);
+    }
+
+    private void RestablecerVelocidad()
+    {
+        player.maxSpeed = 5f;
+    }
+
+    public void Reintentar()
+    {
+        RecuperarVida(10);
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void CerrarPanelTienda()
+    {
+        panelTiendaDesbloqueo.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(null);
+    }
+
+    public void TocarCancionCombate()
+    {
+        audioSource.clip = musicaCombate;
+        if (!audioSource.isPlaying)
+        {
+            audioSource.Play();
+        }
+        
+    }
+
+    public void PararCancionCombate()
+    {
+        audioSource.Stop();
+    }
+    public void GuardarNPCHablado(string npcName)
+    {
+        if (!npcHablados.ContainsKey(npcName))
+        {
+            npcHablados.Add(npcName, true);
+        }
+        else
+        {
+            npcHablados[npcName] = true;
+        }
+    }
+
+    public bool NpcHablado (string npcName)
+    {
+        return npcHablados.ContainsKey(npcName) && npcHablados[npcName];
+    }
+
+}

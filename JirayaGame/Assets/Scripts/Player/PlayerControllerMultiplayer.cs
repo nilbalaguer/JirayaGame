@@ -83,7 +83,6 @@ public class PlayerControllerMultiplayer : MonoBehaviour
     //public ScrollPanel scrollPanel;
     private GameObject tsunade;
     //public panelErmitaño panelScript;
-    public GameObject mensajePocion;
     private Vector2 ultimaDireccion = Vector2.right;
     public float distanciaSujecion = 0.1f;
     public bool puedoMoverme = true;
@@ -326,8 +325,7 @@ public class PlayerControllerMultiplayer : MonoBehaviour
                         //puedoMoverme = false;
                     }
                 }
-                //Beber pocion si la tiene equipada y mostrar mensaje HUD
-                MostrarMensajePocion();
+                
 
                 if (true /*GameManager.Instance.puedeAtacar*/)
                 {
@@ -555,18 +553,6 @@ public class PlayerControllerMultiplayer : MonoBehaviour
         animator.SetTrigger("MirarIzquierda");
     }
 
-    private void MostrarMensajePocion()
-    {
-        if (objetoSujeto != null && (objetoSujeto.nombreObjeto == "Pocion1" || objetoSujeto.nombreObjeto == "Pocion2" || objetoSujeto.nombreObjeto == "Pocion3"))
-        {
-            mensajePocion.SetActive(true);
-            CanvasInfo.SetActive(false);
-        }
-        else
-        {
-            mensajePocion.SetActive(false);
-        }
-    }
 
     //Funcion booleana para beber la pocion y obtener su ventaja correspondiente si se cumple una condicion
     public bool BeberPocion(string nombrePocion)
@@ -596,7 +582,7 @@ public class PlayerControllerMultiplayer : MonoBehaviour
         }
         //Destroy(objetoSujeto.gameObject);
         //objetoSujeto = null;
-        mensajePocion.SetActive(false);
+        
         return true;
     }
 

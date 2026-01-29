@@ -6,6 +6,7 @@ public class IndicadorNumeroScript : MonoBehaviour
     [SerializeField] Transform indicadorTransform;
     private float posicionY;
     private float posicionX;
+    public int numeroActual = 0;
 
     private bool playerTouching = false;
 
@@ -25,6 +26,8 @@ public class IndicadorNumeroScript : MonoBehaviour
         if (playerTouching && Input.GetButtonDown("Fire2"))
         {
             posicionY -= 0.72f;
+            numeroActual += 1;
+            // Debug.Log("Numero actual: " + numeroActual);
         }
     }
 
@@ -47,6 +50,7 @@ public class IndicadorNumeroScript : MonoBehaviour
         {
             indicadorTransform.localPosition = new Vector2(0f, 3.21f);
             posicionY = indicadorTransform.position.y;
+            numeroActual = 0;
         }
     }
 

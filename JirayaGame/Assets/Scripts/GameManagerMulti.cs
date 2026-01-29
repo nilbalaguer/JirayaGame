@@ -5,8 +5,9 @@ using TMPro;
 using System.Collections.Generic;
 using UnityEngine.Playables;
 using UnityEngine.EventSystems;
+using Mirror;
 
-public class GameManagerMulti : MonoBehaviour
+public class GameManagerMulti : NetworkBehaviour
 {
     public static GameManagerMulti Instance;
     public bool puedeTransformarse = false;
@@ -39,7 +40,7 @@ public class GameManagerMulti : MonoBehaviour
     [SerializeField] AudioClip musicaCombate;
     private AudioSource audioSource;
     //Vida
-    public float vidaPlayer;
+    [SyncVar] public float vidaPlayer;
 
     //Player
     private GameObject playerGameObject;

@@ -3,9 +3,9 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 
-
-public class PlayerControllerMultiplayer : MonoBehaviour
+public class PlayerControllerMultiplayer : NetworkBehaviour
 {
     
     [Header("Varios")]
@@ -15,7 +15,7 @@ public class PlayerControllerMultiplayer : MonoBehaviour
     public float maxSpeed = 5;
 
     [SerializeField] string state = "idle";
-    public bool human = true;
+    [SyncVar] public bool human = true;
 
     [Header("HUD")]
     private Image indicadorParry;

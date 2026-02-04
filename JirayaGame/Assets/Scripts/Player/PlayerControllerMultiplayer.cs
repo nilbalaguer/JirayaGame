@@ -136,6 +136,8 @@ public class PlayerControllerMultiplayer : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isLocalPlayer)
+        return;
         // if (GameManager.Instance.inputDesactivado)
         // {
         //     return;

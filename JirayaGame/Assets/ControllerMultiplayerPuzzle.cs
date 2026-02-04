@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ControllerMultiplayerPuzzle : MonoBehaviour
 {
-    public IndicadorNumeroScript[] indicadorNumeroScript = new IndicadorNumeroScript[5];
+    public IndicadorNumeroScriptMultiplayer[] indicadorNumeroScript = new IndicadorNumeroScriptMultiplayer[5];
     private int correctos = 0;
     private int[] resultados = new int[5];
     private bool echo = false;

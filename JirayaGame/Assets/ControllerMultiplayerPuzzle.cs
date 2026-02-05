@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ControllerMultiplayerPuzzle : MonoBehaviour
 {
@@ -24,11 +25,12 @@ public class ControllerMultiplayerPuzzle : MonoBehaviour
                     correctos += 1;
                     if (correctos == 5)
                     {
-                        Debug.Log("Felicidades");
+                        SceneManager.LoadScene("PantallaFinal");
                         echo = true;
                     }
                 }
             }
+            correctos = 0;
         }
         
     }

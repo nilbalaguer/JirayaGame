@@ -770,7 +770,7 @@ MonoBehaviour:
   timelineMostrado: 0
   ultimoDialogo: 0
   cooldownDialogo: 2
-  puedeTransformarse: 1
+  puedeTransformarse: 0
   focusAnimator: {fileID: 8463292399278901663}
   spriterendersmoke: {fileID: 4816036006431534443}
   iconoRana1: {fileID: 0}
@@ -1219,6 +1219,7 @@ GameObject:
   - component: {fileID: 7619615500353886939}
   - component: {fileID: 6316512264472656679}
   - component: {fileID: 3787694431068253647}
+  - component: {fileID: 5385988452301497250}
   m_Layer: 0
   m_Name: PlayerSprite
   m_TagString: Untagged
@@ -1381,6 +1382,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b167ebc2c7862c34abfdc8908c92d270, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5385988452301497250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3223900339570478344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 590ca1c31be609e4ba235f2a88dd0bc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4256137966521079008

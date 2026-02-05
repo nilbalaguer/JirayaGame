@@ -11,6 +11,7 @@ public class MenuManager : MonoBehaviour
     public GameObject botonInicialMenu;
     public GameObject botonInicialOpciones;
     public GameObject botonInicialControles;
+    public GameObject botonMultijugador;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Start()
     {
@@ -66,5 +67,11 @@ public class MenuManager : MonoBehaviour
 
     public void salir(){
         Application.Quit();
+    }
+
+    public void Multiplayer()
+    {
+        SceneManager.LoadScene("MazmorraMulti"); 
+        Time.timeScale = 1;
     }
 }
